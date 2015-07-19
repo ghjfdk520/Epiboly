@@ -7,4 +7,6 @@ package com.gas.conf;
 public class Config {
     public static boolean DEBUG = true;
     public static boolean text =false;
+
+    public static boolean text2 =false;
 }
