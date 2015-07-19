@@ -11,7 +11,7 @@ import com.gas.conf.Config;
  * Created by Heart on 2015/7/16.
  */
 public class Utils {
-    /** 打印log */
+
     public static void log( String tag , Object... msg )
     {
         if ( Config.DEBUG && msg != null )
@@ -47,23 +47,12 @@ public class Utils {
         }
     }
 
-    /**
-     * 判断字符串是否为空字符串、null或“null”字符串包括所有大小写情况
-     *
-     * @param str
-     * @return 是否为空
-     */
+
     public static boolean isEmptyOrNullStr( String str )
     {
         return TextUtils.isEmpty(str) || "".equals( str );
     }
-    /**
-     * @Title: toastMsg
-     * @Description: Toast一条消息
-     * @param context
-     * @param sMsg
-     *            String msg
-     */
+
     public static void toastMsg( Context context , String sMsg )
     {
         Toast.makeText(context, sMsg, Toast.LENGTH_SHORT).show( );
