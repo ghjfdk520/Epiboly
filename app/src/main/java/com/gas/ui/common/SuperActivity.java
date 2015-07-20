@@ -22,9 +22,7 @@ public class SuperActivity extends Activity implements HttpCallBack, Thread.Unca
     protected void onCreate(Bundle savedInstanceState, boolean addToStack) {
         super.onCreate(savedInstanceState);
         Thread.setDefaultUncaughtExceptionHandler(this);
-
         mContext = this;
-
         if (addToStack)
             CloseAllActivity.getInstance().addActivity(this);
     }
