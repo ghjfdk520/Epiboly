@@ -145,5 +145,5 @@
             android:name="JPUSH_APPKEY"
             android:value="6f1a9b2028ffe81aca88b649" />
     </application>
-
+<!---->
 </manifest>
