@@ -1,16 +1,53 @@
 package com.gas.utils;
 
 import android.content.Context;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.gas.conf.Config;
 
+import java.io.File;
+import java.util.Calendar;
+
 /**
  * Created by Heart on 2015/7/16.
  */
 public class Utils {
+
+    public static String getSDPath( )
+    {
+        String sdDir = "";
+        boolean sdCardExist = Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED ); // 判断sd卡是否存在
+        if ( sdCardExist )
+        {
+            sdDir = Environment.getExternalStorageDirectory( ) + "/gas/";// 获取跟目录
+
+        }
+        else
+        {
+            sdDir = "/data/data/com.gas/";
+            // sdDir = Environment.getDataDirectory() + "/iAround/";
+        }
+
+        File file = new File( sdDir );
+        if ( !file.exists( ) )
+        {
+            file.mkdirs( );
+            if ( !file.exists( ) )
+            {
+                sdDir = "/data/data/com.gas/";
+                File tryfile = new File( sdDir );
+                if ( !tryfile.exists( ) )
+                {
+                    tryfile.mkdirs( );
+                }
+            }
+        }
+        return sdDir;
+    }
 
     public static void log( String tag , Object... msg )
     {
@@ -58,4 +95,33 @@ public class Utils {
         Toast.makeText(context, sMsg, Toast.LENGTH_SHORT).show( );
     }
 
+    public static void dumpLogcat( )
+    {
+        if ( !Config.DEBUG )
+        {
+            try
+            {
+                File uncaughtExceptionLogFolder = new File( getSDPath( )
+                        + "UncaughtExceptions/" );
+                if ( !uncaughtExceptionLogFolder.exists( ) )
+                {
+                    uncaughtExceptionLogFolder.mkdirs( );
+                }
+                String fileName = TimeFormat.convertTimeLong2String(
+                        System.currentTimeMillis( ) , Calendar.SECOND )
+                        + ".txt";
+                String dumpFile = uncaughtExceptionLogFolder.getAbsolutePath( ) + "/"
+                        + fileName;
+                Process pDump = Runtime.getRuntime( )
+                        .exec( "logcat -v time -d -f " + dumpFile );
+                pDump.waitFor( );
+                Utils.log( "System.err" , "Log file has been dump to \"" + dumpFile
+                        + "\"" );
+            }
+            catch ( Exception e )
+            {
+                e.printStackTrace( );
+            }
+        }
+    }
 }
