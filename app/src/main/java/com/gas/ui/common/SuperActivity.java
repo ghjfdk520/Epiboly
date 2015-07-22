@@ -13,10 +13,11 @@ import com.gas.utils.Utils;
 /**
  * Created by Heart on 2015/7/20.
  */
-public class SuperActivity extends Activity implements HttpCallBack, Thread.UncaughtExceptionHandler {
+public abstract class SuperActivity extends Activity implements HttpCallBack, Thread.UncaughtExceptionHandler {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         onCreate(savedInstanceState, true);
+
     }
 
     protected void onCreate(Bundle savedInstanceState, boolean addToStack) {
@@ -25,7 +26,11 @@ public class SuperActivity extends Activity implements HttpCallBack, Thread.Unca
         mContext = this;
         if (addToStack)
             CloseAllActivity.getInstance().addActivity(this);
+
+
     }
+
+
 
     @Override
     protected void onStart() {

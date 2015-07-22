@@ -55,14 +55,15 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
-        </activity>
-        <activity
-            android:name=".PullToReference"
-            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".PullToReference"
+            android:label="@string/app_name">
+
         </activity>
         <service
             android:name="com.baidu.location.f"
@@ -73,7 +74,7 @@
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">-
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter><action android:name="cn.jpush.android.ui.PushActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="com.gas.epiboly" />
@@ -88,7 +89,7 @@
         <service
             android:name="cn.jpush.android.service.PushService"
             android:enabled="true"
-            android:exported="false">-
+            android:exported="false">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTER" />
                 <action android:name="cn.jpush.android.intent.REPORT" />
@@ -145,5 +146,4 @@
             android:name="JPUSH_APPKEY"
             android:value="6f1a9b2028ffe81aca88b649" />
     </application>
-<!---->
 </manifest>

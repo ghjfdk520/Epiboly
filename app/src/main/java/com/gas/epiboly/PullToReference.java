@@ -36,7 +36,7 @@ public class PullToReference extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pullto);
-        mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
+        //mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
 
         // Set a listener to be invoked when the list should be refreshed.
         mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
