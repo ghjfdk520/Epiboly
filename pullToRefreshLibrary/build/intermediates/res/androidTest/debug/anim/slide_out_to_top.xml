@@ -19,4 +19,4 @@
     android:duration="@android:integer/config_longAnimTime"
     android:fromYDelta="0"
     android:toYDelta="-100%p" />
-<!-- From: file:/D:/code%20library/android/Epiboly/pullToRefreshLibrary/src/main/res/anim/slide_out_to_top.xml --><!-- From: file:/D:/code%20library/android/Epiboly/pullToRefreshLibrary/build/intermediates/bundles/debug/res/anim/slide_out_to_top.xml -->
+<!-- From: file:/D:/Workspace/studio/Epiboly/pullToRefreshLibrary/src/main/res/anim/slide_out_to_top.xml --><!-- From: file:/D:/Workspace/studio/Epiboly/pullToRefreshLibrary/build/intermediates/bundles/debug/res/anim/slide_out_to_top.xml -->

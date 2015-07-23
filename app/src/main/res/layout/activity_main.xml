@@ -2,6 +2,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
+    <include layout="@layout/title_navigation_bar"/>
      <fragment
          android:name="com.gas.ui.fragment.PersonalFrament"
          android:layout_width="match_parent"
