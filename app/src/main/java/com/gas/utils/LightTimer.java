@@ -148,8 +148,10 @@ public abstract class LightTimer
             if ( shouldRun && mRunCount++ < mRunBout )
             {
                 LightTimer.this.run( LightTimer.this );
+            }else {
+                mHandler.removeCallbacks( this );
+                return;
             }
-
             mHandler.removeCallbacks( this );
             mHandler.postDelayed( this , mLoopTime );
         }

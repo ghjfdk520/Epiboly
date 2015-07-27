@@ -68,11 +68,12 @@
 
 
     <LinearLayout
+        android:id="@+id/ly_text_personal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingLeft="65dip"
-        android:visibility="gone">
+         >
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -105,7 +106,7 @@
                 android:id="@+id/user_sex"
                 style="@style/font_personal_gray"
                 android:layout_marginLeft="8dip"
-                android:text="女" />
+                android:text="男" />
         </LinearLayout>
 
         <LinearLayout
@@ -136,18 +137,30 @@
                 android:text="配送项目 :" />
 
             <TextView
-                android:id="@+id/user_servic"
+                android:id="@+id/user_service"
                 style="@style/font_personal_gray"
                 android:layout_marginLeft="8dip"
                 android:text="煤气   维修" />
         </LinearLayout>
+        <RelativeLayout
+            style="@style/hweight_wfill">
 
+            <ImageView
+                android:id="@+id/personal_modified_data"
+                style="@style/double_wrap"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="15dip"
+                android:src="@drawable/personal_modified_data" />
+        </RelativeLayout>
     </LinearLayout>
 
 
     <LinearLayout
+        android:id="@+id/ly_edit_personal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:orientation="vertical"
         android:paddingLeft="55dip"
         android:paddingRight="42dip">
@@ -183,6 +196,7 @@
 
 
             <RadioGroup
+                android:id="@+id/sex_radioGrop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -190,6 +204,7 @@
                 <TextView
                     style="@style/font_personal_black"
                     android:layout_marginLeft="8dip"
+                    android:layout_marginRight="4dip"
                     android:text="男: " />
 
                 <RadioButton
@@ -200,6 +215,7 @@
                 <TextView
                     style="@style/font_personal_black"
                     android:layout_marginLeft="8dip"
+                    android:layout_marginRight="4dip"
                     android:text="女: " />
 
                 <RadioButton
@@ -211,7 +227,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dip"
             android:orientation="horizontal">
@@ -220,9 +236,9 @@
                 style="@style/font_personal_gray"
                 android:text="备用联系电话:" />
 
-            <TextView
-                android:id="@+id/user_alternate_phone"
-                style="@style/font_personal_gray"
+            <EditText
+                android:id="@+id/user_edit_alternate_phone"
+                style="@style/edit_personal_gray"
                 android:layout_marginLeft="8dip"
                 android:text="120316205" />
         </LinearLayout>
@@ -244,10 +260,12 @@
                 android:text="煤气" />
 
             <CheckBox
+                android:id="@+id/checkbox_deliver_gas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/personal_radio"
                 android:checked="true" />
+
             <TextView
 
                 style="@style/font_personal_black"
@@ -255,6 +273,7 @@
                 android:text="维修" />
 
             <CheckBox
+                android:id="@+id/checkbox_repair"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/personal_radio"
@@ -262,14 +281,14 @@
         </LinearLayout>
 
 
-        <ImageView
-            android:layout_marginTop="55dp"
-            android:layout_gravity="center_horizontal"
-            style="@style/double_wrap"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="15dip"
-            android:src="@drawable/personal_edit_save" />
+
+            <ImageView
+                android:id="@+id/personal_edit_save"
+                style="@style/double_wrap"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="55dp"
+                android:src="@drawable/personal_edit_save" />
+
     </LinearLayout>
 
 
