@@ -55,7 +55,7 @@ public class BaiduLocationUtil {
     }
 
     public void startBaiduListener(final BaiduCallBack baiduCallBack , int type ){
-        option.setAddrType("all");
+     //   option.setAddrType("all");
         client.setLocOption(option);
         setCallBack(baiduCallBack);
         try {

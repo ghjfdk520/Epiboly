@@ -49,6 +49,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack {
         setContentView(R.layout.activity_main);
         init();
         initListeners();
+        initLocation();
     }
 
     public void init() {

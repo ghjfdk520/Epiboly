@@ -2,7 +2,6 @@ package com.gas;
 
 import android.app.Application;
 
-import com.baidu.mapapi.SDKInitializer;
 import com.gas.utils.ImageViewUtil;
 
 import cn.jpush.android.api.JPushInterface;
@@ -16,7 +15,7 @@ public class BaseApplication extends Application{
     public void onCreate() {
 
         super.onCreate();
-        SDKInitializer.initialize(getApplicationContext());
+      //  SDKInitializer.initialize(getApplicationContext());
         ImageViewUtil.initDefault(getApplicationContext());
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);

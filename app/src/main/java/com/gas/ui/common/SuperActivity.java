@@ -4,16 +4,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.gas.CloseAllActivity;
- import com.gas.connector.HttpCallBack;
+import com.gas.connector.HttpCallBack;
 import com.gas.utils.Utils;
 
 /**
  * Created by Heart on 2015/7/20.
  */
 public abstract class SuperActivity extends Activity implements HttpCallBack, Thread.UncaughtExceptionHandler {
+
+    private static CustomProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         onCreate(savedInstanceState, true);
@@ -26,11 +30,9 @@ public abstract class SuperActivity extends Activity implements HttpCallBack, Th
         mContext = this;
         if (addToStack)
             CloseAllActivity.getInstance().addActivity(this);
-
-
+        if (progressDialog == null)
+            progressDialog = CustomProgressDialog.createDialog(this);
     }
-
-
 
     @Override
     protected void onStart() {
@@ -48,7 +50,32 @@ public abstract class SuperActivity extends Activity implements HttpCallBack, Th
     protected void setComponentListener(SuperActivity context) {
 
     }
+    /**
+     * 显示等待对话框np
+     */
+    public void showProgressDialog() {
+        // 显示进度对话框
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = 0.7f; // 0.0-1.0
+        getWindow().setAttributes(lp);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+    }
 
+    /**
+     * 关闭进度对话框
+     */
+    public void dismissProgressDialog() {
+        // 关闭进度对话框
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = 1.0f; // 0.0-1.0
+        getWindow().setAttributes(lp);
+
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
     /**
      * 把软键盘隐藏
      */
@@ -66,7 +93,7 @@ public abstract class SuperActivity extends Activity implements HttpCallBack, Th
     public void uncaughtException(Thread thread, Throwable ex) {
         ex.printStackTrace();
         Utils.dumpLogcat();
-         try {
+        try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
