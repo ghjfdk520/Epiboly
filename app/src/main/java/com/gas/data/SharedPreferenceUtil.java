@@ -7,9 +7,15 @@ import android.content.SharedPreferences.Editor;
  * Created by Heart on 2015/5/28.
  */
 public class SharedPreferenceUtil {
+
+    public final static String LONGITUDE = "longitude";
+    public final static String TIME_DIFFERENCE="time_difference";
+    public final static String SERVICE_TIEM = "service_tiem";
+
     private static SharedPreferenceUtil sharedPreferenceUtil;
     private static SharedPreferences sharedPreferences;
     private final static String KEY = "meyou_sharepreferences";
+
     /** 统计iaroundid **/
     public final static String UMS_HEART = "ums_heart";
     private String SAVE_PUBLIC_KEY = "snPE6LHB8S8GLN96";

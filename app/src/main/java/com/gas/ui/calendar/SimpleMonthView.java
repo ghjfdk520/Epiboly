@@ -24,7 +24,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-class SimpleMonthView extends View
+public class SimpleMonthView extends View
 {
 
     public static final String VIEW_PARAMS_HEIGHT = "height";
@@ -42,14 +42,14 @@ class SimpleMonthView extends View
     private static final int NORMAL_ALPHA = 255;
     protected static int DEFAULT_HEIGHT = 40;
     protected static final int DEFAULT_NUM_ROWS = 6;
-	protected static int DAY_SELECTED_CIRCLE_SIZE;
+    protected static int DAY_SELECTED_CIRCLE_SIZE;
     protected static int EVENT_DOTS_CIRCLE_SIZE;
-	protected static int DAY_SEPARATOR_WIDTH = 1;
-	protected static int MINI_DAY_NUMBER_TEXT_SIZE;
-	protected static int MIN_HEIGHT = 10;
-	protected static int MONTH_DAY_LABEL_TEXT_SIZE;
-	protected static int MONTH_HEADER_SIZE;
-	protected static int MONTH_LABEL_TEXT_SIZE;
+    protected static int DAY_SEPARATOR_WIDTH = 1;
+    protected static int MINI_DAY_NUMBER_TEXT_SIZE;
+    protected static int MIN_HEIGHT = 10;
+    protected static int MONTH_DAY_LABEL_TEXT_SIZE;
+    protected static int MONTH_HEADER_SIZE;
+    protected static int MONTH_LABEL_TEXT_SIZE;
     protected static int MONTH_INFO_TEXT_SIZE;
     protected static int PADDING_BOTTOM;
 
@@ -96,7 +96,7 @@ class SimpleMonthView extends View
     protected int mWidth;
     protected int mYear;
     final Time today;
-	private final Calendar mCalendar;
+    private final Calendar mCalendar;
 
     private final Calendar mDayLabelCalendar;
     private final Boolean isPrevDayEnabled;
@@ -112,9 +112,11 @@ class SimpleMonthView extends View
 
     private Map<Integer, Integer> eventSymbols = new HashMap<>();
 
-	private DateFormatSymbols mDateFormatSymbols = new DateFormatSymbols();
+    private DateFormatSymbols mDateFormatSymbols = new DateFormatSymbols();
 
     private OnDayClickListener mOnDayClickListener;
+
+    private HashMap<SimpleMonthAdapter.CalendarDay,float[]> mDateXY = new HashMap<>();
 
     public SimpleMonthView(Context context, TypedArray typedArray)
     {
@@ -146,7 +148,7 @@ class SimpleMonthView extends View
         DAY_SELECTED_CIRCLE_SIZE = typedArray.getDimensionPixelSize(R.styleable.DayPickerView_selectedDayRadius, resources.getDimensionPixelOffset(R.dimen.selected_day_radius));
         EVENT_DOTS_CIRCLE_SIZE = resources.getDimensionPixelSize(R.dimen.event_dots_radius);
         MONTH_INFO_TEXT_SIZE = resources.getDimensionPixelSize(R.dimen.month_info_text_size);
-        PADDING_BOTTOM = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, resources.getDisplayMetrics());
+        PADDING_BOTTOM = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, resources.getDisplayMetrics());
 
         mRowHeight = ((typedArray.getDimensionPixelSize(R.styleable.DayPickerView_calendarHeight, resources.getDimensionPixelOffset(R.dimen.calendar_height)) - MONTH_HEADER_SIZE) / 6);
 
@@ -161,9 +163,9 @@ class SimpleMonthView extends View
         int dividend = (offset + mNumCells) / mNumDays;
         int remainder = (offset + mNumCells) % mNumDays;
         return (dividend + (remainder > 0 ? 1 : 0));
-	}
+    }
 
-	private void drawMonthDayLabels(Canvas canvas) {
+    private void drawMonthDayLabels(Canvas canvas) {
         int y = MONTH_HEADER_SIZE - (MONTH_DAY_LABEL_TEXT_SIZE / 2);
         int dayWidthHalf = (mWidth - mPadding * 2) / (mNumDays * 2);
 
@@ -180,9 +182,9 @@ class SimpleMonthView extends View
             String dayLabelText = dateFormat.format(mDayLabelCalendar.getTime());
             canvas.drawText(dayLabelText, x, y, mMonthDayLabelPaint);
         }
-	}
+    }
 
-	private void drawMonthTitle(Canvas canvas) {
+    private void drawMonthTitle(Canvas canvas) {
         int paddingDay = (mWidth - 2 * mPadding) / (2 * mNumDays);
         int x = paddingDay * (findDayOffset() * 2 + 1) + mPadding;
         int y = (mRowHeight + MINI_DAY_NUMBER_TEXT_SIZE) / 2 - DAY_SEPARATOR_WIDTH + MONTH_HEADER_SIZE / 5 * 2;
@@ -190,14 +192,15 @@ class SimpleMonthView extends View
         StringBuilder stringBuilder = new StringBuilder(getMonthString().toLowerCase());
         stringBuilder.setCharAt(0, Character.toUpperCase(stringBuilder.charAt(0)));
         canvas.drawText(stringBuilder.toString(), x, y, mMonthTitlePaint);
-	}
+    }
 
-	private int findDayOffset() {
+    private int findDayOffset() {
+
         return (mDayOfWeekStart < mWeekStart ? (mDayOfWeekStart + mNumDays) : mDayOfWeekStart)
                 - mWeekStart;
-	}
+    }
 
-	private String getMonthAndYearString() {
+    private String getMonthAndYearString() {
         int flags = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_NO_MONTH_DAY;
         mStringBuilder.setLength(0);
         long millis = mCalendar.getTimeInMillis();
@@ -210,15 +213,15 @@ class SimpleMonthView extends View
         return monthTitleText;
     }
 
-	private void onDayClick(SimpleMonthAdapter.CalendarDay calendarDay) {
-		if (mOnDayClickListener != null && (isPrevDayEnabled || !((calendarDay.month == today.month) && (calendarDay.year == today.year) && calendarDay.day < today.monthDay))) {
-			mOnDayClickListener.onDayClick(this, calendarDay);
+    private void onDayClick(SimpleMonthAdapter.CalendarDay calendarDay) {
+        if (mOnDayClickListener != null && (isPrevDayEnabled || !((calendarDay.month == today.month) && (calendarDay.year == today.year) && calendarDay.day < today.monthDay))) {
+            mOnDayClickListener.onDayClick(this, calendarDay);
         }
-	}
+    }
 
-	private boolean sameDay(int monthDay, Time time) {
-		return (mYear == time.year) && (mMonth == time.month) && (monthDay == time.monthDay);
-	}
+    private boolean sameDay(int monthDay, Time time) {
+        return (mYear == time.year) && (mMonth == time.month) && (monthDay == time.monthDay);
+    }
 
     private boolean prevDay(int monthDay, Time time) {
         return ((mYear < time.year)) || (mYear == time.year && mMonth < time.month) || ( mMonth == time.month && monthDay < time.monthDay);
@@ -249,22 +252,24 @@ class SimpleMonthView extends View
         }
     }
 
-	protected void drawMonthNums(Canvas canvas) {
-		int y = (mRowHeight + MINI_DAY_NUMBER_TEXT_SIZE) / 2 - DAY_SEPARATOR_WIDTH + MONTH_HEADER_SIZE;
-		int paddingDay = (mWidth - 2 * mPadding) / (2 * mNumDays);
-		int dayOffset = findDayOffset();
-		int day = 1;
-
-		while (day <= mNumCells) {
-			int x = paddingDay * (1 + dayOffset * 2) + mPadding;
-			if (mMonth == mSelectedBeginMonth && mSelectedBeginDay == day && mSelectedBeginYear == mYear) {
+    protected void drawMonthNums(Canvas canvas) {
+        int y = (mRowHeight + MINI_DAY_NUMBER_TEXT_SIZE) / 2 - DAY_SEPARATOR_WIDTH + MONTH_HEADER_SIZE;
+        int paddingDay = (mWidth - 2 * mPadding) / (2 * mNumDays);
+        int dayOffset = findDayOffset();
+        int day = 1;
+        mDateXY.clear();
+        while (day <= mNumCells) {
+            int x = paddingDay * (1 + dayOffset * 2) + mPadding;
+            if (mMonth == mSelectedBeginMonth && mSelectedBeginDay == day && mSelectedBeginYear == mYear) {
                 if (mDrawRect)
                 {
                     RectF rectF = new RectF(x - DAY_SELECTED_CIRCLE_SIZE, (y  - MINI_DAY_NUMBER_TEXT_SIZE / 3) - DAY_SELECTED_CIRCLE_SIZE, x + DAY_SELECTED_CIRCLE_SIZE, (y  - MINI_DAY_NUMBER_TEXT_SIZE / 3) + DAY_SELECTED_CIRCLE_SIZE);
-                    canvas.drawRoundRect(rectF, 10.0f, 10.0f,mSelectedCirclePaint);
+                    canvas.drawRoundRect(rectF, 10.0f, 10.0f, mSelectedCirclePaint);
+
                 }
-                else
+                else{
                     canvas.drawCircle(x, y - MINI_DAY_NUMBER_TEXT_SIZE / 3, DAY_SELECTED_CIRCLE_SIZE, mSelectedCirclePaint);
+                }
             } else {
                 if (mHasToday && (mToday == day)) {
                     canvas.drawCircle(x, y - MINI_DAY_NUMBER_TEXT_SIZE / 3, DAY_SELECTED_CIRCLE_SIZE, mCurrentCirclePaint);
@@ -274,6 +279,7 @@ class SimpleMonthView extends View
                     }
                     Integer dotsCount = eventSymbols.get(day);
                     if (dotsCount != null && dotsCount > 0) {
+
                         drawDots(x, y, dotsCount, canvas);
                     }
                 }
@@ -300,16 +306,19 @@ class SimpleMonthView extends View
                 mMonthNumPaint.setAlpha(NORMAL_ALPHA);
             }
 
-			canvas.drawText(String.format("%d", day), x, y, mMonthNumPaint);
+            canvas.drawText(String.format("%d", day), x, y, mMonthNumPaint);
 
-			dayOffset++;
-			if (dayOffset == mNumDays) {
-				dayOffset = 0;
-				y += mRowHeight;
-			}
-			day++;
-		}
-	}
+            float []location = {x, y};
+            mDateXY.put(new SimpleMonthAdapter.CalendarDay(mYear,mMonth,day),location);
+
+            dayOffset++;
+            if (dayOffset == mNumDays) {
+                dayOffset = 0;
+                y += mRowHeight;
+            }
+            day++;
+        }
+    }
 
     private void drawMonthInfo(Canvas canvas) {
         int x = (mWidth + 2 * mPadding) / 2;
@@ -317,22 +326,22 @@ class SimpleMonthView extends View
         canvas.drawText(getMonthAndYearString(), x, y, mMonthInfoPaint);
     }
 
-	public SimpleMonthAdapter.CalendarDay getDayFromLocation(float x, float y) {
-		int padding = mPadding;
-		if ((x < padding) || (x > mWidth - mPadding)) {
-			return null;
-		}
+    public SimpleMonthAdapter.CalendarDay getDayFromLocation(float x, float y) {
+        int padding = mPadding;
+        if ((x < padding) || (x > mWidth - mPadding)) {
+            return null;
+        }
 
-		int yDay = (int) (y - MONTH_HEADER_SIZE) / mRowHeight;
-		int day = 1 + ((int) ((x - padding) * mNumDays / (mWidth - padding - mPadding)) - findDayOffset()) + yDay * mNumDays;
+        int yDay = (int) (y - MONTH_HEADER_SIZE) / mRowHeight;
 
+        int day = 1 + ((int) ((x - padding) * mNumDays / (mWidth - padding - mPadding)) - findDayOffset()) + yDay * mNumDays;
         if (mMonth > 11 || mMonth < 0 || CalendarUtils.getDaysInMonth(mMonth, mYear) < day || day < 1)
             return null;
 
-		return new SimpleMonthAdapter.CalendarDay(mYear, mMonth, day);
-	}
+        return new SimpleMonthAdapter.CalendarDay(mYear, mMonth, day);
+    }
 
-	protected void initView() {
+    protected void initView() {
         mMonthTitlePaint = new Paint();
         mMonthTitlePaint.setFakeBoldText(true);
         mMonthTitlePaint.setAntiAlias(true);
@@ -382,44 +391,47 @@ class SimpleMonthView extends View
         mMonthNumPaint.setStyle(Style.FILL);
         mMonthNumPaint.setTextAlign(Align.CENTER);
         mMonthNumPaint.setFakeBoldText(false);
-	}
+    }
 
-	protected void onDraw(Canvas canvas) {
+    protected void onDraw(Canvas canvas) {
         calculateAlpha();
         drawMonthNums(canvas);
         drawMonthInfo(canvas);
-	}
+    }
 
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec),
-                mRowHeight * mNumRows + MONTH_HEADER_SIZE + PADDING_BOTTOM);
-	}
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec),
+                mRowHeight * (mNumRows) + MONTH_HEADER_SIZE + PADDING_BOTTOM);
+    }
 
-	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-		mWidth = w;
-	}
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        mWidth = w;
+    }
 
-	public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
+
             SimpleMonthAdapter.CalendarDay calendarDay = getDayFromLocation(event.getX(), event.getY());
             if (calendarDay != null) {
+                float []location = mDateXY.get(calendarDay);
+                setTag(location);
                 onDayClick(calendarDay);
             }
         }
         return true;
-	}
+    }
 
-	public void reuse() {
+    public void reuse() {
         mNumRows = DEFAULT_NUM_ROWS;
         eventSymbols.clear();
-		requestLayout();
-	}
+        requestLayout();
+    }
 
-	public void setMonthParams(HashMap<String, Integer> params) {
+    public void setMonthParams(HashMap<String, Integer> params) {
         if (!params.containsKey(VIEW_PARAMS_MONTH) && !params.containsKey(VIEW_PARAMS_YEAR)) {
             throw new InvalidParameterException("You must specify month and year for this view");
         }
-		setTag(params);
+        setTag(params);
 
         if (params.containsKey(VIEW_PARAMS_HEIGHT)) {
             mRowHeight = params.get(VIEW_PARAMS_HEIGHT);
@@ -443,11 +455,10 @@ class SimpleMonthView extends View
         mHasToday = false;
         mToday = -1;
 
-		mCalendar.set(Calendar.MONTH, mMonth);
-		mCalendar.set(Calendar.YEAR, mYear);
-		mCalendar.set(Calendar.DAY_OF_MONTH, 1);
-		mDayOfWeekStart = mCalendar.get(Calendar.DAY_OF_WEEK);
-
+        mCalendar.set(Calendar.MONTH, mMonth);
+        mCalendar.set(Calendar.YEAR, mYear);
+        mCalendar.set(Calendar.DAY_OF_MONTH, 1);
+        mDayOfWeekStart = mCalendar.get(Calendar.DAY_OF_WEEK);
         if (params.containsKey(VIEW_PARAMS_WEEK_START)) {
             mWeekStart = params.get(VIEW_PARAMS_WEEK_START);
         } else {
@@ -466,7 +477,7 @@ class SimpleMonthView extends View
         }
 
         mNumRows = calculateNumRows();
-	}
+    }
 
     public void showMothInfo(boolean show) {
         if (shouldShowMonthInfo != show) {
@@ -513,11 +524,11 @@ class SimpleMonthView extends View
         }
     }
 
-	public void setOnDayClickListener(OnDayClickListener onDayClickListener) {
-		mOnDayClickListener = onDayClickListener;
-	}
+    public void setOnDayClickListener(OnDayClickListener onDayClickListener) {
+        mOnDayClickListener = onDayClickListener;
+    }
 
-	public static abstract interface OnDayClickListener {
-		public abstract void onDayClick(SimpleMonthView simpleMonthView, SimpleMonthAdapter.CalendarDay calendarDay);
-	}
+    public static abstract interface OnDayClickListener {
+        public abstract void onDayClick(SimpleMonthView simpleMonthView, SimpleMonthAdapter.CalendarDay calendarDay);
+    }
 }

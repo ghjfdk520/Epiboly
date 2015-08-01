@@ -2,20 +2,24 @@ package com.gas.ui.common;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.gas.CloseAllActivity;
+import com.gas.conf.Config;
+import com.gas.connector.ConnectorManage;
 import com.gas.connector.HttpCallBack;
 import com.gas.utils.Utils;
 
 /**
  * Created by Heart on 2015/7/20.
  */
-public abstract class SuperActivity extends Activity implements HttpCallBack, Thread.UncaughtExceptionHandler {
-
+public abstract class SuperActivity extends Activity implements  Thread.UncaughtExceptionHandler,HttpCallBack,DialogInterface.OnDismissListener {
+    public Context mContext;
+    private long currentFlag;
     private static CustomProgressDialog progressDialog;
 
     @Override
@@ -26,7 +30,8 @@ public abstract class SuperActivity extends Activity implements HttpCallBack, Th
 
     protected void onCreate(Bundle savedInstanceState, boolean addToStack) {
         super.onCreate(savedInstanceState);
-        Thread.setDefaultUncaughtExceptionHandler(this);
+        if(!Config.DEBUG)
+         Thread.setDefaultUncaughtExceptionHandler(this);
         mContext = this;
         if (addToStack)
             CloseAllActivity.getInstance().addActivity(this);
@@ -55,6 +60,20 @@ public abstract class SuperActivity extends Activity implements HttpCallBack, Th
      */
     public void showProgressDialog() {
         // 显示进度对话框
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = 0.7f; // 0.0-1.0
+        getWindow().setAttributes(lp);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+    }
+
+    /**
+     * 显示等待对话框np 绑定请求flag
+     */
+    public void showProgressDialog(long flag) {
+        // 显示进度对话框
+        currentFlag = flag;
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = 0.7f; // 0.0-1.0
         getWindow().setAttributes(lp);
@@ -116,6 +135,10 @@ public abstract class SuperActivity extends Activity implements HttpCallBack, Th
 
     }
 
+    protected void setOnDismissListener(DialogInterface.OnDismissListener listener) {
+        progressDialog.setOnDismissListener(listener);
+    }
+
     /**
      * 获取string
      *
@@ -147,13 +170,19 @@ public abstract class SuperActivity extends Activity implements HttpCallBack, Th
     }
 
     @Override
-    public void onGeneralSuccess(String result, long flag) {
+    public void onBackPressed() {
+        Utils.log("back","0001");
+       // super.onBackPressed();
     }
 
     @Override
-    public void onGeneralError(String e, long flag) {
+    public void onDismiss(DialogInterface dialog) {
+        Utils.log("back","xiaoshi ");
+        if(currentFlag != 0){
+            ConnectorManage.getInstance().cancleRequest(currentFlag);
+            currentFlag = 0;
+        }
     }
 
 
-    public Context mContext;
 }

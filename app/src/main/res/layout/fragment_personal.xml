@@ -240,7 +240,7 @@
                 android:id="@+id/user_edit_alternate_phone"
                 style="@style/edit_personal_gray"
                 android:layout_marginLeft="8dip"
-                android:text="120316205" />
+                android:hint="120316205" />
         </LinearLayout>
 
         <LinearLayout

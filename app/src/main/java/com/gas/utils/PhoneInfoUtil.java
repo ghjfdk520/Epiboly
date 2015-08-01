@@ -97,10 +97,6 @@ public class PhoneInfoUtil {
 
     /**
      * 获取手机mac地址
-     *
-     * @return
-     * @time 2011-8-12 下午03:45:01
-     * @author:linyg
      */
     public String macAddress() {
         String macAddress = "";
@@ -121,10 +117,6 @@ public class PhoneInfoUtil {
 
     /**
      * 平台
-     *
-     * @return
-     * @time 2011-6-1 下午03:20:05
-     * @author:linyg
      */
     public int getPlat() {
         return Config.PLAT;
@@ -328,7 +320,7 @@ public class PhoneInfoUtil {
         // 自动生成，并将保存在本地
         if (invalidDeviceID) {
             StringBuffer buff = new StringBuffer();
-            buff.append("iaroundid_");
+            buff.append("id_");
             String constantChars = "1234567890abcdefghijklmnopqrstuvw";
             for (int i = 0; i < 32; i++) {
                 int randomChar = (int) (Math.random() * 100);

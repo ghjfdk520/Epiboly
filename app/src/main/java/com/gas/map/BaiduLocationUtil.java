@@ -7,6 +7,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
+import com.gas.data.SharedPreferenceUtil;
 import com.gas.utils.LightTimer;
 import com.gas.utils.Utils;
 
@@ -36,9 +37,10 @@ public class BaiduLocationUtil {
         option.setLocationMode(LocationMode.Hight_Accuracy);
         option.setOpenGps(true);
         option.setIsNeedAddress(true);
-        option.setCoorType( "bd09ll" );
-        option.setScanSpan( 0 ); // ���ö�λģʽ��С��1����һ�ζ�λ;���ڵ���1����ʱ��λ
+        option.setCoorType("bd09ll");
+        option.setScanSpan(0);
         callBacks = new ArrayList<BaiduCallBack>();
+        startBaiduListener(null);
     }
 
     public static BaiduLocationUtil getInstance( Context context ){
@@ -54,7 +56,7 @@ public class BaiduLocationUtil {
         mBaiduLocationUtil = null;
     }
 
-    public void startBaiduListener(final BaiduCallBack baiduCallBack , int type ){
+    public void startBaiduListener(final BaiduCallBack baiduCallBack ){
      //   option.setAddrType("all");
         client.setLocOption(option);
         setCallBack(baiduCallBack);
@@ -77,7 +79,8 @@ public class BaiduLocationUtil {
                             }
                         }
                     };
-                    lt.startTimerDelay(20 * 1000, 0);
+                    lt.startTimerDelay(20 * 1000, 0,1);
+
                 }
             }
 
@@ -108,7 +111,7 @@ public class BaiduLocationUtil {
             Utils.log( "addrStr" , "type:" + location.getLatitude() +" "+location.getLongitude() );
             if(!Utils.isEmptyOrNullStr( location.getAddrStr( ) ) ){
                 mIsFirst =true;
-                address = "," + location.getProvince( ) + "," + location.getCity( ) + ","
+                address = location.getProvince( ) + "," + location.getCity( ) + ","
                         + location.getDistrict( ) + location.getStreet( )
                         + location.getStreetNumber( );
                 simpleAddress = location.getCity( );
@@ -121,6 +124,10 @@ public class BaiduLocationUtil {
                 type = 0;
             }
 
+            if(type == 1){
+                SharedPreferenceUtil.getInstance(mContext).putString(SharedPreferenceUtil.LONGITUDE,lat / 1e6 + "/" + lng / 1e6 + "/"
+                        + address);
+            }
             update( type , lat , lng , address , simpleAddress );
         }
 

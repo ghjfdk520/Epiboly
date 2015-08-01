@@ -94,12 +94,14 @@ public class SimpleMonthAdapter extends RecyclerView.Adapter<SimpleMonthAdapter.
         v.setMonthParams(drawingParams);
         v.showMothInfo(isDragging);
 
+
         CalendarMonth calendarMonth = new CalendarMonth(year, month);
         if (monthCountMap.containsKey(calendarMonth)) {
              v.setEventSymbols(monthCountMap.get(calendarMonth));
         }
         v.invalidate();
-    }
+
+     }
 
     public long getItemId(int position) {
 		return position;
@@ -128,17 +130,17 @@ public class SimpleMonthAdapter extends RecyclerView.Adapter<SimpleMonthAdapter.
 
 	protected void init() {
         if (typedArray.getBoolean(R.styleable.DayPickerView_currentDaySelected, false))
-            onDayTapped(new CalendarDay(System.currentTimeMillis()));
+            onDayTapped(new CalendarDay(System.currentTimeMillis()),null);
 	}
 
 	public void onDayClick(SimpleMonthView simpleMonthView, CalendarDay calendarDay) {
 		if (calendarDay != null) {
-			onDayTapped(calendarDay);
+			onDayTapped(calendarDay,simpleMonthView);
         }
 	}
 
-	protected void onDayTapped(CalendarDay calendarDay) {
-		mController.onDayOfMonthSelected(calendarDay.year, calendarDay.month, calendarDay.day);
+	protected void onDayTapped(CalendarDay calendarDay,SimpleMonthView simpleMonthView) {
+		mController.onDayOfMonthSelected(calendarDay.year, calendarDay.month, calendarDay.day,simpleMonthView);
 		setSelectedDay(calendarDay);
 	}
 

@@ -11,6 +11,11 @@ import com.gas.epiboly.R;
 
 
 public class CustomProgressDialog extends Dialog {
+    @Override
+    public void setOnDismissListener(OnDismissListener listener) {
+        super.setOnDismissListener(listener);
+    }
+
     public CustomProgressDialog(Context context, int theme) {
         super(context, theme);
     }
@@ -67,5 +72,4 @@ public class CustomProgressDialog extends Dialog {
             t.printStackTrace();
         }
     }
-
 }

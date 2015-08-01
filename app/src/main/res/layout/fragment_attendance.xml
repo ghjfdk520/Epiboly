@@ -72,6 +72,7 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/imageview_work_bt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/attendance_work" />
@@ -93,21 +94,23 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/imageview_off_bt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/attendance_work" />
+                    android:background="@drawable/attendance_off" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dip"
-                    android:text="时间: 7:00"
+                    android:text="时间:18:00"
                     android:textColor="@color/m_5d869b"
                     android:textSize="8.5sp" />
             </LinearLayout>
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/bt_check_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
