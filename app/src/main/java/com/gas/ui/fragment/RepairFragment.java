@@ -12,6 +12,14 @@ import com.gas.ui.common.BaseFragment;
  * Created by Heart on 2015/7/22.
  */
 public class RepairFragment extends BaseFragment {
+    public void init() {
+
+    }
+
+    public void initListener() {
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return  inflater.inflate(R.layout.fragment_repair_order,container,
