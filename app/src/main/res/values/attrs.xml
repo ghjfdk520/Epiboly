@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="DayPickerView">
-        <attr name="colorCurrentDay" format="color"/>
-        <attr name="colorSelectedDayBackground" format="color"/>
-        <attr name="colorSelectedDayText" format="color"/>
-        <attr name="colorPreviousDay" format="color"/>
+        <attr name="colorCurrentDay" format="color" />
+        <attr name="colorSelectedDayBackground" format="color" />
+        <attr name="colorSelectedDayText" format="color" />
+        <attr name="colorPreviousDay" format="color" />
         <attr name="colorNormalDay" format="color" />
         <attr name="colorMonthName" format="color" />
         <attr name="colorDayName" format="color" />
-        <attr name="textSizeDay" format="dimension"/>
+        <attr name="textSizeDay" format="dimension" />
         <attr name="textSizeMonth" format="dimension" />
         <attr name="textSizeDayName" format="dimension" />
         <attr name="headerMonthHeight" format="dimension" />
@@ -45,5 +45,10 @@
             <enum name="november" value="10" />
             <enum name="december" value="11" />
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
     </declare-styleable>
 </resources>

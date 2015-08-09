@@ -1,22 +1,60 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+
     android:orientation="vertical">
 
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="1591872796"
-        android:id="@+id/edit_name"/>
+        android:layout_height="25dp"
+        android:background="@drawable/title_navigation_bg"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7.5dp"
+            android:src="@drawable/title_back" />
+    </LinearLayout>
 
     <EditText
+        android:layout_marginTop="18dp"
+        android:id="@+id/edit_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="19.5dp"
+        android:paddingLeft="19.5dp"
+        android:background="@null"
+        android:hint="手机号码"
+        android:text="1591872796"
+        android:textSize="9sp" />
+
+    <View
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        style="@style/line_one_topic"
+        />
+    <EditText android:layout_marginTop="18dp"
+        android:id="@+id/edit_pass"
+        android:layout_width="match_parent"
+        android:layout_height="19.5dp"
+        android:paddingLeft="19.5dp"
+        android:background="@null"
+        android:hint="密码"
+        android:inputType="textPassword"
         android:text="888888"
-        android:id="@+id/edit_pass"/>
+        android:textSize="9sp" />
+    <View
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        style="@style/line_one_topic"
+        />
     <Button
+        android:id="@+id/bt_login"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bt_login"
-        android:text="登陆"/>
-    </LinearLayout>
+        android:background="@drawable/start_login_bt"
+        />
+</LinearLayout>

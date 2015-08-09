@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.gas.epiboly.R;
+import com.google.gson.Gson;
 
 /**
  * Created by Heart on 2015/7/21.
@@ -22,7 +23,7 @@ public class BaseFragment extends Fragment {
 
     protected int mScreenWidth;
     protected int mScreenHeight;
-
+    protected Gson gson = new Gson();
     public BaseFragment() {
         super();
     }

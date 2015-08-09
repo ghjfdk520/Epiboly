@@ -1,7 +1,10 @@
 package com.gas.connector.protocol;
+
 import com.gas.conf.Config;
 import com.gas.connector.ConnectorManage;
 import com.gas.connector.HttpCallBack;
+import com.gas.entity.User;
+
 import java.util.LinkedHashMap;
 /**
  * Created by Heart on 2015/7/31.
@@ -30,5 +33,14 @@ public class BusinessHttpProtocol {
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
         entity.put("id",id);
         return Post(Config.checkInfo, entity, callback);
+    }
+
+    //派送历史订单
+    public static  long deliveryHisOrder(HttpCallBack callback,User user,int Id,String status ){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("depot_id",user.getDepot_id()+"");
+        entity.put("id",Id+"");
+        entity.put("status", status);
+        return Post(Config.deliveryHistoryOrder, entity, callback);
     }
 }

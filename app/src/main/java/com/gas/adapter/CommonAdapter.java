@@ -20,6 +20,30 @@ public abstract class CommonAdapter<T> extends BaseAdapter{
 	    this.mDatas = mDatas;
 	    this.mItemLayoutId= itemLayoutId;
 	}
+
+
+
+	public void addItem(T item){
+		mDatas.add(item);
+		notifyDataSetChanged();
+	}
+
+	public void addItems(List<T> items){
+		mDatas.addAll(items);
+		notifyDataSetChanged();
+	}
+
+	public void replaceItems(List<T> items){
+		mDatas.clear();
+		mDatas.addAll(items);
+		notifyDataSetChanged();
+	}
+
+	public void removeDate(){
+		mDatas.clear();
+		notifyDataSetChanged();
+	}
+
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub

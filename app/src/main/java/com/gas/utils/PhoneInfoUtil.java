@@ -11,7 +11,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.gas.conf.Config;
-import com.gas.data.SharedPreferenceUtil;
+import com.gas.database.SharedPreferenceUtil;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

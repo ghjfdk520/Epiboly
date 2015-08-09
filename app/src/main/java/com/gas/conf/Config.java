@@ -14,4 +14,5 @@ public class Config {
     public static String loginUrl = BASE_URL+"&a=login";
     public static String clockInUrl = BASE_URL+ "&a=checking";
     public static String checkInfo =  BASE_URL+ "&a=check_all";
+    public static String deliveryHistoryOrder =   BASE_URL+ "&a=order";
 }

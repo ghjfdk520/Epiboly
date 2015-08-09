@@ -14,10 +14,13 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.gas.conf.Common;
 import com.gas.connector.HttpCallBack;
+import com.gas.database.UserWorker;
 import com.gas.map.BaiduLocationUtil;
+import com.gas.ui.codeScan.CaptureActivity;
 import com.gas.ui.common.SuperActivity;
 import com.gas.ui.fragment.AttendanceFragment;
 import com.gas.ui.fragment.DeliveryFragment;
@@ -33,7 +36,7 @@ import java.util.Set;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
-public class MainActivity extends SuperActivity implements HttpCallBack {
+public class MainActivity extends SuperActivity implements HttpCallBack,View.OnClickListener {
     private static final int MSG_SET_ALIAS = 1001;
     public static final String MESSAGE_RECEIVED_ACTION = "com.gas.epiboly.MESSAGE_RECEIVED_ACTION";
     public static final String KEY_MESSAGE = "message";
@@ -50,6 +53,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack {
     private NestRadioGroup mNestRadioGroup;
     private int checkId = 1;  //显示界面id
     private View v;
+    private ImageView scan_code;
     // 百度地位模块
     private BaiduLocationUtil mBaiduLocationutil;
     private Button button;
@@ -69,6 +73,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack {
         init();
         initListeners();
         initLocation();
+        new UserWorker(this).getUser();
     }
 
     public void init() {
@@ -82,6 +87,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack {
         gasFragment = (GasFragment) fragmentManager.findFragmentById(R.id.gas_fragment);
         personalFrament = (PersonalFrament) fragmentManager.findFragmentById(R.id.personal_fragment);
         repairFragment = (RepairFragment) fragmentManager.findFragmentById(R.id.repair_fragment);
+        scan_code = (ImageView) findViewById(R.id.scan_code);
         mFragments = new Fragment[5];
         mFragments[0] = personalFrament;
         mFragments[1] = attendanceFragment;
@@ -116,7 +122,6 @@ public class MainActivity extends SuperActivity implements HttpCallBack {
                 break;
         }
     }
-
     public void initListeners() {
         mNestRadioGroup
                 .setOnCheckedChangeListener(new NestRadioGroup.OnCheckedChangeListener() {
@@ -144,13 +149,12 @@ public class MainActivity extends SuperActivity implements HttpCallBack {
                         }
                     }
                 });
+        scan_code.setOnClickListener(this);
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
-
     }
 
     @Override
@@ -252,6 +256,16 @@ public class MainActivity extends SuperActivity implements HttpCallBack {
         filter.addAction(MESSAGE_RECEIVED_ACTION);
         registerReceiver(mMessageReceiver, filter);
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.scan_code:
+                CaptureActivity.launchActivity(this);
+                break;
+        }
+    }
+
     public class MessageReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {

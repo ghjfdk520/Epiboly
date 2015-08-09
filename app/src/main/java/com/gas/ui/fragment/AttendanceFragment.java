@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import com.gas.conf.Common;
 import com.gas.connector.HttpCallBack;
 import com.gas.connector.protocol.BusinessHttpProtocol;
-import com.gas.data.SharedPreferenceUtil;
+import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.User;
 import com.gas.epiboly.R;
 import com.gas.ui.calendar.DatePickerController;
@@ -77,13 +77,13 @@ public class AttendanceFragment extends BaseFragment implements HttpCallBack,Dat
     public void onClick(View v) {
        switch (v.getId()){
            case R.id.imageview_off_bt:
-               BusinessHttpProtocol.ClockIn(this,u.getId(),temp[0],temp[1],temp[2],String.format("%d",System.currentTimeMillis() / 1000+3*24*60*60),2);
+               BusinessHttpProtocol.ClockIn(this,u.getId()+"",temp[0],temp[1],temp[2],String.format("%d",System.currentTimeMillis() / 1000+3*24*60*60),2);
                break;
            case R.id.imageview_work_bt:
-               BusinessHttpProtocol.ClockIn(this,u.getId(),temp[0],temp[1],temp[2],String.format("%d",System.currentTimeMillis() / 1000+3*24*60*60),1);
+               BusinessHttpProtocol.ClockIn(this,u.getId()+"",temp[0],temp[1],temp[2],String.format("%d",System.currentTimeMillis() / 1000+3*24*60*60),1);
                break;
            case R.id.bt_check_all:
-               BusinessHttpProtocol.checkingInfo(this,u.getId());
+               BusinessHttpProtocol.checkingInfo(this,u.getId()+"");
                break;
        }
     }

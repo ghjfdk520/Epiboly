@@ -7,7 +7,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
-import com.gas.data.SharedPreferenceUtil;
+import com.gas.database.SharedPreferenceUtil;
 import com.gas.utils.LightTimer;
 import com.gas.utils.Utils;
 

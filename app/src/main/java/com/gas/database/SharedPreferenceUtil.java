@@ -1,4 +1,4 @@
-package com.gas.data;
+package com.gas.database;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,6 +11,8 @@ public class SharedPreferenceUtil {
     public final static String LONGITUDE = "longitude";
     public final static String TIME_DIFFERENCE="time_difference";
     public final static String SERVICE_TIEM = "service_tiem";
+    public final static String DELIVERY_HISTORY="delivery_history";
+    public final static String DELIVERY_ACCPET="delivery_accpet";
 
     private static SharedPreferenceUtil sharedPreferenceUtil;
     private static SharedPreferences sharedPreferences;

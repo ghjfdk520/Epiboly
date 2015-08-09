@@ -93,7 +93,7 @@ public class ConnectorManage {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (!error.getMessage().equals("")) {
+                if (error.getMessage() != null && !error.getMessage().equals("")) {
                     Utils.toastMsg(mContext, error.getMessage());
                     Utils.log("RESULT Error", error.getMessage());
                 }

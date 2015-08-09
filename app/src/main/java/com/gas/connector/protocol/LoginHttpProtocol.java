@@ -5,7 +5,7 @@ import com.gas.conf.Common;
 import com.gas.conf.Config;
 import com.gas.connector.ConnectorManage;
 import com.gas.connector.HttpCallBack;
-import com.gas.data.SharedPreferenceUtil;
+import com.gas.database.SharedPreferenceUtil;
 import com.gas.utils.Utils;
 
 import org.json.JSONObject;

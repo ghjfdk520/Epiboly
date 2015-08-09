@@ -34,4 +34,5 @@ dependencies {
     compile files('libs/iaround_httplib.jar')
     compile files('libs/gson-2.2.2.jar')
     compile files('libs/locSDK_6.03.jar')
+    compile files('libs/zxing.jar')
 }
