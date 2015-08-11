@@ -15,4 +15,10 @@ public class Config {
     public static String clockInUrl = BASE_URL+ "&a=checking";
     public static String checkInfo =  BASE_URL+ "&a=check_all";
     public static String deliveryHistoryOrder =   BASE_URL+ "&a=order";
+    public static String newDeliverOrder = BASE_URL+"&a=new_order";
+    public static String onDeliverOrder =BASE_URL+ "&a=on_order";
+    public static String getDeliverOrder = BASE_URL+"&a=get_order";
+    public static String rejectDeliverOrder= BASE_URL+"&a=reject_order";
+    public static String deliverOrderlist= BASE_URL+"&a=order_list";
+
 }

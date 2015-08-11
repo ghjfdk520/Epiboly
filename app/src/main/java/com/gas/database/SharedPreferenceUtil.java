@@ -13,6 +13,7 @@ public class SharedPreferenceUtil {
     public final static String SERVICE_TIEM = "service_tiem";
     public final static String DELIVERY_HISTORY="delivery_history";
     public final static String DELIVERY_ACCPET="delivery_accpet";
+    public final static String DELIVERY_UNACCPET="delivery_unaccpet";
 
     private static SharedPreferenceUtil sharedPreferenceUtil;
     private static SharedPreferences sharedPreferences;

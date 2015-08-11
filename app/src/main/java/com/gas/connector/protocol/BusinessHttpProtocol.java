@@ -43,4 +43,42 @@ public class BusinessHttpProtocol {
         entity.put("status", status);
         return Post(Config.deliveryHistoryOrder, entity, callback);
     }
+
+    //拒单
+    public static long rejectDeliverOrder(HttpCallBack callback,int orderId,int userId){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",userId);
+        entity.put("id",orderId);
+        return Post(Config.rejectDeliverOrder, entity, callback);
+    }
+
+    //
+    public static long getDeliverOrder(HttpCallBack callback,int orderId,int userId){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",userId);
+        entity.put("id",orderId);
+        return Post(Config.getDeliverOrder, entity, callback);
+    }
+
+    public static long onDeliverOrder(HttpCallBack callback,User user,int Id,String status){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("depot_id",user.getDepot_id()+"");
+        entity.put("id",Id+"");
+        entity.put("status", status);
+        return Post(Config.onDeliverOrder, entity, callback);
+    }
+    public static long newDeliverOrder(HttpCallBack callback,User user,int Id,String status){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("depot_id",user.getDepot_id()+"");
+        entity.put("id",Id+"");
+        entity.put("status", status);
+        return Post(Config.newDeliverOrder, entity, callback);
+    }
+
+    public static long dOrderDetails(HttpCallBack callback,int id){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("id",id+"");
+        return Post(Config.deliverOrderlist, entity, callback);
+    }
+
 }

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -67,6 +68,8 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
     private int currentViewPosition = 0;  //0未接订单  1 已接订单  2 历史订单
     private Handler handler = new Handler();
 
+
+    private ImageView  emptyView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_delivery_order, container,
@@ -88,19 +91,36 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
     public void getRecordToBuffer() {
 
         String historyJsonArray = SharedPreferenceUtil.getInstance(mActivity).getString(SharedPreferenceUtil.DELIVERY_HISTORY);
+        String accpetJsonArray = SharedPreferenceUtil.getInstance(mActivity).getString(SharedPreferenceUtil.DELIVERY_ACCPET);
+        String unaccpetyJsonArray = SharedPreferenceUtil.getInstance(mActivity).getString(SharedPreferenceUtil.DELIVERY_UNACCPET);
 
         List<DeliveryOrder> tempList = gson.fromJson(historyJsonArray, new TypeToken<List<DeliveryOrder>>() {
         }.getType());
         if (tempList != null)
             historyDatas.addAll(tempList);
 
+        tempList = gson.fromJson(unaccpetyJsonArray, new TypeToken<List<DeliveryOrder>>() {
+        }.getType());
+        if (tempList != null)
+            unaccpetDatas.addAll(tempList);
+
+        tempList = gson.fromJson(accpetJsonArray, new TypeToken<List<DeliveryOrder>>() {
+        }.getType());
+        if (tempList != null)
+            accpetDatas.addAll(tempList);
+
         if (currentViewPosition == 2)
             currentList = (LinkedList) historyDatas;
+        else if(currentViewPosition == 1)
+            currentList = (LinkedList) accpetDatas;
+        else if(currentViewPosition == 0)
+            currentList = (LinkedList) unaccpetDatas;
     }
 
     public void init() {
         getRecordToBuffer();
-
+        emptyView = new ImageView(mActivity);
+        emptyView.setImageResource(R.drawable.start_login_bt);
         historyListView = (PullToRefreshListView) rootView.findViewById(R.id.pull_refresh_history_list);
         accpetListView = (PullToRefreshListView) rootView.findViewById(R.id.pull_refresh_accpet_list);
         unaccpetListView = (PullToRefreshListView) rootView.findViewById(R.id.pull_refresh_un_accpet_list);
@@ -135,20 +155,39 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
 
 
         showListView(currentViewPosition);
+        referenceList(currentViewPosition);
     }
 
     public void initListener() {
-        accpetListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        unaccpetListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                Utils.log("down","yeah");
                 referenceTime = System.currentTimeMillis() / 1000;
-                DOWN_FLAG = BusinessHttpProtocol.deliveryHisOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+                DOWN_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 referenceTime = System.currentTimeMillis() / 1000;
-                UP_FLAG = BusinessHttpProtocol.deliveryHisOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
+                UP_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
+            }
+        });
+
+
+        accpetListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                Utils.log("down","yeah");
+                referenceTime = System.currentTimeMillis() / 1000;
+                DOWN_FLAG = BusinessHttpProtocol.onDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                Utils.log("down","yeah");
+                referenceTime = System.currentTimeMillis() / 1000;
+                UP_FLAG = BusinessHttpProtocol.onDeliverOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
             }
         });
 
@@ -172,14 +211,24 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
                 switch (checkedId) {
                     case R.id.radio_un_accpet:
                         showListView(0);
+                        referenceList(0);
                         break;
                     case R.id.radio_accpet:
                         showListView(1);
+                        referenceList(1);
                         break;
                     case R.id.radio_history:
                         showListView(2);
+                        referenceList(2);
                         break;
                 }
+            }
+        });
+
+        emptyView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DOWN_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
             }
         });
     }
@@ -193,25 +242,27 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
         tv.setText("空的");
 
 
-
         switch (position) {
             case 0:
                 currentViewPosition = 0;
                 unaccpetListView.setVisibility(View.VISIBLE);
                 group_status_selector.check(R.id.radio_un_accpet);
-                unaccpetListView.setEmptyView(tv);
+                unaccpetListView.setEmptyView(emptyView);
+                currentList = (LinkedList) unaccpetDatas;
                 break;
             case 1:
                 currentViewPosition = 1;
                 accpetListView.setVisibility(View.VISIBLE);
                 group_status_selector.check(R.id.radio_accpet);
-                accpetListView.setEmptyView(tv);
+                accpetListView.setEmptyView(emptyView);
+                currentList = (LinkedList) accpetDatas;
                 break;
             case 2:
                 currentViewPosition = 2;
                 historyListView.setVisibility(View.VISIBLE);
                 group_status_selector.check(R.id.radio_history);
-                historyListView.setEmptyView(tv);
+                historyListView.setEmptyView(emptyView);
+                currentList = (LinkedList) historyDatas;
                 break;
         }
     }
@@ -223,42 +274,47 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
             @Override
             public void run() {
                 onRefreshComplete();
-                if (flag == DOWN_FLAG) {
-                    try {
-                        JSONObject json = new JSONObject(result);
 
-                        List<DeliveryOrder> tempList = new LinkedList<DeliveryOrder>();
-                        tempList = gson.fromJson(json.getString("all"), new TypeToken<List<DeliveryOrder>>() {
-                        }.getType());
+                try {
+                    JSONObject json = new JSONObject(result);
 
-
+                    List<DeliveryOrder> tempList = new LinkedList<DeliveryOrder>();
+                    tempList = gson.fromJson(json.getString("all"), new TypeToken<List<DeliveryOrder>>() {
+                    }.getType());
+                    if (flag == DOWN_FLAG) {
                         if (currentViewPosition == 2) {
-                            for (DeliveryOrder deliveryOrder : historyDatas) {
-                                Utils.log("orderList", deliveryOrder.getAddress());
-                            }
                             sharedPreferenceUtil.putString(SharedPreferenceUtil.DELIVERY_HISTORY, json.getString("all"));
                             historyDatas.clear();
                             historyDatas.addAll(tempList);
                             historyAdapter.notifyDataSetChanged();
                         } else if (currentViewPosition == 1) {
-
+                            sharedPreferenceUtil.putString(SharedPreferenceUtil.DELIVERY_ACCPET, json.getString("all"));
+                            accpetDatas.clear();
+                            accpetDatas.addAll(tempList);
+                            accpetAdapter.notifyDataSetChanged();
                         } else if (currentViewPosition == 0) {
-
+                            sharedPreferenceUtil.putString(SharedPreferenceUtil.DELIVERY_UNACCPET, json.getString("all"));
+                            unaccpetDatas.clear();
+                            unaccpetDatas.addAll(tempList);
+                            unaccpetAdapter.notifyDataSetChanged();
                         }
 
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    } else if (flag == UP_FLAG) {
+                        if (currentViewPosition == 2) {
+                            historyDatas.addAll(tempList);
+                            historyAdapter.notifyDataSetChanged();
+                        } else if (currentViewPosition == 1) {
+                            accpetDatas.addAll(tempList);
+                            accpetAdapter.notifyDataSetChanged();
+                        } else if (currentViewPosition == 0) {
+                            unaccpetDatas.addAll(tempList);
+                            unaccpetAdapter.notifyDataSetChanged();
+                        }
                     }
-                } else if (flag == UP_FLAG) {
-                    List<DeliveryOrder> tempList = new LinkedList<DeliveryOrder>();
-                    for (int i = 0; i < 10; i++) {
-                        DeliveryOrder temp = new DeliveryOrder();
-                        tempList.add(temp);
-                    }
-                    historyDatas.addAll(tempList);
-                    historyAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+
             }
         }, ((System.currentTimeMillis() / 1000) - referenceTime) < 2000 ? 2000 : 100);
 
@@ -279,5 +335,23 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
     public void onRefreshComplete() {
         accpetListView.onRefreshComplete();
         historyListView.onRefreshComplete();
+        unaccpetListView.onRefreshComplete();
     }
+
+
+
+    public void referenceList(int position) {
+        switch (position) {
+            case 0:
+                unaccpetListView.setRefreshing(false);
+                break;
+            case 1:
+                accpetListView.setRefreshing(false);
+                break;
+            case 2:
+                historyListView.setRefreshing(false);
+                break;
+        }
+    }
+
 }

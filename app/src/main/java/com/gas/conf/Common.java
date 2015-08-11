@@ -19,4 +19,10 @@ public class Common {
     public int windowWidth = 0; // 屏幕宽度
     public int windowHeight = 0; // 屏幕高度
 
+    public static int mDeliveryCount = 0;   //未接订单 数量
+
+    public static int mDliveryAccept = 0 ;  //管理员推送订单数量
+
+
+
 }
