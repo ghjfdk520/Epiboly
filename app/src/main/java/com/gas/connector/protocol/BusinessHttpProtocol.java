@@ -47,16 +47,16 @@ public class BusinessHttpProtocol {
     //拒单
     public static long rejectDeliverOrder(HttpCallBack callback,int orderId,int userId){
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
-        entity.put("driver_id",userId);
-        entity.put("id",orderId);
+        entity.put("driver_id",userId+"");
+        entity.put("id",orderId+"");
         return Post(Config.rejectDeliverOrder, entity, callback);
     }
 
-    //
+    //接单
     public static long getDeliverOrder(HttpCallBack callback,int orderId,int userId){
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
-        entity.put("driver_id",userId);
-        entity.put("id",orderId);
+        entity.put("driver_id",userId+"");
+        entity.put("id",orderId+"");
         return Post(Config.getDeliverOrder, entity, callback);
     }
 
@@ -81,4 +81,10 @@ public class BusinessHttpProtocol {
         return Post(Config.deliverOrderlist, entity, callback);
     }
 
+    public static long finishOrder(HttpCallBack callback,int Id,int orderId){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",Id+"");
+        entity.put("id",orderId+"");
+        return Post(Config.finishOrder, entity, callback);
+    }
 }

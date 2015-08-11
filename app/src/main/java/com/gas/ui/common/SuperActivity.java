@@ -25,7 +25,6 @@ public abstract class SuperActivity extends Activity implements  Thread.Uncaught
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         onCreate(savedInstanceState, true);
-
     }
 
     protected void onCreate(Bundle savedInstanceState, boolean addToStack) {

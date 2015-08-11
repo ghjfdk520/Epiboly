@@ -8,9 +8,6 @@ import android.os.Looper;
  */
 /**
  * 一个简单的定时器，使用Handler实现，比Timer更实用 也可用CountDownTimer来代替
- *
- * @author huyunfeng E-mail:my519820363@gmail.com
- *
  */
 public abstract class LightTimer
 {

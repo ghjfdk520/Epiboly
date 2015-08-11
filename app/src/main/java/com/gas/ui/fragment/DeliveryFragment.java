@@ -1,11 +1,13 @@
 package com.gas.ui.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -19,6 +21,7 @@ import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.DeliveryOrder;
 import com.gas.epiboly.R;
+import com.gas.ui.activity.orderDetail;
 import com.gas.ui.common.BaseFragment;
 import com.gas.utils.Utils;
 import com.google.gson.reflect.TypeToken;
@@ -69,7 +72,8 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
     private Handler handler = new Handler();
 
 
-    private ImageView  emptyView;
+    private ImageView emptyView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_delivery_order, container,
@@ -84,6 +88,9 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
         sharedPreferenceUtil = SharedPreferenceUtil.getInstance(mActivity);
         init();
         initListener();
+
+        showListView(currentViewPosition);
+        referenceList(currentViewPosition);
     }
 
 
@@ -111,9 +118,9 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
 
         if (currentViewPosition == 2)
             currentList = (LinkedList) historyDatas;
-        else if(currentViewPosition == 1)
+        else if (currentViewPosition == 1)
             currentList = (LinkedList) accpetDatas;
-        else if(currentViewPosition == 0)
+        else if (currentViewPosition == 0)
             currentList = (LinkedList) unaccpetDatas;
     }
 
@@ -125,23 +132,37 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
         accpetListView = (PullToRefreshListView) rootView.findViewById(R.id.pull_refresh_accpet_list);
         unaccpetListView = (PullToRefreshListView) rootView.findViewById(R.id.pull_refresh_un_accpet_list);
 
-
         unaccpetAdapter = new CommonAdapter<DeliveryOrder>(mActivity, unaccpetDatas, R.layout.item_delivery_order_history) {
             @Override
-            public void convert(ViewHolder helper, DeliveryOrder item) {
-
+            public void convert(final ViewHolder helper, DeliveryOrder item) {
+                helper.setText(R.id.customer_address, item.getAddress());
+                helper.setText(R.id.customer_name, item.getClient_name());
+                helper.getView(R.id.ly_click).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        orderDetail.launchActivity(DeliveryFragment.this, 0x2222, unaccpetDatas.get(helper.getPosition()));
+                    }
+                });
             }
         };
         accpetAdapter = new CommonAdapter<DeliveryOrder>(mActivity, accpetDatas, R.layout.item_delivery_order_history) {
             @Override
-            public void convert(ViewHolder helper, DeliveryOrder item) {
-
+            public void convert(final ViewHolder helper, DeliveryOrder item) {
+                helper.setText(R.id.customer_address, item.getAddress());
+                helper.setText(R.id.customer_name, item.getClient_name());
+                helper.getView(R.id.ly_click).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        orderDetail.launchActivity(DeliveryFragment.this, 0x2222, accpetDatas.get(helper.getPosition()));
+                    }
+                });
             }
         };
         historyAdapter = new CommonAdapter<DeliveryOrder>(mActivity, historyDatas, R.layout.item_delivery_order_history) {
             @Override
             public void convert(ViewHolder helper, DeliveryOrder item) {
-
+                helper.setText(R.id.customer_address, item.getAddress());
+                helper.setText(R.id.customer_name, item.getClient_name());
             }
         };
         group_status_selector = (RadioGroup) rootView.findViewById(R.id.group_status_selector);
@@ -152,17 +173,13 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
         accpetListView.setMode(PullToRefreshBase.Mode.BOTH);
         historyListView.setAdapter(historyAdapter);
         historyListView.setMode(PullToRefreshBase.Mode.BOTH);
-
-
-        showListView(currentViewPosition);
-        referenceList(currentViewPosition);
     }
 
     public void initListener() {
         unaccpetListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                Utils.log("down","yeah");
+                Utils.log("down", "yeah");
                 referenceTime = System.currentTimeMillis() / 1000;
                 DOWN_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
             }
@@ -170,24 +187,33 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 referenceTime = System.currentTimeMillis() / 1000;
-                UP_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
+                if( currentList.size()>0)
+                 UP_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
             }
         });
 
-
+        accpetListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Utils.log("click ", "clikc");
+                orderDetail.launchActivity(DeliveryFragment.this, 0x2222, accpetDatas.get(position));
+            }
+        });
         accpetListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                Utils.log("down","yeah");
+                Utils.log("down", "yeah");
                 referenceTime = System.currentTimeMillis() / 1000;
                 DOWN_FLAG = BusinessHttpProtocol.onDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                Utils.log("down","yeah");
+                Utils.log("down", "yeah");
                 referenceTime = System.currentTimeMillis() / 1000;
-                UP_FLAG = BusinessHttpProtocol.onDeliverOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
+
+                if (currentList != null)
+                    UP_FLAG = BusinessHttpProtocol.onDeliverOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
             }
         });
 
@@ -201,13 +227,15 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 referenceTime = System.currentTimeMillis() / 1000;
-                UP_FLAG = BusinessHttpProtocol.deliveryHisOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
+                if (currentList != null)
+                    UP_FLAG = BusinessHttpProtocol.deliveryHisOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
             }
         });
 
         group_status_selector.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                onRefreshComplete();
                 switch (checkedId) {
                     case R.id.radio_un_accpet:
                         showListView(0);
@@ -339,7 +367,6 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
     }
 
 
-
     public void referenceList(int position) {
         switch (position) {
             case 0:
@@ -354,4 +381,10 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
         }
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Utils.log("czd", requestCode + "  " + resultCode);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

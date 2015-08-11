@@ -20,5 +20,6 @@ public class Config {
     public static String getDeliverOrder = BASE_URL+"&a=get_order";
     public static String rejectDeliverOrder= BASE_URL+"&a=reject_order";
     public static String deliverOrderlist= BASE_URL+"&a=order_list";
+    public static String finishOrder = BASE_URL+"&a=finish_orde";
 
 }
