@@ -2,14 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white"
+    android:gravity="center_vertical"
     android:orientation="vertical">
 
-    <View
-        style="@style/line_one_topic"
-        android:layout_marginTop="20dip" />
+    <ImageView
+        android:id="@+id/bt_check_all"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dip"
+        android:src="@drawable/attendanse_absence" />
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageview_work_bt"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:src="@drawable/attendance_work" />
+        <ImageView
+            android:id="@+id/imageview_off_bt"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:src="@drawable/attendance_off" />
+    </LinearLayout>
+
+  <!--  <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="28dip"
         android:orientation="horizontal">
@@ -41,8 +65,8 @@
         <TextView
             style="@style/font_attendance_calendar_bar"
             android:text="六" />
-    </LinearLayout>
-
+    </LinearLayout>-->
+<!--
     <View style="@style/line_one_topic" />
 
 
@@ -51,9 +75,9 @@
         android:layout_width="match_parent"
         android:layout_height="260dp"
         android:background="@android:color/white"
-        calendar:drawRoundRect="false" />
+        calendar:drawRoundRect="false" />-->
 
-    <RelativeLayout
+   <!-- <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -64,49 +88,9 @@
             android:layout_marginBottom="90dp"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/imageview_work_bt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/attendance_work" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dip"
-                    android:text="时间: 7:00"
-                    android:textColor="@color/m_5d869b"
-                    android:textSize="8.5sp" />
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/imageview_off_bt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/attendance_off" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dip"
-                    android:text="时间:18:00"
-                    android:textColor="@color/m_5d869b"
-                    android:textSize="8.5sp" />
-            </LinearLayout>
         </LinearLayout>
 
         <ImageView
@@ -118,5 +102,5 @@
             android:layout_margin="15dip"
             android:src="@drawable/attendanse_absence" />
     </RelativeLayout>
-
+-->
 </LinearLayout>

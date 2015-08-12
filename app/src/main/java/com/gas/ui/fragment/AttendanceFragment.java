@@ -12,19 +12,14 @@ import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.User;
 import com.gas.epiboly.R;
-import com.gas.ui.calendar.DatePickerController;
-import com.gas.ui.calendar.DayPickerView;
-import com.gas.ui.calendar.SimpleMonthAdapter;
-import com.gas.ui.calendar.SimpleMonthView;
 import com.gas.ui.common.BaseFragment;
 import com.gas.utils.Utils;
 
 /**
  * Created by Heart on 2015/7/21.
  */
-public class AttendanceFragment extends BaseFragment implements HttpCallBack,DatePickerController,View.OnClickListener {
+public class AttendanceFragment extends BaseFragment implements HttpCallBack,View.OnClickListener {
     protected View rootView;
-    private DayPickerView calendarView;
     private ImageView imageview_work_bt;
     private ImageView imageview_off_bt;
     private ImageView bt_check_all;
@@ -42,8 +37,7 @@ public class AttendanceFragment extends BaseFragment implements HttpCallBack,Dat
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         rootView = getView();
-        calendarView = (DayPickerView) rootView.findViewById(R.id.calendar_view);
-        calendarView.setController(this);
+
         init();
         initListener();
     }
@@ -60,17 +54,6 @@ public class AttendanceFragment extends BaseFragment implements HttpCallBack,Dat
         imageview_work_bt.setOnClickListener(this);
         imageview_off_bt.setOnClickListener(this);
         bt_check_all.setOnClickListener(this);
-    }
-    @Override
-    public int getMaxYear() {
-        return 0;
-    }
-    @Override
-    public void onDayOfMonthSelected(int year, int month, int day,SimpleMonthView simpleMonthView) {
-        Utils.log("czd", year + " " + month + " " + day + "  " + ((float[]) simpleMonthView.getTag())[0] + " " + ((float[]) simpleMonthView.getTag())[1]);
-    }
-    @Override
-    public void onDateRangeSelected(SimpleMonthAdapter.SelectedDays<SimpleMonthAdapter.CalendarDay> selectedDays) {
     }
 
     @Override

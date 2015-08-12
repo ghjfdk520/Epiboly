@@ -61,10 +61,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <View
-        style="@style/line_one_topic"
-        android:layout_marginLeft="8dip"
-        android:layout_marginRight="8dip" />
+
 
 
     <LinearLayout
@@ -82,12 +79,12 @@
             android:orientation="horizontal">
 
             <TextView
-                style="@style/font_personal_gray"
+                style="@style/font_personal_black_one"
                 android:text="住址:" />
 
             <TextView
                 android:id="@+id/user_address"
-                style="@style/font_personal_gray"
+                style="@style/font_personal_black_one"
                 android:layout_marginLeft="8dip"
                 android:text="XXXXXXXXXXXXXXXX" />
         </LinearLayout>
@@ -99,12 +96,12 @@
             android:orientation="horizontal">
 
             <TextView
-                style="@style/font_personal_gray"
+                style="@style/font_personal_black_one"
                 android:text="性别:" />
 
             <TextView
                 android:id="@+id/user_sex"
-                style="@style/font_personal_gray"
+                style="@style/font_personal_black_one"
                 android:layout_marginLeft="8dip"
                 android:text="男" />
         </LinearLayout>
@@ -116,12 +113,12 @@
             android:orientation="horizontal">
 
             <TextView
-                style="@style/font_personal_gray"
+                style="@style/font_personal_black_one"
                 android:text="备用联系电话:" />
 
             <TextView
                 android:id="@+id/user_alternate_phone"
-                style="@style/font_personal_gray"
+                style="@style/font_personal_black_one"
                 android:layout_marginLeft="8dip"
                 android:text="120316205" />
         </LinearLayout>
@@ -133,16 +130,17 @@
             android:orientation="horizontal">
 
             <TextView
-                style="@style/font_personal_gray"
+                style="@style/font_personal_black_one"
                 android:text="配送项目 :" />
 
             <TextView
                 android:id="@+id/user_service"
-                style="@style/font_personal_gray"
+                style="@style/font_personal_black_one"
                 android:layout_marginLeft="8dip"
                 android:text="煤气   维修" />
         </LinearLayout>
         <RelativeLayout
+            android:visibility="gone"
             style="@style/hweight_wfill">
 
             <ImageView
@@ -283,6 +281,7 @@
 
 
             <ImageView
+                android:visibility="gone"
                 android:id="@+id/personal_edit_save"
                 style="@style/double_wrap"
                 android:layout_gravity="center_horizontal"
