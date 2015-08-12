@@ -205,6 +205,8 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     }
 
     public void initJpush(){
+
+
         mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, Common.getInstance().user.getPhone()));
     }
 
@@ -274,5 +276,11 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
                 Utils.log("Main",message);
             }
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Utils.log("czd","agin");
     }
 }

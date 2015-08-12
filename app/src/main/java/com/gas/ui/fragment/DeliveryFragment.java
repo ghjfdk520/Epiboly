@@ -21,7 +21,6 @@ import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.DeliveryOrder;
 import com.gas.epiboly.R;
-import com.gas.ui.activity.orderDetail;
 import com.gas.ui.common.BaseFragment;
 import com.gas.utils.Utils;
 import com.google.gson.reflect.TypeToken;
@@ -140,7 +139,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
                 helper.getView(R.id.ly_click).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        orderDetail.launchActivity(DeliveryFragment.this, 0x2222, unaccpetDatas.get(helper.getPosition()));
+                      //  orderDetail.launchActivity(DeliveryFragment.this, 0x2222, unaccpetDatas.get(helper.getPosition()));
                     }
                 });
             }
@@ -153,7 +152,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
                 helper.getView(R.id.ly_click).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        orderDetail.launchActivity(DeliveryFragment.this, 0x2222, accpetDatas.get(helper.getPosition()));
+                     //   orderDetail.launchActivity(DeliveryFragment.this, 0x2222, accpetDatas.get(helper.getPosition()));
                     }
                 });
             }
@@ -196,7 +195,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Utils.log("click ", "clikc");
-                orderDetail.launchActivity(DeliveryFragment.this, 0x2222, accpetDatas.get(position));
+              //  orderDetail.launchActivity(DeliveryFragment.this, 0x2222, accpetDatas.get(position));
             }
         });
         accpetListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {

@@ -7,10 +7,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.gas.conf.Common;
 import com.gas.epiboly.MainActivity;
 import com.gas.epiboly.R;
 import com.gas.utils.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -19,13 +24,53 @@ import cn.jpush.android.api.JPushInterface;
  */
 public class JGReceiver extends BroadcastReceiver {
     private static final String TAG = "JPush";
-
+    private NotificationManager manager;
+    private int notificationId = 0;
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (null == manager) {
+            manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        }
+
         Bundle bundle = intent.getExtras();
         Utils.log(TAG, "[MyReceiver] onReceive - " + intent.getAction() + ", extras: " + printBundle(bundle));
 
+        if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
+            String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
+            Utils.log(TAG, "[MyReceiver] 接收Registration Id : " + regId);
+            //send the Registration Id to your server...
 
+        } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
+            Utils.log(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
+            processCustomMessage(context, bundle);
+            addNotification(context, bundle);
+
+        } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
+            Utils.log(TAG, "[MyReceiver] 接收到推送下来的通知");
+            int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
+            Utils.log(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
+            //processCustomMessage(context, bundle);
+            addNotification(context, bundle);
+        } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
+            Utils.log(TAG, "[MyReceiver] 用户点击打开了通知");
+
+//            //打开自定义的Activity
+//            Intent i = new Intent(context, MainActivity.class);
+//            i.putExtras(bundle);
+//            //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+//            context.startActivity(i);
+
+        } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
+            Utils.log(TAG, "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
+            //在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity， 打开一个网页等..
+
+        } else if (JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {
+            boolean connected = intent.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, false);
+            Log.w(TAG, "[MyReceiver]" + intent.getAction() + " connected state change to " + connected);
+        } else {
+            Utils.log(TAG, "[MyReceiver] Unhandled intent - " + intent.getAction());
+        }
     }
 
     // 打印所有的 intent extra 数据
@@ -34,10 +79,9 @@ public class JGReceiver extends BroadcastReceiver {
         for (String key : bundle.keySet()) {
             if (key.equals(JPushInterface.EXTRA_NOTIFICATION_ID)) {
                 sb.append("\nkey:" + key + ", value:" + bundle.getInt(key));
-            }else if(key.equals(JPushInterface.EXTRA_CONNECTION_CHANGE)){
+            } else if (key.equals(JPushInterface.EXTRA_CONNECTION_CHANGE)) {
                 sb.append("\nkey:" + key + ", value:" + bundle.getBoolean(key));
-            }
-            else {
+            } else {
                 sb.append("\nkey:" + key + ", value:" + bundle.getString(key));
             }
         }
@@ -55,18 +99,57 @@ public class JGReceiver extends BroadcastReceiver {
         }
     }
 
-    private void addNotification(Context mContext) {
-        NotificationManager manager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new Notification();
-        notification.icon = R.drawable.indicator_arrow;
-        notification.tickerText = "我在这里";
-        notification.defaults = Notification.DEFAULT_SOUND;
-        notification.audioStreamType = android.media.AudioManager.ADJUST_LOWER;
+    private void addNotification(Context mContext, Bundle bundle) {
+        //manager.cancel(0);
 
-        Intent intent = new Intent(mContext, MainActivity.class);
+        /**
+         * order_type 1为送气；2为抢修； must_get 1为系统派送（不可拒绝）；0反之
+         */
+        try {
+            JSONObject jsontemp = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        notification.setLatestEventInfo(mContext, "短信通知", "亲爱的，晚上8点老地方见哦~", pendingIntent);
-        manager.notify(R.drawable.start_login_bt, notification);
+            JSONObject json = new JSONObject(jsontemp.getString("txt"));
+            int order_type = json.optInt("order_type");
+            int must_get=json.optInt("must_get");
+
+            Notification notification = new Notification();
+            notification.icon = R.drawable.indicator_arrow;
+            notification.defaults = Notification.DEFAULT_SOUND;
+            notification.audioStreamType = android.media.AudioManager.ADJUST_LOWER;
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            Intent intent = new Intent(mContext, MainActivity.class);
+            intent.putExtra("order_type", bundle);
+            intent.putExtra("must_get", bundle);
+            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+            StringBuffer strBuffer = new StringBuffer();
+            strBuffer.append("您有");
+            if(order_type == 1){
+                if(must_get == 1){
+                    Common.deliveryCount =Common.deliveryCount+1;
+                    strBuffer.append(Common.deliveryCount +"条管理员指派送气订单");
+                    notificationId =1;
+                }else{
+                    Common.deliveryAccept =Common.deliveryAccept+1;
+                    strBuffer.append(Common.deliveryAccept +"条未接送气订单");notificationId =2;
+                }
+            }else if(order_type ==2){
+                if(must_get == 1){
+                    Common.repairCount =
+                            Common.repairCount+1;
+                    strBuffer.append(Common.repairCount +"条管理员指派维修订单");
+                    notificationId =3;
+                }else{
+                    Common.repairAccept  =Common.repairAccept+1;
+                    strBuffer.append(Common.repairAccept +"条未接维修订单");
+                    notificationId =4;
+                }
+            }
+            notification.setLatestEventInfo(mContext, "林田燃气", strBuffer.toString(), pendingIntent);
+            manager.cancel(notificationId);
+            manager.notify(notificationId, notification);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //  manager.notify(1,notification);
     }
 }

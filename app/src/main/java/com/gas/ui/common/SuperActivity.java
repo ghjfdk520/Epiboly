@@ -14,6 +14,8 @@ import com.gas.connector.ConnectorManage;
 import com.gas.connector.HttpCallBack;
 import com.gas.utils.Utils;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Created by Heart on 2015/7/20.
  */
@@ -43,6 +45,18 @@ public abstract class SuperActivity extends Activity implements  Thread.Uncaught
         super.onStart();
         Utils.log("SuperActivity", "onStart");
         setComponentListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
     }
 
     /**
