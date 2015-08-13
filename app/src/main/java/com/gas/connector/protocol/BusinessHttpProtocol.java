@@ -81,10 +81,49 @@ public class BusinessHttpProtocol {
         return Post(Config.deliverOrderlist, entity, callback);
     }
 
-    public static long finishOrder(HttpCallBack callback,int Id,int orderId){
+
+    //派送历史订单
+    public static  long repairOrderHistory(HttpCallBack callback,User user,int Id,String status ){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("depot_id",user.getDepot_id()+"");
+        entity.put("id",Id+"");
+        entity.put("status", status);
+        return Post(Config.repairOrderHistory, entity, callback);
+    }
+
+    public static long newRepairOrder(HttpCallBack callback,User user,int Id,String status){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("depot_id",user.getDepot_id()+"");
+        entity.put("id",Id+"");
+        entity.put("status", status);
+        return Post(Config.newRepairOrder, entity, callback);
+    }
+    //派送维修
+    public static long onRepairOrder(HttpCallBack callback,User user,int Id,String status){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("depot_id",user.getDepot_id()+"");
+        entity.put("id",Id+"");
+        entity.put("status", status);
+        return Post(Config.onRepairOrder, entity, callback);
+    }
+    //维修 接单
+    public static long getRepairOrder(HttpCallBack callback,int orderId,int userId){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",userId+"");
+        entity.put("id",orderId+"");
+        return Post(Config.getRepairOrder, entity, callback);
+    }
+    //拒单
+    public static long rejectRepairOrder(HttpCallBack callback,int orderId,int userId){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",userId+"");
+        entity.put("id",orderId+"");
+        return Post(Config.rejectRepairOrder, entity, callback);
+    }
+    public static long finishRepairOrder(HttpCallBack callback,int Id,int orderId){
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
         entity.put("driver_id",Id+"");
         entity.put("id",orderId+"");
-        return Post(Config.finishOrder, entity, callback);
+        return Post(Config.finishRepairOrder, entity, callback);
     }
 }

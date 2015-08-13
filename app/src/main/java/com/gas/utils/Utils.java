@@ -1,6 +1,10 @@
 package com.gas.utils;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -9,6 +13,7 @@ import android.widget.Toast;
 import com.gas.conf.Config;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.Calendar;
 
 /**
@@ -241,5 +246,100 @@ public class Utils {
             density = context.getResources( ).getDisplayMetrics( ).density;
         }
         return ( int ) ( ( px - 0.5f ) / density );
+    }
+
+    public static void dialAlert(final String dialNamber, final Context context) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("电话号:"+ dialNamber);
+        builder.setTitle("确定要拨打电话？");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent();
+                Uri uri = Uri.parse("tel:" + dialNamber);
+                intent.setAction(intent.ACTION_CALL);
+                intent.setData(uri);
+                context.startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                // TODO Auto-generated method stub
+                arg0.dismiss();
+
+            }
+        });
+        builder.create().show();
+    }
+
+    public static void MapPilot(String address,Context mContext){
+        try {
+
+            Intent intent = Intent.getIntent("intent://map/direction?origin=latlng:34.264642646862,108.95108518068|name:我家&destination=大雁塔&mode=drivingion=西安&referer=Autohome|GasStation#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
+
+            if(isInstallByread("com.baidu.BaiduMap")){
+
+                mContext.startActivity(intent); //启动调用
+
+                Log.e("GasStation", "百度地图客户端已经安装") ;
+
+            }else{
+
+                Log.e("GasStation", "没有安装百度地图客户端") ;
+
+            }
+
+        } catch (URISyntaxException e) {
+
+            e.printStackTrace();
+
+        }
+//        [/mw_shl_code]
+//
+//        但是，若客户端没有安装了百度地图客户端就会报 No Activity.... 直接会导致程序挂掉，这是开发者不希望看到的.所以在调用之前判断该手机是否安装了百度地图客户端，我们知道百度的包名为 com.baidu.BaiduMap
+//
+//        所以通过下面的方法进行判断：
+//
+//        [mw_shl_code=java,true]
+       /**
+         * 判断是否安装目标应用
+
+         * @param packageName 目标应用安装后的包名
+
+         * @return 是否已安装目标应用
+
+         */
+
+
+       // 使用Intent调用高德地图
+
+
+        try {
+
+           Intent intent = Intent.getIntent("androidamap://path?sourceApplication=GasStation&sid=BGVIS1&slat=34.264642646862&slon=108.95108518068&sname=当前位置&did=BGVIS2&dlat=36.3&dlon=116.2&dname=终点位置&dev=1&m=2&t=0");
+
+            if(isInstallByread("com.autonavi.minimap")){
+
+                mContext.startActivity(intent); //启动调用
+
+                Log.i("GasStation", "高德地图客户端已经安装") ;
+            }else{
+                Log.d("GasStation", "没有安装高德地图客户端") ;
+            }
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+
+
+    private static boolean isInstallByread(String packageName) {
+
+        return new File("/data/data/" + packageName).exists();
+
     }
 }

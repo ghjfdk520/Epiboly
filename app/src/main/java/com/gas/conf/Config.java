@@ -22,4 +22,12 @@ public class Config {
     public static String deliverOrderlist= BASE_URL+"&a=order_list";
     public static String finishOrder = BASE_URL+"&a=finish_order";
 
+
+    public static String  repairOrderHistory = BASE_URL+"&a=repair_order";
+    public static String  newRepairOrder = BASE_URL+"&a=new_repair_order";
+    public static String  onRepairOrder = BASE_URL+"&a=on_repair_order";
+    public static String  getRepairOrder = BASE_URL+"&a=get_repair_order";
+    public static String  rejectRepairOrder = BASE_URL+"&a=reject_repair_order";
+    public static String  finishRepairOrder = BASE_URL+"&a=finish_repair_order";
+
 }
