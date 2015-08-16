@@ -14,7 +14,7 @@ public class SharedPreferenceUtil {
     public final static String DELIVERY_HISTORY="delivery_history";
     public final static String DELIVERY_ACCPET="delivery_accpet";
     public final static String DELIVERY_UNACCPET="delivery_unaccpet";
-
+    public final static String ORDER_DELIVERY_BOTTLE ="order_delivery_bottle";
     private static SharedPreferenceUtil sharedPreferenceUtil;
     private static SharedPreferences sharedPreferences;
     private final static String KEY = "meyou_sharepreferences";

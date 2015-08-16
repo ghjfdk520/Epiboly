@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import com.gas.conf.Common;
 import com.gas.connector.HttpCallBack;
 import com.gas.database.UserWorker;
-import com.gas.map.BaiduLocationUtil;
+import com.gas.utils.BaiduLocationUtil;
 import com.gas.ui.codeScan.CaptureActivity;
 import com.gas.ui.common.SuperActivity;
 import com.gas.ui.fragment.AttendanceFragment;
@@ -39,6 +39,7 @@ import cn.jpush.android.api.TagAliasCallback;
 public class MainActivity extends SuperActivity implements HttpCallBack,View.OnClickListener {
     private static final int MSG_SET_ALIAS = 1001;
     public static final String MESSAGE_RECEIVED_ACTION = "com.gas.epiboly.MESSAGE_RECEIVED_ACTION";
+    private int REQUEST_CODE_MAIN_SCAN = 0X01101;
     public static final String KEY_MESSAGE = "message";
     private MessageReceiver mMessageReceiver;
 
@@ -72,13 +73,31 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         setContentView(R.layout.activity_main);
         init();
         initListeners();
-        initLocation();
         new UserWorker(this).getUser();
+    }
+
+    public void getExtra(){
+        /**
+         * order_type 1为送气；2为抢修； must_get 1为系统派送（不可拒绝）；0反之
+         */
+
+        Intent intent = getIntent();
+        int order_type = intent.getIntExtra("order_type",0);
+        int must_get = intent.getIntExtra("must_get",-1);
+        Utils.log("czd order_type",order_type+" "+must_get);
+        Common.order_type = order_type;
+        Common.must_get = must_get;
+        if(order_type == 1){
+            checkId = 2;
+        }else if(order_type == 2){
+            checkId = 3;
+        }
+        showFragment(checkId);
     }
 
     public void init() {
         initJpush();
-        registerMessageReceiver();
+     //   registerMessageReceiver();
         mNestRadioGroup = (NestRadioGroup) findViewById(R.id.nav_radio_group);
         fragmentManager = getFragmentManager();
         attendanceFragment = (AttendanceFragment) fragmentManager.findFragmentById(R.id.attendance_fragment);
@@ -101,26 +120,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
                 .hide(mFragments[3]).hide(mFragments[4]);
         fragmentTransaction.show(mFragments[checkId]);
         fragmentTransaction.commit();
-
-        switch (checkId) {
-            case 0:
-                mNestRadioGroup.check(R.id.radio_personal);
-                break;
-            case 1:
-                mNestRadioGroup.check(R.id.radio_attendance);
-                break;
-            case 2:
-                mNestRadioGroup.check(R.id.radio_delivery);
-                break;
-            case 3:
-                mNestRadioGroup.check(R.id.radio_repair);
-                break;
-            case 4:
-                mNestRadioGroup.check(R.id.radio_gas);
-                break;
-            default:
-                break;
-        }
+        getExtra();
     }
     public void initListeners() {
         mNestRadioGroup
@@ -168,22 +168,6 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         super.onPause();
     }
 
-    // 定位功能！！
-    private void initLocation() {
-        BaiduLocationUtil.getInstance(this).startBaiduListener(null);
-//        mBaiduLocationutil = BaiduLocationUtil.getInstance(this);
-//        mBaiduLocationutil.startBaiduListener(new BaiduCallBack() {
-//
-//            public void updateBaidu(int type, int lat, int lng, String address,
-//                                    String simpleAddress) {
-//                // TODO Auto-generated method stub
-//                Utils.log("czd", type + " " + lat / 1e6 + " " + lng / 1e6 + " "
-//                        + address);
-//
-//            }
-//        });
-    }
-
     @Override
     public void onGeneralSuccess(String result, long flag) {
         System.out.print(result);
@@ -202,6 +186,26 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
                     .hide(mFragments[3]).hide(mFragments[4]);
             fragmentTransaction.show(mFragments[position]);
             fragmentTransaction.commit();
+
+        switch (position) {
+            case 0:
+                mNestRadioGroup.check(R.id.radio_personal);
+                break;
+            case 1:
+                mNestRadioGroup.check(R.id.radio_attendance);
+                break;
+            case 2:
+                mNestRadioGroup.check(R.id.radio_delivery);
+                break;
+            case 3:
+                mNestRadioGroup.check(R.id.radio_repair);
+                break;
+            case 4:
+                mNestRadioGroup.check(R.id.radio_gas);
+                break;
+            default:
+                break;
+        }
     }
 
     public void initJpush(){
@@ -263,7 +267,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.scan_code:
-                CaptureActivity.launchActivity(this);
+                CaptureActivity.launchActivity(this,REQUEST_CODE_MAIN_SCAN);
                 break;
         }
     }
@@ -280,7 +284,20 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
 
     @Override
     protected void onNewIntent(Intent intent) {
+
+        int order_type = intent.getIntExtra("order_type",0);
+        int must_get = intent.getIntExtra("must_get",0);
+
+        Common.order_type = order_type;
+        Common.must_get = must_get;
+
+        Utils.log("czd order_type",order_type+" "+must_get);
+        if(order_type == 1){
+            checkId = 2;
+        }else if(order_type == 2){
+            checkId = 3;
+        }
+        showFragment(checkId);
         super.onNewIntent(intent);
-        Utils.log("czd","agin");
     }
 }

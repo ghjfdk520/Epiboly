@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="42dip"
-    android:background="#fffeef"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="vertical">
+
 
     <LinearLayout
-        android:id="@+id/ly_click"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <TextView
@@ -18,24 +19,31 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="2"
-            android:text="xxx" />
+            android:text="xxx"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:maxEms="2"
+            android:layout_marginRight="12dp"/>
 
         <TextView
             android:id="@+id/customer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
             android:text="东子"
-            android:textSize="12sp" />
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/order_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:text="订单号：123456789"
+            android:textColor="#707070"
+            android:textSize="11.5sp" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/access_order"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="接单确认" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="拒单申请" />
+    <View
+        style="@style/line_two_order"
+        />
 </LinearLayout>

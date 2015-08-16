@@ -3,8 +3,6 @@ package com.gas.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.gas.utils.Utils;
-
 /**
  * Created by Heart on 2015/8/7.
  */
@@ -17,7 +15,7 @@ public class DeliveryOrder implements Parcelable {
     private String address;
     private int area_id;
     private String depot_id;
-    private String send_date;
+    private long send_date;
     private String send_time;
     /**
      * 默认状态为0；表示未付款；
@@ -32,13 +30,24 @@ public class DeliveryOrder implements Parcelable {
     private double total_cost;
     private double total_yj;
     private String order_list;
+    private int pay_type;
+    private long add_time;
+
+
+    public long getAdd_time() {
+        return add_time;
+    }
+
+    public void setAdd_time(long add_time) {
+        this.add_time = add_time;
+    }
 
     public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
-        this.address = Utils.decodeUnicode(address);
+        this.address = address;
     }
 
     public int getArea_id() {
@@ -81,6 +90,14 @@ public class DeliveryOrder implements Parcelable {
         this.id = id;
     }
 
+    public String getOrder_list() {
+        return order_list;
+    }
+
+    public void setOrder_list(String order_list) {
+        this.order_list = order_list;
+    }
+
     public String getOrder_no() {
         return order_no;
     }
@@ -89,11 +106,19 @@ public class DeliveryOrder implements Parcelable {
         this.order_no = order_no;
     }
 
-    public String getSend_date() {
+    public int getPay_type() {
+        return pay_type;
+    }
+
+    public void setPay_type(int pay_type) {
+        this.pay_type = pay_type;
+    }
+
+    public long getSend_date() {
         return send_date;
     }
 
-    public void setSend_date(String send_date) {
+    public void setSend_date(long send_date) {
         this.send_date = send_date;
     }
 
@@ -119,14 +144,6 @@ public class DeliveryOrder implements Parcelable {
 
     public void setTelphone(String telphone) {
         this.telphone = telphone;
-    }
-
-    public String getOrder_list() {
-        return order_list;
-    }
-
-    public void setOrder_list(String order_list) {
-        this.order_list = Utils.decodeUnicode(order_list);
     }
 
     public double getTotal_cost() {
@@ -168,13 +185,15 @@ public class DeliveryOrder implements Parcelable {
         dest.writeString(this.address);
         dest.writeInt(this.area_id);
         dest.writeString(this.depot_id);
-        dest.writeString(this.send_date);
+        dest.writeLong(this.send_date);
         dest.writeString(this.send_time);
         dest.writeString(this.status);
         dest.writeInt(this.total_count);
         dest.writeDouble(this.total_cost);
         dest.writeDouble(this.total_yj);
         dest.writeString(this.order_list);
+        dest.writeInt(this.pay_type);
+        dest.writeLong(this.add_time);
     }
 
     public DeliveryOrder() {
@@ -189,13 +208,15 @@ public class DeliveryOrder implements Parcelable {
         this.address = in.readString();
         this.area_id = in.readInt();
         this.depot_id = in.readString();
-        this.send_date = in.readString();
+        this.send_date = in.readLong();
         this.send_time = in.readString();
         this.status = in.readString();
         this.total_count = in.readInt();
         this.total_cost = in.readDouble();
         this.total_yj = in.readDouble();
         this.order_list = in.readString();
+        this.pay_type = in.readInt();
+        this.add_time = in.readLong();
     }
 
     public static final Parcelable.Creator<DeliveryOrder> CREATOR = new Parcelable.Creator<DeliveryOrder>() {
@@ -207,7 +228,4 @@ public class DeliveryOrder implements Parcelable {
             return new DeliveryOrder[size];
         }
     };
-
-
-
 }

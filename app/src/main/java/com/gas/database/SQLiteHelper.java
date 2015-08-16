@@ -12,7 +12,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     private final static String DATABASE_NAME = "DongZ.db";
     private static SQLiteHelper db;
 
-    private static final int VERSION = 3;
+    private static final int VERSION = 1;
     private static final String TABLE_NAME_USER = "user";
 
     private SQLiteHelper( Context context )

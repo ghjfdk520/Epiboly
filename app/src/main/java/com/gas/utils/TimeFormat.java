@@ -40,7 +40,7 @@ public class TimeFormat {
 			}
 			break;
 			case Calendar.DATE: {
-				format = "yyyy-M-d";
+				format = "yyyy年MM月dd日";
 			}
 			break;
 			case Calendar.MONTH: {

@@ -9,7 +9,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
+    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
@@ -77,9 +77,9 @@
 
         <activity android:name="com.gas.ui.codeScan.CaptureActivity" />
         <activity android:name="com.gas.ui.codeScan.ResultActivity" />
-        <!--<activity
+       <activity
             android:name="com.gas.ui.activity.orderDetail"
-            android:label="@string/app_name"></activity>-->
+            android:label="@string/app_name"></activity>
 
         <service
             android:name="com.baidu.location.f"
@@ -142,7 +142,7 @@
         <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
         <!-- User defined.  For test only  用户自定义的广播接收器-->
         <receiver
-            android:name="com.gas.common.JGReceiver"
+            android:name="com.gas.ui.common.JGReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTRATION" />

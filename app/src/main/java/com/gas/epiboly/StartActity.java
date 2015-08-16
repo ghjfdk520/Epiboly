@@ -25,10 +25,11 @@ public class StartActity extends SuperActivity{
     private long loginFlag;
     private UserWorker userWorker;
     private long referenceTiem;
+    private User user;
     private Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState,false);
+        super.onCreate(savedInstanceState, false);
         setContentView(R.layout.activity_start);
         init();
         initListener();
@@ -41,6 +42,13 @@ public class StartActity extends SuperActivity{
         setOnDismissListener(this);
         LoginHttpProtocol.serviceTime();
         userWorker = new UserWorker(this);
+
+        user = userWorker.getUser();
+
+        if(user.getIsLogin() == 1){
+            Common.getInstance().user = user;
+            MainActivity.launchActivity(StartActity.this);
+        }
 }
 
     public void initListener(){
@@ -62,6 +70,7 @@ public class StartActity extends SuperActivity{
             public void run() {
                 dismissProgressDialog();
                 User u = new Gson().fromJson(result, User.class);
+                u.setIsLogin(1);
                 userWorker.addUser(u);
                 Common.getInstance().user = u;
                 MainActivity.launchActivity(StartActity.this);

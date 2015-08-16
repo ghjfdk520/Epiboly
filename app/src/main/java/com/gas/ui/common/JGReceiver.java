@@ -1,4 +1,4 @@
-package com.gas.common;
+package com.gas.ui.common;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -118,19 +118,26 @@ public class JGReceiver extends BroadcastReceiver {
             notification.audioStreamType = android.media.AudioManager.ADJUST_LOWER;
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             Intent intent = new Intent(mContext, MainActivity.class);
-            intent.putExtra("order_type", bundle);
-            intent.putExtra("must_get", bundle);
-            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+            Bundle bundle1 = new Bundle();
+            intent.putExtra("text","s");
+            intent.putExtra("order_type",order_type);
+            intent.putExtra("must_get",must_get);
+
+            bundle1.putInt("order_type", order_type);
+            bundle1.putInt("must_get", must_get);
+            intent.putExtras(bundle1);
+
+
             StringBuffer strBuffer = new StringBuffer();
             strBuffer.append("您有");
             if(order_type == 1){
                 if(must_get == 1){
-                    Common.deliveryCount =Common.deliveryCount+1;
-                    strBuffer.append(Common.deliveryCount +"条管理员指派送气订单");
+                    Common.deliveryAccept =Common.deliveryAccept+1;
+                    strBuffer.append(Common.deliveryAccept +"条管理员指派送气订单");
                     notificationId =1;
                 }else{
-                    Common.deliveryAccept =Common.deliveryAccept+1;
-                    strBuffer.append(Common.deliveryAccept +"条未接送气订单");notificationId =2;
+                    Common.deliveryCount =Common.deliveryCount+1;
+                    strBuffer.append(Common.deliveryCount +"条未接送气订单");notificationId =2;
                 }
             }else if(order_type ==2){
                 if(must_get == 1){
@@ -144,6 +151,7 @@ public class JGReceiver extends BroadcastReceiver {
                     notificationId =4;
                 }
             }
+            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             notification.setLatestEventInfo(mContext, "林田燃气", strBuffer.toString(), pendingIntent);
             manager.cancel(notificationId);
             manager.notify(notificationId, notification);

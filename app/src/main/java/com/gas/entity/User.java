@@ -3,8 +3,6 @@ package com.gas.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.gas.utils.Utils;
-
 /**
  * Created by Heart on 2015/7/28.
  */
@@ -21,6 +19,7 @@ public class User implements Parcelable {
     private String last_login_time;
     private String create_time;
     private String update_time;
+    private int isLogin;
 
     public String getAreaid() {
         return areaid;
@@ -44,10 +43,6 @@ public class User implements Parcelable {
 
     public void setCreate_time(String create_time) {
         this.create_time = create_time;
-    }
-
-    public static Creator<User> getCREATOR() {
-        return CREATOR;
     }
 
     public int getDepot_id() {
@@ -74,6 +69,14 @@ public class User implements Parcelable {
         this.in_time = in_time;
     }
 
+    public int getIsLogin() {
+        return isLogin;
+    }
+
+    public void setIsLogin(int isLogin) {
+        this.isLogin = isLogin;
+    }
+
     public String getLast_login_time() {
         return last_login_time;
     }
@@ -81,11 +84,13 @@ public class User implements Parcelable {
     public void setLast_login_time(String last_login_time) {
         this.last_login_time = last_login_time;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
-        this.name = Utils.decodeUnicode(name);
+        this.name = name;
     }
 
     public String getPassword() {
@@ -139,6 +144,7 @@ public class User implements Parcelable {
         dest.writeString(this.last_login_time);
         dest.writeString(this.create_time);
         dest.writeString(this.update_time);
+        dest.writeInt(this.isLogin);
     }
 
     public User() {
@@ -157,12 +163,14 @@ public class User implements Parcelable {
         this.last_login_time = in.readString();
         this.create_time = in.readString();
         this.update_time = in.readString();
+        this.isLogin = in.readInt();
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
         public User createFromParcel(Parcel source) {
             return new User(source);
         }
+
         public User[] newArray(int size) {
             return new User[size];
         }
@@ -183,6 +191,7 @@ public class User implements Parcelable {
                 ", last_login_time='" + last_login_time + '\'' +
                 ", create_time='" + create_time + '\'' +
                 ", update_time='" + update_time + '\'' +
+                ", isLogin=" + isLogin +
                 '}';
     }
 }

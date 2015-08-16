@@ -185,7 +185,7 @@ public abstract class SuperActivity extends Activity implements  Thread.Uncaught
     @Override
     public void onBackPressed() {
         Utils.log("back","0001");
-       // super.onBackPressed();
+        super.onBackPressed();
     }
 
     @Override

@@ -27,4 +27,7 @@ public class Common {
 
     public static int repairAccept = 0 ;  //维修管理员推送订单数量
 
+    public static int order_type = -1;
+    public static int must_get = -1;
+
 }

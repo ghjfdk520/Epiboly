@@ -62,8 +62,10 @@ public class CustomProgressDialog extends Dialog {
         return customProgressDialog;
     }
 
+    @Override
     public void dismiss() {
         try {
+
             if (customProgressDialog != null
                     && customProgressDialog.isShowing()) {
                 super.dismiss();
@@ -72,4 +74,5 @@ public class CustomProgressDialog extends Dialog {
             t.printStackTrace();
         }
     }
+
 }

@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.gas.entity.User;
-import com.gas.map.BaiduLocationUtil;
+import com.gas.utils.BaiduLocationUtil;
 import com.gas.utils.ImageViewUtil;
 
 import cn.jpush.android.api.JPushInterface;

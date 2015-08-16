@@ -26,9 +26,9 @@ public class UserWorker extends ITableWorker {
     public static final String LAST_LOGIN_TIME = "last_login_time";
     public static final String CREATE_TIME = "create_time";
     public static final String UPDATE_TIME = "update_time";
-
+    public static final String ISLOGIN = "isLogin";
     public static final String[] selectors = {
-            ID, DEPOT_ID, NAME, PHONE, PASSWORD, QQ, AREAID, CARID, IN_TIME, LAST_LOGIN_TIME, CREATE_TIME, UPDATE_TIME
+            ID, DEPOT_ID, NAME, PHONE, PASSWORD, QQ, AREAID, CARID, IN_TIME, LAST_LOGIN_TIME, CREATE_TIME,UPDATE_TIME,ISLOGIN
     };
     public static final String deleteAll = "DELETE FROM TB_NAME";
     public static final String tableSql = "CREATE TABLE IF NOT EXISTS " + TB_NAME + " ( " +
@@ -44,6 +44,7 @@ public class UserWorker extends ITableWorker {
             IN_TIME + " TEXT," +
             LAST_LOGIN_TIME + " TEXT," +
             CREATE_TIME + " TEXT," +
+            ISLOGIN +" INTEGER,"+
             UPDATE_TIME + " TEXT);";
 
     public UserWorker(Context context) {
@@ -64,6 +65,7 @@ public class UserWorker extends ITableWorker {
         values.put(LAST_LOGIN_TIME,user.getLast_login_time());
         values.put(CREATE_TIME,user.getCreate_time());
         values.put(UPDATE_TIME,user.getUpdate_time());
+        values.put(ISLOGIN,user.getIsLogin());
         return onInsert(values);
     }
     public User getUser(){
@@ -82,6 +84,7 @@ public class UserWorker extends ITableWorker {
             user.setLast_login_time(cursor.getString(cursor.getColumnIndex(LAST_LOGIN_TIME)));
             user.setCreate_time(cursor.getString(cursor.getColumnIndex(CREATE_TIME)));
             user.setUpdate_time(cursor.getString(cursor.getColumnIndex(UPDATE_TIME)));
+            user.setIsLogin(cursor.getInt(cursor.getColumnIndex(ISLOGIN)));
         }
          return user;
     }

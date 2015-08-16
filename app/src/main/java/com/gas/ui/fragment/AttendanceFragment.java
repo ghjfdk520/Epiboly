@@ -101,7 +101,6 @@ public class AttendanceFragment extends BaseFragment implements HttpCallBack,Vie
     public void onGeneralError(String e, long flag) {
         Utils.log(" flag result eeor",Utils.decodeUnicode(e));
         Utils.toastMsg(getActivity(), Utils.decodeUnicode(e));
-        showWindow(1);
     }
 
     private void showWindow(int showPotision){
@@ -116,10 +115,8 @@ public class AttendanceFragment extends BaseFragment implements HttpCallBack,Vie
 
         if(showPotision ==0){
             img.setImageResource(R.mipmap.attendance_popup_work);
-            showWindow.setContentView(img);
         }else {
-            img.setImageResource(R.mipmap.attendance_popup_work);
-            showWindow.setContentView(img);
+            img.setImageResource(R.mipmap.attendance_popup_off);
         }
         showWindow.setContentView(img);
         showWindow.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);

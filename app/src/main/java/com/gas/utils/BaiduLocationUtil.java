@@ -1,4 +1,4 @@
-package com.gas.map;
+package com.gas.utils;
 
 import android.content.Context;
 
@@ -8,8 +8,6 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 import com.gas.database.SharedPreferenceUtil;
-import com.gas.utils.LightTimer;
-import com.gas.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

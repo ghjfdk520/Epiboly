@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -21,6 +20,7 @@ import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.DeliveryOrder;
 import com.gas.epiboly.R;
+import com.gas.ui.activity.orderDetail;
 import com.gas.ui.common.BaseFragment;
 import com.gas.utils.Utils;
 import com.google.gson.reflect.TypeToken;
@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * Created by Heart on 2015/7/22.
  */
-public class DeliveryFragment extends BaseFragment implements HttpCallBack {
+public class DeliveryFragment extends BaseFragment implements HttpCallBack, View.OnClickListener {
 
 
     private SharedPreferenceUtil sharedPreferenceUtil;
@@ -45,7 +45,9 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
     //当前显示list
     private LinkedList<DeliveryOrder> currentList;
 
-
+    private int REQUEST_CODE_HISTORY = 0x00003;
+    private int REQUEST_CODE_ACCEPT = 0x00002;
+    private int REQUEST_CODE_UNACCEPT = 0x00001;
     private List<DeliveryOrder> historyDatas = new LinkedList<>();
     private List<DeliveryOrder> accpetDatas = new LinkedList<>();
     private List<DeliveryOrder> unaccpetDatas = new LinkedList<>();
@@ -61,17 +63,22 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
     private RadioGroup group_status_selector;
     protected View rootView;
     private Activity mActivity;
-    private long DOWN_FLAG = 0;
-    private long UP_FLAG = 0;
+    private long FINISH_DOWN_FLAG = 0;
+    private long FINISH_UP_FLAG = 0;
+    private long ON_DOWN_FLAG = 0;
+    private long ON_UP_FLAG = 0;
+    private long NEW_DOWN_FLAG = 0;
+    private long NEW_UP_FLAG = 0;
+    private long EMPTY_FLAG = -1;
     private long referenceTime = 0;
 
     private String DOWN_STATE = "1";
     private String UP_STATE = "0";
-    private int currentViewPosition = 0;  //0未接订单  1 已接订单  2 历史订单
+    private int currentViewPosition = 2;  //0未接订单  1 已接订单  2 历史订单
     private Handler handler = new Handler();
 
 
-    private ImageView emptyView;
+    private View emptyView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -125,8 +132,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
 
     public void init() {
         getRecordToBuffer();
-        emptyView = new ImageView(mActivity);
-        emptyView.setImageResource(R.drawable.start_login_bt);
+        emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.ly_empty_view, null);
         historyListView = (PullToRefreshListView) rootView.findViewById(R.id.pull_refresh_history_list);
         accpetListView = (PullToRefreshListView) rootView.findViewById(R.id.pull_refresh_accpet_list);
         unaccpetListView = (PullToRefreshListView) rootView.findViewById(R.id.pull_refresh_un_accpet_list);
@@ -136,12 +142,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
             public void convert(final ViewHolder helper, DeliveryOrder item) {
                 helper.setText(R.id.customer_address, item.getAddress());
                 helper.setText(R.id.customer_name, item.getClient_name());
-                helper.getView(R.id.ly_click).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                      //  orderDetail.launchActivity(DeliveryFragment.this, 0x2222, unaccpetDatas.get(helper.getPosition()));
-                    }
-                });
+                helper.setText(R.id.order_no, "订单号：" + item.getId());
             }
         };
         accpetAdapter = new CommonAdapter<DeliveryOrder>(mActivity, accpetDatas, R.layout.item_delivery_order_history) {
@@ -149,12 +150,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
             public void convert(final ViewHolder helper, DeliveryOrder item) {
                 helper.setText(R.id.customer_address, item.getAddress());
                 helper.setText(R.id.customer_name, item.getClient_name());
-                helper.getView(R.id.ly_click).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                     //   orderDetail.launchActivity(DeliveryFragment.this, 0x2222, accpetDatas.get(helper.getPosition()));
-                    }
-                });
+                helper.setText(R.id.order_no, "订单号：" + item.getId());
             }
         };
         historyAdapter = new CommonAdapter<DeliveryOrder>(mActivity, historyDatas, R.layout.item_delivery_order_history) {
@@ -162,6 +158,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
             public void convert(ViewHolder helper, DeliveryOrder item) {
                 helper.setText(R.id.customer_address, item.getAddress());
                 helper.setText(R.id.customer_name, item.getClient_name());
+                helper.setText(R.id.order_no, "订单号：" + item.getId());
             }
         };
         group_status_selector = (RadioGroup) rootView.findViewById(R.id.group_status_selector);
@@ -180,39 +177,50 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 Utils.log("down", "yeah");
                 referenceTime = System.currentTimeMillis() / 1000;
-                DOWN_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+                NEW_DOWN_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 referenceTime = System.currentTimeMillis() / 1000;
-                if( currentList.size()>0)
-                 UP_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
+                if (currentList.size() > 0)
+                    NEW_UP_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
             }
         });
-
+        unaccpetListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                orderDetail.launchActivity(DeliveryFragment.this, REQUEST_CODE_UNACCEPT, unaccpetDatas.get(position - 1));
+            }
+        });
         accpetListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Utils.log("click ", "clikc");
-              //  orderDetail.launchActivity(DeliveryFragment.this, 0x2222, accpetDatas.get(position));
+                orderDetail.launchActivity(DeliveryFragment.this, REQUEST_CODE_ACCEPT, accpetDatas.get(position - 1));
+            }
+        });
+
+        historyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                orderDetail.launchActivity(DeliveryFragment.this, REQUEST_CODE_HISTORY, historyDatas.get(position - 1));
             }
         });
         accpetListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                Utils.log("down", "yeah");
+                Utils.log("down", "accpetListView");
                 referenceTime = System.currentTimeMillis() / 1000;
-                DOWN_FLAG = BusinessHttpProtocol.onDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+                ON_DOWN_FLAG = BusinessHttpProtocol.onDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                Utils.log("down", "yeah");
+                Utils.log("down", "accpetListView");
                 referenceTime = System.currentTimeMillis() / 1000;
 
-                if (currentList != null)
-                    UP_FLAG = BusinessHttpProtocol.onDeliverOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
+                if (currentList.size() > 0)
+                    ON_UP_FLAG = BusinessHttpProtocol.onDeliverOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
             }
         });
 
@@ -220,14 +228,14 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 referenceTime = System.currentTimeMillis() / 1000;
-                DOWN_FLAG = BusinessHttpProtocol.deliveryHisOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+                FINISH_DOWN_FLAG = BusinessHttpProtocol.deliveryHisOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 referenceTime = System.currentTimeMillis() / 1000;
-                if (currentList != null)
-                    UP_FLAG = BusinessHttpProtocol.deliveryHisOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
+                if (currentList.size() > 0)
+                    FINISH_UP_FLAG = BusinessHttpProtocol.deliveryHisOrder(DeliveryFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
             }
         });
 
@@ -238,26 +246,45 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
                 switch (checkedId) {
                     case R.id.radio_un_accpet:
                         showListView(0);
-                        referenceList(0);
                         break;
                     case R.id.radio_accpet:
                         showListView(1);
-                        referenceList(1);
                         break;
                     case R.id.radio_history:
                         showListView(2);
-                        referenceList(2);
                         break;
                 }
             }
         });
 
-        emptyView.setOnClickListener(new View.OnClickListener() {
+        emptyView.findViewById(R.id.bt_again_load).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DOWN_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+                switch (currentViewPosition) {
+                    case 0:
+                        NEW_DOWN_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+                        showProgressDialog(NEW_DOWN_FLAG);
+                        EMPTY_FLAG = NEW_DOWN_FLAG;
+                        break;
+                    case 1:
+                        ON_DOWN_FLAG = BusinessHttpProtocol.onDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+                        showProgressDialog(ON_DOWN_FLAG);
+                        EMPTY_FLAG = ON_DOWN_FLAG;
+                        break;
+                    case 2:
+                        FINISH_DOWN_FLAG = BusinessHttpProtocol.deliveryHisOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+                        showProgressDialog(FINISH_DOWN_FLAG);
+                        EMPTY_FLAG = FINISH_DOWN_FLAG;
+                        break;
+                }
             }
         });
+//        emptyView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DOWN_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+//            }
+//        });
     }
 
     public void showListView(int position) {
@@ -308,36 +335,56 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
                     List<DeliveryOrder> tempList = new LinkedList<DeliveryOrder>();
                     tempList = gson.fromJson(json.getString("all"), new TypeToken<List<DeliveryOrder>>() {
                     }.getType());
-                    if (flag == DOWN_FLAG) {
-                        if (currentViewPosition == 2) {
-                            sharedPreferenceUtil.putString(SharedPreferenceUtil.DELIVERY_HISTORY, json.getString("all"));
-                            historyDatas.clear();
-                            historyDatas.addAll(tempList);
-                            historyAdapter.notifyDataSetChanged();
-                        } else if (currentViewPosition == 1) {
-                            sharedPreferenceUtil.putString(SharedPreferenceUtil.DELIVERY_ACCPET, json.getString("all"));
-                            accpetDatas.clear();
-                            accpetDatas.addAll(tempList);
-                            accpetAdapter.notifyDataSetChanged();
-                        } else if (currentViewPosition == 0) {
-                            sharedPreferenceUtil.putString(SharedPreferenceUtil.DELIVERY_UNACCPET, json.getString("all"));
-                            unaccpetDatas.clear();
-                            unaccpetDatas.addAll(tempList);
-                            unaccpetAdapter.notifyDataSetChanged();
-                        }
 
-                    } else if (flag == UP_FLAG) {
-                        if (currentViewPosition == 2) {
-                            historyDatas.addAll(tempList);
-                            historyAdapter.notifyDataSetChanged();
-                        } else if (currentViewPosition == 1) {
-                            accpetDatas.addAll(tempList);
-                            accpetAdapter.notifyDataSetChanged();
-                        } else if (currentViewPosition == 0) {
-                            unaccpetDatas.addAll(tempList);
-                            unaccpetAdapter.notifyDataSetChanged();
-                        }
+                    if (EMPTY_FLAG == flag) {
+                        dismissProgressDialog();
+
+                        if (tempList.size() == 0)
+                            Utils.toastMsg(getActivity(), "没有更多数据");
                     }
+
+                    if (flag == FINISH_DOWN_FLAG) {
+                        sharedPreferenceUtil.putString(SharedPreferenceUtil.DELIVERY_HISTORY, json.getString("all"));
+                        historyDatas.clear();
+                        historyDatas.addAll(tempList);
+                        historyAdapter.notifyDataSetChanged();
+
+
+                    } else if (flag == ON_DOWN_FLAG) {
+                        sharedPreferenceUtil.putString(SharedPreferenceUtil.DELIVERY_ACCPET, json.getString("all"));
+                        accpetDatas.clear();
+                        accpetDatas.addAll(tempList);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                accpetAdapter.notifyDataSetChanged();
+                            }
+                        }, 1000);
+
+
+                    } else if (flag == NEW_DOWN_FLAG) {
+                        sharedPreferenceUtil.putString(SharedPreferenceUtil.DELIVERY_UNACCPET, json.getString("all"));
+                        unaccpetDatas.clear();
+                        unaccpetDatas.addAll(tempList);
+                        unaccpetAdapter.notifyDataSetChanged();
+
+                    } else if (flag == FINISH_UP_FLAG) {
+                        historyDatas.addAll(tempList);
+                        historyAdapter.notifyDataSetChanged();
+                        if (historyListView.isShown() && tempList.size() == 0)
+                            Utils.toastMsg(getActivity(), "没有更多数据");
+                    } else if (flag == ON_UP_FLAG) {
+                        accpetDatas.addAll(tempList);
+                        accpetAdapter.notifyDataSetChanged();
+                        if (accpetListView.isShown() && tempList.size() == 0)
+                            Utils.toastMsg(getActivity(), "没有更多数据");
+                    } else if (flag == NEW_UP_FLAG) {
+                        unaccpetDatas.addAll(tempList);
+                        unaccpetAdapter.notifyDataSetChanged();
+                        if (unaccpetListView.isShown() && tempList.size() == 0)
+                            Utils.toastMsg(getActivity(), "没有更多数据");
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -349,11 +396,18 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
     }
 
     @Override
-    public void onGeneralError(String e, long flag) {
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onGeneralError(final String e, long flag) {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                dismissProgressDialog();
                 onRefreshComplete();
+                Utils.toastMsg(getActivity(), e);
             }
         }, ((System.currentTimeMillis() / 1000) - referenceTime) < 2000 ? 2000 : 100);
 
@@ -384,6 +438,45 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Utils.log("czd", requestCode + "  " + resultCode);
+
+        //2数据发生变化
+        if (resultCode == 2) {
+            if (requestCode == REQUEST_CODE_UNACCEPT) {
+                unaccpetDatas.remove(data.getParcelableExtra("itemOrder"));
+                referenceList(1);
+            } else if (requestCode == REQUEST_CODE_ACCEPT) {
+                accpetDatas.remove(data.getParcelableExtra("itemOrder"));
+                accpetAdapter.notifyDataSetChanged();
+                referenceList(2);
+            } else if (requestCode == REQUEST_CODE_HISTORY) {
+
+
+            }
+        }
         super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            if (Common.order_type == 1 && Common.must_get == 0) {
+                currentViewPosition = 0;
+                showListView(currentViewPosition);
+                referenceList(currentViewPosition);
+                Common.order_type = -1;
+                Common.must_get = -1;
+                Common.deliveryCount = 0;
+            } else if (Common.order_type == 1 && Common.must_get == 1) {
+                currentViewPosition = 1;
+                showListView(currentViewPosition);
+                referenceList(currentViewPosition);
+                Common.order_type = -1;
+                Common.must_get = -1;
+                Common.deliveryAccept = 0;
+            }
+        }
+
     }
 }

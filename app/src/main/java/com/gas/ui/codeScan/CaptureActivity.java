@@ -60,7 +60,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     private RelativeLayout scanContainer;
     private RelativeLayout scanCropView;
     private ImageView scanLine;
-
+    private boolean verifyBottle =false;
     private Rect mCropRect = null;
 
     public Handler getHandler() {
@@ -73,10 +73,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     private boolean isHasSurface = false;
 
-    public static void launchActivity(Activity fromActivity) {
+    public static void launchActivity(Activity fromActivity,int CaptrueCode) {
         Intent i = new Intent(fromActivity, CaptureActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        fromActivity.startActivity(i);
+        fromActivity.startActivityForResult(i,CaptrueCode);
     }
 
     @Override
@@ -170,14 +170,18 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
      * @param bundle    The extras
      */
     public void handleDecode(Result rawResult, Bundle bundle) {
-        inactivityTimer.onActivity();
-        beepManager.playBeepSoundAndVibrate();
 
-        bundle.putInt("width", mCropRect.width());
-        bundle.putInt("height", mCropRect.height());
-        bundle.putString("result", rawResult.getText());
-
-        startActivity(new Intent(CaptureActivity.this, ResultActivity.class).putExtras(bundle));
+            verifyBottle =true;
+            inactivityTimer.onActivity();
+            beepManager.playBeepSoundAndVibrate();
+            bundle.putInt("width", mCropRect.width());
+            bundle.putInt("height", mCropRect.height());
+            bundle.putString("result", rawResult.getText());
+            Intent intent = new Intent();
+            intent.putExtra("code", rawResult.getText());
+            setResult(RESULT_OK, intent);
+            finish();
+         //startActivity(new Intent(CaptureActivity.this, ResultActivity.class).putExtras(bundle));
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {

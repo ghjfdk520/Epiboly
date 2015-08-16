@@ -6,6 +6,7 @@ import com.gas.connector.HttpCallBack;
 import com.gas.entity.User;
 
 import java.util.LinkedHashMap;
+
 /**
  * Created by Heart on 2015/7/31.
  */
@@ -38,7 +39,7 @@ public class BusinessHttpProtocol {
     //派送历史订单
     public static  long deliveryHisOrder(HttpCallBack callback,User user,int Id,String status ){
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
-        entity.put("depot_id",user.getDepot_id()+"");
+        entity.put("driver_id",user.getId()+"");
         entity.put("id",Id+"");
         entity.put("status", status);
         return Post(Config.deliveryHistoryOrder, entity, callback);
@@ -60,22 +61,28 @@ public class BusinessHttpProtocol {
         return Post(Config.getDeliverOrder, entity, callback);
     }
 
+    public static long finishOrder(HttpCallBack callback,int Id,int orderId){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",Id+"");
+        entity.put("id",orderId+"");
+        return Post(Config.finishOrder, entity, callback);
+    }
     public static long onDeliverOrder(HttpCallBack callback,User user,int Id,String status){
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
-        entity.put("depot_id",user.getDepot_id()+"");
+        entity.put("driver_id",user.getId()+"");
         entity.put("id",Id+"");
         entity.put("status", status);
         return Post(Config.onDeliverOrder, entity, callback);
     }
     public static long newDeliverOrder(HttpCallBack callback,User user,int Id,String status){
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
-        entity.put("depot_id",user.getDepot_id()+"");
+        entity.put("driver_id",user.getId()+"");
         entity.put("id",Id+"");
         entity.put("status", status);
         return Post(Config.newDeliverOrder, entity, callback);
     }
 
-    public static long dOrderDetails(HttpCallBack callback,int id){
+    public static long getOrderDetails(HttpCallBack callback, int id){
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
         entity.put("id",id+"");
         return Post(Config.deliverOrderlist, entity, callback);
@@ -85,7 +92,7 @@ public class BusinessHttpProtocol {
     //派送历史订单
     public static  long repairOrderHistory(HttpCallBack callback,User user,int Id,String status ){
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
-        entity.put("depot_id",user.getDepot_id()+"");
+        entity.put("driver_id",user.getId()+"");
         entity.put("id",Id+"");
         entity.put("status", status);
         return Post(Config.repairOrderHistory, entity, callback);
@@ -93,7 +100,7 @@ public class BusinessHttpProtocol {
 
     public static long newRepairOrder(HttpCallBack callback,User user,int Id,String status){
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
-        entity.put("depot_id",user.getDepot_id()+"");
+        entity.put("driver_id",user.getId()+"");
         entity.put("id",Id+"");
         entity.put("status", status);
         return Post(Config.newRepairOrder, entity, callback);
@@ -101,7 +108,7 @@ public class BusinessHttpProtocol {
     //派送维修
     public static long onRepairOrder(HttpCallBack callback,User user,int Id,String status){
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
-        entity.put("depot_id",user.getDepot_id()+"");
+        entity.put("driver_id",user.getId()+"");
         entity.put("id",Id+"");
         entity.put("status", status);
         return Post(Config.onRepairOrder, entity, callback);
@@ -120,10 +127,22 @@ public class BusinessHttpProtocol {
         entity.put("id",orderId+"");
         return Post(Config.rejectRepairOrder, entity, callback);
     }
-    public static long finishRepairOrder(HttpCallBack callback,int Id,int orderId){
+    //满气出库
+    public static long gasBottleOut(HttpCallBack callback,int userId,int orderId,String code){
+
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
-        entity.put("driver_id",Id+"");
-        entity.put("id",orderId+"");
-        return Post(Config.finishRepairOrder, entity, callback);
+        entity.put("driver_id",userId+"");
+        entity.put("order_id",orderId+"");
+        entity.put("code",code);
+        return Post(Config.gasBottleOut, entity, callback);
+    }
+
+
+  //空气入库
+    public static long gasBottleIn(HttpCallBack callback,int userId,String code){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",userId+"");
+        entity.put("code",code+"");
+        return Post(Config.gasBottleIn, entity, callback);
     }
 }

@@ -8,9 +8,15 @@ import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.gas.conf.Common;
 import com.gas.conf.Config;
+import com.gas.entity.User;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -278,7 +284,18 @@ public class Utils {
     public static void MapPilot(String address,Context mContext){
         try {
 
-            Intent intent = Intent.getIntent("intent://map/direction?origin=latlng:34.264642646862,108.95108518068|name:我家&destination=大雁塔&mode=drivingion=西安&referer=Autohome|GasStation#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
+            User user = Common.getInstance().user;
+            Intent intent = Intent.getIntent("intent://map/direction?origin=latlng:"+" "+","+" "+"|name:顾客&destination=大雁塔&mode=drivingion=西安&referer=Autohome|GasStation#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
+
+
+            BaiduLocationUtil  mBaiduLocationutil = BaiduLocationUtil.getInstance(mContext);
+            mBaiduLocationutil.startBaiduListener(new BaiduLocationUtil.BaiduCallBack() {
+
+                public void updateBaidu(int type, int lat, int lng, String address,
+                                        String simpleAddress) {
+
+                }
+            });
 
             if(isInstallByread("com.baidu.BaiduMap")){
 
@@ -341,5 +358,25 @@ public class Utils {
 
         return new File("/data/data/" + packageName).exists();
 
+    }
+
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            return;
+        }
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight
+                + (listView.getDividerHeight() * listAdapter.getCount() )+40;
+        listView.setLayoutParams(params);
     }
 }
