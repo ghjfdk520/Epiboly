@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -44,7 +45,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
 
     //当前显示list
     private LinkedList<DeliveryOrder> currentList;
-
+    private PopupWindow showWindow;
     private int REQUEST_CODE_HISTORY = 0x00003;
     private int REQUEST_CODE_ACCEPT = 0x00002;
     private int REQUEST_CODE_UNACCEPT = 0x00001;
@@ -142,7 +143,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
             public void convert(final ViewHolder helper, DeliveryOrder item) {
                 helper.setText(R.id.customer_address, item.getAddress());
                 helper.setText(R.id.customer_name, item.getClient_name());
-                helper.setText(R.id.order_no, "订单号：" + item.getId());
+                helper.setText(R.id.order_no, "订单序号：" + item.getId());
             }
         };
         accpetAdapter = new CommonAdapter<DeliveryOrder>(mActivity, accpetDatas, R.layout.item_delivery_order_history) {
@@ -150,7 +151,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
             public void convert(final ViewHolder helper, DeliveryOrder item) {
                 helper.setText(R.id.customer_address, item.getAddress());
                 helper.setText(R.id.customer_name, item.getClient_name());
-                helper.setText(R.id.order_no, "订单号：" + item.getId());
+                helper.setText(R.id.order_no, "订单序号：" + item.getId());
             }
         };
         historyAdapter = new CommonAdapter<DeliveryOrder>(mActivity, historyDatas, R.layout.item_delivery_order_history) {
@@ -158,7 +159,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
             public void convert(ViewHolder helper, DeliveryOrder item) {
                 helper.setText(R.id.customer_address, item.getAddress());
                 helper.setText(R.id.customer_name, item.getClient_name());
-                helper.setText(R.id.order_no, "订单号：" + item.getId());
+                helper.setText(R.id.order_no, "订单序号：" + item.getId());
             }
         };
         group_status_selector = (RadioGroup) rootView.findViewById(R.id.group_status_selector);
@@ -441,15 +442,29 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
 
         //2数据发生变化
         if (resultCode == 2) {
+            DeliveryOrder deliveryOrder = data.getParcelableExtra("itemOrder");
             if (requestCode == REQUEST_CODE_UNACCEPT) {
-                unaccpetDatas.remove(data.getParcelableExtra("itemOrder"));
+                for(DeliveryOrder temp :unaccpetDatas){
+                    if(temp.getId() == deliveryOrder.getId())
+                    {
+                        unaccpetDatas.remove(temp);
+                        return;
+                    }
+                }
+                unaccpetAdapter.notifyDataSetChanged();
                 referenceList(1);
             } else if (requestCode == REQUEST_CODE_ACCEPT) {
                 accpetDatas.remove(data.getParcelableExtra("itemOrder"));
+                for(DeliveryOrder temp :accpetDatas){
+                    if(temp.getId() == deliveryOrder.getId())
+                    {
+                        accpetDatas.remove(temp);
+                        return;
+                    }
+                }
                 accpetAdapter.notifyDataSetChanged();
                 referenceList(2);
             } else if (requestCode == REQUEST_CODE_HISTORY) {
-
 
             }
         }
@@ -479,4 +494,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
         }
 
     }
+
+
+
 }

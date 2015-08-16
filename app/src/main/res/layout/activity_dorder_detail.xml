@@ -35,17 +35,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="16dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/custom_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_marginTop="10dp"
-                        android:layout_toRightOf="@+id/order_detail_icon"
-                        android:text="4565465"
                         android:textColor="#f4753b"
                         android:textSize="23sp" />
 
@@ -58,9 +54,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="订单号码："
+                            android:text="订单编号："
                             android:textColor="#707070"
-                            android:textSize="15sp" />
+                            android:textSize="14sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -68,7 +64,7 @@
                             android:id="@+id/order_no"
                             android:text="123456"
                             android:textColor="#f4753b"
-                            android:textSize="15sp" />
+                            android:textSize="14sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -140,7 +136,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="35dp"
                         android:layout_marginTop="10dp"
                         android:orientation="horizontal">
 
@@ -151,7 +147,7 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="35dp"
                             android:orientation="vertical">
 
                             <TextView

@@ -2,13 +2,18 @@ package com.gas.ui.activity;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -46,13 +51,15 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
     public static int REQUEST_CODE;
     public static final int REQUEST_LOGIN_ACTIVITY = 0X10012;
     private final int REQUEST_CODE_SCANLE = 0X00012;
-    private long ORDER_DETAIL_FLAG =-1;
+    private long ORDER_DETAIL_FLAG = -1;
     private long VERIFY_BOTTLE_FLAG = -1;
     private long FINISH_ORDER_FLAG = -1;
-    private long REJECT_ORDER_FLAG =-1;
-    private long ACCEPT_ORDER_FLAG =-1;
+    private long REJECT_ORDER_FLAG = -1;
+    private long ACCEPT_ORDER_FLAG = -1;
     private List<String> bottleList = new LinkedList<>();
     private Map<Long, String> bottleMap = new HashMap<>();
+
+    private PopupWindow showWindow;
     private Button accpet_order;
     private Button refuse_order;
     private Button finish_order;
@@ -76,25 +83,27 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
     private RelativeLayout ly_accept_order;
     private LinearLayout ly_unaccept_order;
     private static DeliveryOrder itemOrder;
-    private Gson gson  = new Gson();
+    private Gson gson = new Gson();
     private Handler handler = new Handler();
-
+    private View rootView;
     private List<String> productList = new ArrayList<>();
     private CommonAdapter<String> productAdapter;
+
     public static void launchActivity(Fragment mContext, int requestCode, DeliveryOrder item) {
         Intent intent = new Intent();
         intent.setClass(mContext.getActivity(), orderDetail.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         REQUEST_CODE = requestCode;
         ((Fragment) mContext).startActivityForResult(intent,
-                REQUEST_LOGIN_ACTIVITY);
+                requestCode);
         itemOrder = item;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dorder_detail);
+        rootView = LayoutInflater.from(this).inflate(R.layout.activity_dorder_detail, null);
+        setContentView(rootView);
         init();
         initListener();
     }
@@ -129,24 +138,24 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         ly_unaccept_order = (LinearLayout) findViewById(R.id.ly_unaccept_order);
         productListView = (ListView) findViewById(R.id.product_list);
         custom_name.setText(itemOrder.getClient_name());
-        order_no.setText(itemOrder.getId() + "");
+        order_no.setText(itemOrder.getOrder_no() + "");
         order_status.setText(getOrderStutus(itemOrder.getStatus()));
         customer_address.setText(itemOrder.getAddress());
         customer_phone.setText(itemOrder.getTelphone());
         pay_type.setText(itemOrder.getPay_type() == 1 ? "到付" : "已支付");
-        pay_amount.setText(itemOrder.getTotal_cost() + "");
-        cash_pledge.setText(itemOrder.getTotal_yj() + "");
-        order_time.setText(TimeFormat.convertTimeLong2String(itemOrder.getAdd_time() * 1000, Calendar.DATE));
+        pay_amount.setText("￥"+itemOrder.getTotal_cost() );
+        cash_pledge.setText("￥"+itemOrder.getTotal_yj());
+        order_time.setText(TimeFormat.convertTimeLong2String(itemOrder.getAdd_time() * 1000, Calendar.SECOND));
         order_delivery_hours.setText(itemOrder.getSend_time());
         order_delivery_date.setText("(" + TimeFormat.convertTimeLong2String((itemOrder.getSend_date() * 1000), Calendar.DATE) + ")");
         bottle_num.setText(itemOrder.getTotal_count() - bottleList.size() + "");
         showBottomLy();
 
-        productAdapter = new CommonAdapter<String>(this,productList,R.layout.item_product_list) {
+        productAdapter = new CommonAdapter<String>(this, productList, R.layout.item_product_list) {
             @Override
             public void convert(ViewHolder helper, String item) {
-                helper.setText(R.id.product_name,item.split(",")[0]);
-                helper.setText(R.id.product_num,item.split(",")[1]);
+                helper.setText(R.id.product_name, item.split(",")[0]);
+                helper.setText(R.id.product_num, item.split(",")[1]);
             }
         };
 
@@ -157,19 +166,19 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         accpet_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ACCEPT_ORDER_FLAG= BusinessHttpProtocol.getDeliverOrder(orderDetail.this, itemOrder.getId(), user.getId());
+                showWindow(0);
             }
         });
         refuse_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                REJECT_ORDER_FLAG =  BusinessHttpProtocol.rejectDeliverOrder(orderDetail.this, itemOrder.getId(), user.getId());
+                showWindow(1);
             }
         });
         finish_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FINISH_ORDER_FLAG = BusinessHttpProtocol.finishOrder(orderDetail.this, user.getId(), itemOrder.getId());
+                showWindow(2);
             }
         });
         ly_accept_order.setOnClickListener(new View.OnClickListener() {
@@ -179,6 +188,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
             }
         });
         customer_phone.setOnClickListener(this);
+        order_address_nav_bt.setOnClickListener(this);
     }
 
     @Override
@@ -186,6 +196,28 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         switch (v.getId()) {
             case R.id.customer_phone:
                 Utils.dialAlert(itemOrder.getTelphone(), this);
+                break;
+            case R.id.order_address_nav_bt:
+                break;
+            case R.id.ly_prompt:
+                final int position = (int) v.getTag();
+                showWindow.dismiss();
+                if (position == 0) {
+                    ACCEPT_ORDER_FLAG = BusinessHttpProtocol.getDeliverOrder(orderDetail.this, itemOrder.getId(), user.getId());
+                } else if (position == 1) {
+                    REJECT_ORDER_FLAG = BusinessHttpProtocol.rejectDeliverOrder(orderDetail.this, itemOrder.getId(), user.getId());
+                } else if (position == 2) {
+                    FINISH_ORDER_FLAG = BusinessHttpProtocol.finishOrder(orderDetail.this, user.getId(), itemOrder.getId());
+                }
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showProgressDialog();
+
+                    }
+                },1000);
+
+
                 break;
         }
     }
@@ -195,13 +227,14 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         if (bottleMap.containsKey(flag)) {
             bottleMap.remove(flag);
             Utils.toastMsg(this, "煤气瓶号错误");
+        }else if(ACCEPT_ORDER_FLAG == flag ||REJECT_ORDER_FLAG == flag || FINISH_ORDER_FLAG==flag ){
+            dismissProgressDialog();
+            Utils.toastMsg(this,e);
         }
     }
 
     @Override
     public void onGeneralSuccess(String result, long flag) {
-
-
         try {
             JSONObject json = new JSONObject(result);
             if (bottleMap.containsKey(flag)) {
@@ -216,49 +249,30 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
                     ly_accept_order.setVisibility(View.GONE);
                     finish_order.setVisibility(View.VISIBLE);
                 }
-            } else if (FINISH_ORDER_FLAG == flag) {
-                Utils.toastMsg(this, Utils.decodeUnicode(json.getString("msg")));
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent();
-                        intent.putExtra("itemOrder",itemOrder);
-                        setResult(2,intent);
-                        finish();
-                    }
-                }, 400);
-            }else if(ACCEPT_ORDER_FLAG == flag){
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent();
-                        intent.putExtra("itemOrder",itemOrder);
-                        setResult(2,intent);
-                        finish();
-                    }
-                }, 400);
-            }else if(REJECT_ORDER_FLAG == flag){
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent();
-                        intent.putExtra("itemOrder",itemOrder);
-                        setResult(2,intent);
-                        finish();
-                    }
-                }, 400);
-            }else if(ORDER_DETAIL_FLAG == flag){
+            } else if (ORDER_DETAIL_FLAG == flag) {
                 //itemOrder  = gson.fromJson(result,DeliveryOrder.class);
-                JSONArray jsonArray =new JSONArray(json.getString("order_list"));
+                JSONArray jsonArray = new JSONArray(json.getString("order_list"));
 
-                Utils.log("jsonarray",jsonArray.toString());
-                for(int i =0;i<jsonArray.length();i++){
+                Utils.log("jsonarray", jsonArray.toString());
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsontemp = jsonArray.getJSONObject(i);
-                    Utils.log("jsontemp",jsontemp.toString());
-                    productList.add(jsontemp.getString("product_type")+","+jsontemp.getString("count"));
+                    Utils.log("jsontemp", jsontemp.toString());
+                    productList.add(jsontemp.getString("product_type") + "," + jsontemp.getString("count"));
                 }
                 productAdapter.notifyDataSetChanged();
                 Utils.setListViewHeightBasedOnChildren(productListView);
+            }else if(ACCEPT_ORDER_FLAG == flag ||REJECT_ORDER_FLAG == flag || FINISH_ORDER_FLAG==flag ){
+                dismissProgressDialog();
+                Utils.toastMsg(this,Utils.decodeUnicode(json.getString("msg")));
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent();
+                        intent.putExtra("itemOrder", itemOrder);
+                        setResult(2, intent);
+                        finish();
+                    }
+                }, 400);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -298,69 +312,72 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         }
     }
 
-    public String getOrderStutus(String status){
-        switch (status){
+    public String getOrderStutus(String status) {
+        switch (status) {
             case "1":
-                return "未接订单";
             case "2":
+                return "未接订单";
             case "3":
                 return "已接订单";
             case "4":
             case "5":
                 return "已完成";
         }
-        return  "";
+        return "";
     }
-   public void showPrompt(){
 
-   }
+    //接单0  拒绝1  确认订单2
+    private void showWindow(int position) {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.alpha = 0.7f;
+        getWindow().setAttributes(params);
+        View showView = LayoutInflater.from(this).inflate(
+                R.layout.ly_prompt_dialog, null);
+        TextView titleView = (TextView) showView.findViewById(R.id.prompt_title);
+        TextView contentView = (TextView) showView.findViewById(R.id.prompt_content);
+        String title = "";
+        String content = "";
+        if (position == 0) {
+            title = "接收订单";
+            content = "确定接收订单？";
+        } else if (position == 1) {
+            title = "拒绝订单";
+            content = "确定拒绝订单？";
+        } else if (position == 2) {
+            title = "派送完成";
+            content = "确定派送完成？";
+        }
+        titleView.setText(title);
+        contentView.setText(content);
+
+        LinearLayout ly_prompt = (LinearLayout) showView.findViewById(R.id.ly_prompt);
+        ly_prompt.setTag(position);
+        ly_prompt.setOnClickListener(this);
+
+        if (showWindow == null) {
+            showWindow = new PopupWindow();
+        }
+
+        showWindow.setContentView(showView);
+        showWindow.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        showWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        showWindow.setFocusable(true);
+        showWindow.setOutsideTouchable(true);
+        ColorDrawable dw = new ColorDrawable(0000000000);
+        // 点back键和其他地方使其消失,设置了这个才能触发OnDismisslistener ，设置其他控件变化等操作
+        showWindow.setBackgroundDrawable(dw);
+        showWindow.showAtLocation(rootView, Gravity.CENTER, 0, 0);
+
+        showWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams params = getWindow().getAttributes();
+                params.alpha = 1.0f;
+                getWindow().setAttributes(params);
+            }
+        });
+    }
 
 
-//    TextView textview = (TextView) findViewById(R.id.color_text);
-//    //声明一个字符串变量
-//    String str="君不见黄河之水天上来";
-//    SpannableStringBuilder style=new SpannableStringBuilder(str);
-//    //从第2到第4个字符  颜色为红色
-//    style.setSpan(new ForegroundColorSpan(Color.RED), 1, 4, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-//    //从第6到第7个字符  颜色为绿色
-//    style.setSpan(new ForegroundColorSpan(Color.BLUE), 5, 7, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-//    textview.setText(style);
-
-    /**
-     * protected void onCreate(Bundle savedInstanceState) {
-     super.onCreate(savedInstanceState);
-     setContentView(R.layout.textview);
-     TextView txtInfo =(TextView)findViewById(R.id.tv);
-     //SpannableString文本类，包含不可变的文本但可以用已有对象替换和分离。
-     //可变文本类参考SpannableStringBuilder
-     SpannableString ss = new SpannableString("红色打电话斜体删除线绿色下划线图片:.");
-     //用颜色标记文本
-     ss.setSpan(new ForegroundColorSpan(Color.RED), 0, 2,
-     //setSpan时需要指定的 flag,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE(前后都不包括).
-     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-     //用超链接标记文本
-     ss.setSpan(new URLSpan("tel:4155551212"), 2, 5,
-     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-     //用样式标记文本（斜体）
-     ss.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 5, 7,
-     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-     //用删除线标记文本
-     ss.setSpan(new StrikethroughSpan(), 7, 10,
-     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-     //用下划线标记文本
-     ss.setSpan(new UnderlineSpan(), 10, 16,
-     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-     //用颜色标记
-     ss.setSpan(new ForegroundColorSpan(Color.GREEN), 10, 13,
-     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-     //获取Drawable资源
-     Drawable d = getResources().getDrawable(R.drawable.icon);
-     d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-     //创建ImageSpan
-     ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
-     //用ImageSpan替换文本
-     ss.setSpan(span, 18, 19, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-     txtInfo.setText(ss);
-     txtInfo.setMovementMethod(LinkMovementMethod.getInstance()); //实现文本的滚动
-     */
 }

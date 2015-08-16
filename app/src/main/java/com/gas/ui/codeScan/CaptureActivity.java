@@ -50,6 +50,7 @@ import java.lang.reflect.Field;
 public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
+    private static int REQUEST_CODE = 0;
 
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;
@@ -75,6 +76,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     public static void launchActivity(Activity fromActivity,int CaptrueCode) {
         Intent i = new Intent(fromActivity, CaptureActivity.class);
+        REQUEST_CODE = CaptrueCode;
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         fromActivity.startActivityForResult(i,CaptrueCode);
     }
@@ -171,16 +173,19 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
      */
     public void handleDecode(Result rawResult, Bundle bundle) {
 
-            verifyBottle =true;
-            inactivityTimer.onActivity();
-            beepManager.playBeepSoundAndVibrate();
-            bundle.putInt("width", mCropRect.width());
-            bundle.putInt("height", mCropRect.height());
-            bundle.putString("result", rawResult.getText());
-            Intent intent = new Intent();
-            intent.putExtra("code", rawResult.getText());
-            setResult(RESULT_OK, intent);
-            finish();
+        
+
+               verifyBottle = true;
+               inactivityTimer.onActivity();
+               beepManager.playBeepSoundAndVibrate();
+               bundle.putInt("width", mCropRect.width());
+               bundle.putInt("height", mCropRect.height());
+               bundle.putString("result", rawResult.getText());
+               Intent intent = new Intent();
+               intent.putExtra("code", rawResult.getText());
+               setResult(RESULT_OK, intent);
+               finish();
+
          //startActivity(new Intent(CaptureActivity.this, ResultActivity.class).putExtras(bundle));
     }
 

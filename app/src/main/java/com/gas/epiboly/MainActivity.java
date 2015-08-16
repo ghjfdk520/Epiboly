@@ -18,6 +18,7 @@ import android.widget.ImageView;
 
 import com.gas.conf.Common;
 import com.gas.connector.HttpCallBack;
+import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.UserWorker;
 import com.gas.utils.BaiduLocationUtil;
 import com.gas.ui.codeScan.CaptureActivity;
@@ -60,7 +61,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     private Button button;
     public static boolean isForeground = false;
 
-
+    private long GAS_BOTTLE_IN = -1;
     public static void launchActivity(Activity fromActivity) {
         Intent i = new Intent(fromActivity, MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -84,7 +85,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         Intent intent = getIntent();
         int order_type = intent.getIntExtra("order_type",0);
         int must_get = intent.getIntExtra("must_get",-1);
-        Utils.log("czd order_type",order_type+" "+must_get);
+        Utils.log("czd order_type", order_type + " " + must_get);
         Common.order_type = order_type;
         Common.must_get = must_get;
         if(order_type == 1){
@@ -172,6 +173,9 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     public void onGeneralSuccess(String result, long flag) {
         System.out.print(result);
         Log.d("czd result", result);
+        if(GAS_BOTTLE_IN == flag){
+            Utils.toastMsg(this,Utils.decodeUnicode(result));
+        }
     }
 
     @Override
@@ -280,6 +284,13 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
                 Utils.log("Main",message);
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(RESULT_OK == resultCode)
+         GAS_BOTTLE_IN =  BusinessHttpProtocol.gasBottleIn(this, Common.getInstance().user.getId(), data.getStringExtra("code"));
     }
 
     @Override
