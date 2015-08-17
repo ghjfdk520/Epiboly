@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.gas.adapter.CommonAdapter;
 import com.gas.adapter.ViewHolder;
@@ -37,6 +36,9 @@ import java.util.List;
  * Created by Heart on 2015/7/22.
  */
 public class RepairFragment extends BaseFragment implements HttpCallBack {
+    private int REQUEST_CODE_HISTORY = 0x00003;
+    private int REQUEST_CODE_ACCEPT = 0x00002;
+    private int REQUEST_CODE_UNACCEPT = 0x00001;
 
     private SharedPreferenceUtil sharedPreferenceUtil;
 
@@ -60,6 +62,14 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
     private RadioGroup group_status_selector;
     protected View rootView;
     private Activity mActivity;
+
+    private long FINISH_DOWN_FLAG = 0;
+    private long FINISH_UP_FLAG = 0;
+    private long ON_DOWN_FLAG = 0;
+    private long ON_UP_FLAG = 0;
+    private long NEW_DOWN_FLAG = 0;
+    private long NEW_UP_FLAG = 0;
+    private long EMPTY_FLAG = -1;
     private long DOWN_FLAG = 0;
     private long UP_FLAG = 0;
     private long referenceTime = 0;
@@ -134,6 +144,7 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
             public void convert(final ViewHolder helper, RepairOrder item) {
                 helper.setText(R.id.customer_address, item.getAddress());
                 helper.setText(R.id.customer_name, item.getClient_name());
+                helper.setText(R.id.order_no, "订单序号：" + item.getId());
 
             }
         };
@@ -142,6 +153,7 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
             public void convert(final ViewHolder helper, RepairOrder item) {
                 helper.setText(R.id.customer_address, item.getAddress());
                 helper.setText(R.id.customer_name, item.getClient_name());
+                helper.setText(R.id.order_no, "订单序号：" + item.getId());
 
             }
         };
@@ -150,6 +162,7 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
             public void convert(ViewHolder helper, RepairOrder item) {
                 helper.setText(R.id.customer_address, item.getAddress());
                 helper.setText(R.id.customer_name, item.getClient_name());
+                helper.setText(R.id.order_no, "订单序号：" + item.getId());
             }
         };
         group_status_selector = (RadioGroup) rootView.findViewById(R.id.group_status_selector);
@@ -163,35 +176,49 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
     }
 
     public void initListener() {
+        unaccpetListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+              //  orderDetail.launchActivity(DeliveryFragment.this, REQUEST_CODE_UNACCEPT, unaccpetDatas.get(position - 1));
+            }
+        });
+        accpetListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+              //  orderDetail.launchActivity(DeliveryFragment.this, REQUEST_CODE_ACCEPT, accpetDatas.get(position - 1));
+            }
+        });
+
+        historyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //  orderDetail.launchActivity(DeliveryFragment.this, REQUEST_CODE_HISTORY, historyDatas.get(position - 1));
+            }
+        });
+
         unaccpetListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 Utils.log("down", "yeah");
                 referenceTime = System.currentTimeMillis() / 1000;
-                DOWN_FLAG = BusinessHttpProtocol.newDeliverOrder(RepairFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+                NEW_DOWN_FLAG = BusinessHttpProtocol.newRepairOrder(RepairFragment.this, Common.getInstance().user, 0, DOWN_STATE);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 referenceTime = System.currentTimeMillis() / 1000;
                 if (currentList.size() > 0)
-                    UP_FLAG = BusinessHttpProtocol.newDeliverOrder(RepairFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
+                    NEW_UP_FLAG = BusinessHttpProtocol.newRepairOrder(RepairFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
             }
         });
 
-        accpetListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Utils.log("click ", "clikc");
-                //  orderDetail.launchActivity(DeliveryFragment.this, 0x2222, accpetDatas.get(position));
-            }
-        });
+
         accpetListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 Utils.log("down", "yeah");
                 referenceTime = System.currentTimeMillis() / 1000;
-                DOWN_FLAG = BusinessHttpProtocol.onDeliverOrder(RepairFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+                ON_DOWN_FLAG = BusinessHttpProtocol.onRepairOrder(RepairFragment.this, Common.getInstance().user, 0, DOWN_STATE);
             }
 
             @Override
@@ -200,7 +227,7 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
                 referenceTime = System.currentTimeMillis() / 1000;
 
                 if (currentList.size() > 0)
-                    UP_FLAG = BusinessHttpProtocol.onDeliverOrder(RepairFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
+                    ON_UP_FLAG = BusinessHttpProtocol.onRepairOrder(RepairFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
             }
         });
 
@@ -208,14 +235,14 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 referenceTime = System.currentTimeMillis() / 1000;
-                DOWN_FLAG = BusinessHttpProtocol.deliveryHisOrder(RepairFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+                FINISH_DOWN_FLAG = BusinessHttpProtocol.repairOrderHistory(RepairFragment.this, Common.getInstance().user, 0, DOWN_STATE);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 referenceTime = System.currentTimeMillis() / 1000;
                 if (currentList.size() > 0)
-                    UP_FLAG = BusinessHttpProtocol.deliveryHisOrder(RepairFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
+                    FINISH_UP_FLAG = BusinessHttpProtocol.repairOrderHistory(RepairFragment.this, Common.getInstance().user, currentList.getLast().getId(), UP_STATE);
             }
         });
 
@@ -226,36 +253,45 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
                 switch (checkedId) {
                     case R.id.radio_un_accpet:
                         showListView(0);
-                        referenceList(0);
                         break;
                     case R.id.radio_accpet:
                         showListView(1);
-                        referenceList(1);
                         break;
                     case R.id.radio_history:
                         showListView(2);
-                        referenceList(2);
                         break;
                 }
             }
         });
 
-//        emptyView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                DOWN_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
-//            }
-//        });
+        emptyView.findViewById(R.id.bt_again_load).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (currentViewPosition) {
+                    case 0:
+                        NEW_DOWN_FLAG = BusinessHttpProtocol.newRepairOrder(RepairFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+                        showProgressDialog(NEW_DOWN_FLAG);
+                        EMPTY_FLAG = NEW_DOWN_FLAG;
+                        break;
+                    case 1:
+                        ON_DOWN_FLAG = BusinessHttpProtocol.onRepairOrder(RepairFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+                        showProgressDialog(ON_DOWN_FLAG);
+                        EMPTY_FLAG = ON_DOWN_FLAG;
+                        break;
+                    case 2:
+                        FINISH_DOWN_FLAG = BusinessHttpProtocol.repairOrderHistory(RepairFragment.this, Common.getInstance().user, 0, DOWN_STATE);
+                        showProgressDialog(FINISH_DOWN_FLAG);
+                        EMPTY_FLAG = FINISH_DOWN_FLAG;
+                        break;
+                }
+            }
+        });
     }
 
     public void showListView(int position) {
         historyListView.setVisibility(View.GONE);
         unaccpetListView.setVisibility(View.GONE);
         accpetListView.setVisibility(View.GONE);
-        //空数据 显示界面
-        TextView tv = new TextView(mActivity);
-        tv.setText("空的");
-
 
         switch (position) {
             case 0:
@@ -296,36 +332,50 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
                     List<RepairOrder> tempList = new LinkedList<RepairOrder>();
                     tempList = gson.fromJson(json.getString("all"), new TypeToken<List<RepairOrder>>() {
                     }.getType());
-                    if (flag == DOWN_FLAG) {
-                        if (currentViewPosition == 2) {
-                            sharedPreferenceUtil.putString(SharedPreferenceUtil.DELIVERY_HISTORY, json.getString("all"));
-                            historyDatas.clear();
-                            historyDatas.addAll(tempList);
-                            historyAdapter.notifyDataSetChanged();
-                        } else if (currentViewPosition == 1) {
-                            sharedPreferenceUtil.putString(SharedPreferenceUtil.DELIVERY_ACCPET, json.getString("all"));
-                            accpetDatas.clear();
-                            accpetDatas.addAll(tempList);
-                            accpetAdapter.notifyDataSetChanged();
-                        } else if (currentViewPosition == 0) {
-                            sharedPreferenceUtil.putString(SharedPreferenceUtil.DELIVERY_UNACCPET, json.getString("all"));
-                            unaccpetDatas.clear();
-                            unaccpetDatas.addAll(tempList);
-                            unaccpetAdapter.notifyDataSetChanged();
-                        }
 
-                    } else if (flag == UP_FLAG) {
-                        if (currentViewPosition == 2) {
-                            historyDatas.addAll(tempList);
-                            historyAdapter.notifyDataSetChanged();
-                        } else if (currentViewPosition == 1) {
-                            accpetDatas.addAll(tempList);
-                            accpetAdapter.notifyDataSetChanged();
-                        } else if (currentViewPosition == 0) {
-                            unaccpetDatas.addAll(tempList);
-                            unaccpetAdapter.notifyDataSetChanged();
-                        }
+                    if (EMPTY_FLAG == flag) {
+                        dismissProgressDialog();
+
+                        if (tempList.size() == 0)
+                            Utils.toastMsg(getActivity(), "没有更多数据");
                     }
+
+
+                    if (flag == FINISH_DOWN_FLAG) {
+                        sharedPreferenceUtil.putString(SharedPreferenceUtil.REPAIRORDER_HISTORY, json.getString("all"));
+                        historyDatas.clear();
+                        historyDatas.addAll(tempList);
+                        historyAdapter.notifyDataSetChanged();
+                    } else if (flag == ON_DOWN_FLAG) {
+                        sharedPreferenceUtil.putString(SharedPreferenceUtil.REPAIRORDER_ACCPET, json.getString("all"));
+                        accpetDatas.clear();
+                        accpetDatas.addAll(tempList);
+                        accpetAdapter.notifyDataSetChanged();
+                    } else if (flag == NEW_DOWN_FLAG) {
+                        sharedPreferenceUtil.putString(SharedPreferenceUtil.REPAIRORDER_UNACCPET, json.getString("all"));
+                        unaccpetDatas.clear();
+                        unaccpetDatas.addAll(tempList);
+                        unaccpetAdapter.notifyDataSetChanged();
+                    }
+
+
+                    if (flag == FINISH_UP_FLAG) {
+                        historyDatas.addAll(tempList);
+                        historyAdapter.notifyDataSetChanged();
+                        if (historyListView.isShown() && tempList.size() == 0)
+                            Utils.toastMsg(getActivity(), "没有更多数据");
+                    } else if (flag == ON_UP_FLAG) {
+                        accpetDatas.addAll(tempList);
+                        accpetAdapter.notifyDataSetChanged();
+                        if (accpetListView.isShown() && tempList.size() == 0)
+                            Utils.toastMsg(getActivity(), "没有更多数据");
+                    } else if (flag == NEW_UP_FLAG) {
+                        unaccpetDatas.addAll(tempList);
+                        unaccpetAdapter.notifyDataSetChanged();
+                        if (accpetListView.isShown() && tempList.size() == 0)
+                            Utils.toastMsg(getActivity(), "没有更多数据");
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -337,11 +387,13 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
     }
 
     @Override
-    public void onGeneralError(String e, long flag) {
+    public void onGeneralError(final String e, long flag) {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                dismissProgressDialog();
                 onRefreshComplete();
+                Utils.toastMsg(getActivity(), e);
             }
         }, ((System.currentTimeMillis() / 1000) - referenceTime) < 2000 ? 2000 : 100);
 
@@ -372,6 +424,62 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Utils.log("czd", requestCode + "  " + resultCode);
+
+        //2数据发生变化
+        if (resultCode == 2) {
+            DeliveryOrder deliveryOrder = data.getParcelableExtra("itemOrder");
+            if (requestCode == REQUEST_CODE_UNACCEPT) {
+                for (int i = 0; i < unaccpetDatas.size(); i++) {
+                    RepairOrder temp = unaccpetDatas.get(i);
+                    if (temp.getId() == deliveryOrder.getId()) {
+                        unaccpetDatas.remove(temp);
+                    }
+                }
+                unaccpetAdapter.notifyDataSetChanged();
+                referenceList(1);
+                return;
+            } else if (requestCode == REQUEST_CODE_ACCEPT) {
+                accpetDatas.remove(data.getParcelableExtra("itemOrder"));
+                for (int i = 0; i < accpetDatas.size(); i++) {
+                    RepairOrder temp = accpetDatas.get(i);
+                    if (temp.getId() == deliveryOrder.getId()) {
+                        accpetDatas.remove(temp);
+                    }
+                }
+                accpetAdapter.notifyDataSetChanged();
+                referenceList(2);
+                return;
+            } else if (requestCode == REQUEST_CODE_HISTORY) {
+
+            }
+        }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        /**
+         * order_type 1为送气；2为抢修； must_get 1为系统派送（不可拒绝）；0反之
+         */
+
+        if (!hidden) {
+            if (Common.order_type == 2 && Common.must_get == 0) {
+                currentViewPosition = 0;
+                showListView(currentViewPosition);
+                referenceList(currentViewPosition);
+                Common.order_type = -1;
+                Common.must_get = -1;
+                Common.repairCount = 0;
+            } else if (Common.order_type == 2 && Common.must_get == 1) {
+                currentViewPosition = 1;
+                showListView(currentViewPosition);
+                referenceList(currentViewPosition);
+                Common.order_type = -1;
+                Common.must_get = -1;
+                Common.repairAccept = 0;
+            }
+        }
     }
 }

@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.gas.adapter.CommonAdapter;
 import com.gas.adapter.ViewHolder;
@@ -292,9 +291,6 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
         historyListView.setVisibility(View.GONE);
         unaccpetListView.setVisibility(View.GONE);
         accpetListView.setVisibility(View.GONE);
-        //空数据 显示界面
-        TextView tv = new TextView(mActivity);
-        tv.setText("空的");
 
 
         switch (position) {
