@@ -6,6 +6,7 @@ import android.content.Context;
 import com.gas.entity.User;
 import com.gas.utils.BaiduLocationUtil;
 import com.gas.utils.ImageViewUtil;
+import com.pgyersdk.crash.PgyCrashManager;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -23,6 +24,7 @@ public class BaseApplication extends Application{
         JPushInterface.init(this);
         this.mContext = getBaseContext();
         BaiduLocationUtil.getInstance(this);
+        PgyCrashManager.register(this, "66a0cbb2f41686b59a52833aa45d0442");
     }
 
     @Override

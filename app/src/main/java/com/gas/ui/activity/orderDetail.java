@@ -201,21 +201,20 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
                 break;
             case R.id.ly_prompt:
                 final int position = (int) v.getTag();
-                showWindow.dismiss();
-                if (position == 0) {
-                    ACCEPT_ORDER_FLAG = BusinessHttpProtocol.getDeliverOrder(orderDetail.this, itemOrder.getId(), user.getId());
-                } else if (position == 1) {
-                    REJECT_ORDER_FLAG = BusinessHttpProtocol.rejectDeliverOrder(orderDetail.this, itemOrder.getId(), user.getId());
-                } else if (position == 2) {
-                    FINISH_ORDER_FLAG = BusinessHttpProtocol.finishOrder(orderDetail.this, user.getId(), itemOrder.getId());
-                }
+
+                showProgressDialog();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        showProgressDialog();
-
+                        if (position == 0) {
+                            ACCEPT_ORDER_FLAG = BusinessHttpProtocol.getDeliverOrder(orderDetail.this, itemOrder.getId(), user.getId());
+                        } else if (position == 1) {
+                            REJECT_ORDER_FLAG = BusinessHttpProtocol.rejectDeliverOrder(orderDetail.this, itemOrder.getId(), user.getId());
+                        } else if (position == 2) {
+                            FINISH_ORDER_FLAG = BusinessHttpProtocol.finishOrder(orderDetail.this, user.getId(), itemOrder.getId());
+                        }
                     }
-                },1000);
+                },100);
 
 
                 break;
@@ -262,7 +261,14 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
                 productAdapter.notifyDataSetChanged();
                 Utils.setListViewHeightBasedOnChildren(productListView);
             }else if(ACCEPT_ORDER_FLAG == flag ||REJECT_ORDER_FLAG == flag || FINISH_ORDER_FLAG==flag ){
-                dismissProgressDialog();
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismissProgressDialog();
+                        showWindow.dismiss();
+                    }
+                });
                 Utils.toastMsg(this,Utils.decodeUnicode(json.getString("msg")));
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -322,6 +328,8 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
             case "4":
             case "5":
                 return "已完成";
+            case "8":
+                return "配送完成";
         }
         return "";
     }
@@ -355,7 +363,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         ly_prompt.setOnClickListener(this);
 
         if (showWindow == null) {
-            showWindow = new PopupWindow();
+            showWindow = new PopupWindow(this);
         }
 
         showWindow.setContentView(showView);

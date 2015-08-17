@@ -1,5 +1,4 @@
 package com.gas.ui.fragment;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
 import com.gas.adapter.CommonAdapter;
 import com.gas.adapter.ViewHolder;
 import com.gas.conf.Common;
@@ -27,10 +25,8 @@ import com.gas.utils.Utils;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -361,7 +357,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
                                 accpetAdapter.notifyDataSetChanged();
                             }
                         }, 1000);
-
+                        accpetAdapter.notifyDataSetInvalidated();
 
                     } else if (flag == NEW_DOWN_FLAG) {
                         sharedPreferenceUtil.putString(SharedPreferenceUtil.DELIVERY_UNACCPET, json.getString("all"));

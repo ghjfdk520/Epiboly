@@ -18,6 +18,7 @@ import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.User;
 import com.gas.epiboly.R;
 import com.gas.ui.common.BaseFragment;
+import com.gas.utils.BaiduLocationUtil;
 import com.gas.utils.Utils;
 
 /**
@@ -34,6 +35,7 @@ public class AttendanceFragment extends BaseFragment implements HttpCallBack,Vie
     private long workFlag;
     private long offFlag;
     private long checkallFlag;
+    private BaiduLocationUtil mBaiduLocationutil;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return  inflater.inflate(R.layout.fragment_attendance,container,
@@ -53,6 +55,10 @@ public class AttendanceFragment extends BaseFragment implements HttpCallBack,Vie
 
     public void init(){
         temp = SharedPreferenceUtil.getInstance(getActivity()).getString(SharedPreferenceUtil.LONGITUDE).split("/");
+        if(temp.length<2){
+            initLocation();
+        }
+
         imageview_work_bt = (ImageView) rootView.findViewById(R.id.imageview_work_bt);
         imageview_off_bt = (ImageView) rootView.findViewById(R.id.imageview_off_bt);
         bt_check_all = (ImageView) rootView.findViewById(R.id.bt_check_all);
@@ -63,7 +69,21 @@ public class AttendanceFragment extends BaseFragment implements HttpCallBack,Vie
         imageview_off_bt.setOnClickListener(this);
         bt_check_all.setOnClickListener(this);
     }
+    // 定位功能！！
+    private void initLocation() {
+        mBaiduLocationutil = BaiduLocationUtil.getInstance(getActivity());
+        mBaiduLocationutil.startBaiduListener(new BaiduLocationUtil.BaiduCallBack() {
 
+            public void updateBaidu(int type, int lat, int lng, String address,
+                                    String simpleAddress) {
+                // TODO Auto-generated method stub
+                Utils.log("czd", type + " " + lat / 1e6 + " " + lng / 1e6 + " "
+                        + address);
+                temp = (lat / 1e6 + "/" + lng / 1e6 + "/"
+                        + address).split("/");
+            }
+        });
+    }
     @Override
     public void onClick(View v) {
        switch (v.getId()){
