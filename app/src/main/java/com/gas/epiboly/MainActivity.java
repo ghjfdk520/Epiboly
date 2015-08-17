@@ -68,6 +68,13 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         fromActivity.startActivity(i);
     }
 
+    public static void lauchActivity(Activity fromActivity,int CheckId){
+        Intent i = new Intent(fromActivity, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.putExtra("checkId",CheckId);
+        fromActivity.startActivity(i);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +100,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         }else if(order_type == 2){
             checkId = 3;
         }
+        checkId = intent.getIntExtra("checkId",1);
         showFragment(checkId);
     }
 
@@ -151,6 +159,8 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
                     }
                 });
         scan_code.setOnClickListener(this);
+        findViewById(R.id.title_home).setOnClickListener(this);
+        findViewById(R.id.title_back).setOnClickListener(this);
     }
     @Override
     protected void onDestroy() {
@@ -272,6 +282,10 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         switch (v.getId()){
             case R.id.scan_code:
                 CaptureActivity.launchActivity(this,REQUEST_CODE_MAIN_SCAN);
+                break;
+            case R.id.title_home:
+                HomeActivity.launchActivity(this);
+                finish();
                 break;
         }
     }

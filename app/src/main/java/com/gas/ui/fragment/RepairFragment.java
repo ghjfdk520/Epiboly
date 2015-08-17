@@ -19,6 +19,7 @@ import com.gas.connector.HttpCallBack;
 import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.DeliveryOrder;
+import com.gas.entity.RepairOrder;
 import com.gas.epiboly.R;
 import com.gas.ui.common.BaseFragment;
 import com.gas.utils.Utils;
@@ -41,20 +42,20 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
 
 
     //当前显示list
-    private LinkedList<DeliveryOrder> currentList;
+    private LinkedList<RepairOrder> currentList;
 
 
-    private List<DeliveryOrder> historyDatas = new LinkedList<>();
-    private List<DeliveryOrder> accpetDatas = new LinkedList<>();
-    private List<DeliveryOrder> unaccpetDatas = new LinkedList<>();
+    private List<RepairOrder> historyDatas = new LinkedList<>();
+    private List<RepairOrder> accpetDatas = new LinkedList<>();
+    private List<RepairOrder> unaccpetDatas = new LinkedList<>();
 
     private PullToRefreshListView accpetListView;
     private PullToRefreshListView historyListView;
     private PullToRefreshListView unaccpetListView;
 
-    private CommonAdapter<DeliveryOrder> historyAdapter;
-    private CommonAdapter<DeliveryOrder> accpetAdapter;
-    private CommonAdapter<DeliveryOrder> unaccpetAdapter;
+    private CommonAdapter<RepairOrder> historyAdapter;
+    private CommonAdapter<RepairOrder> accpetAdapter;
+    private CommonAdapter<RepairOrder> unaccpetAdapter;
 
     private RadioGroup group_status_selector;
     protected View rootView;
@@ -94,11 +95,11 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
     //读取缓存
     public void getRecordToBuffer() {
 
-        String historyJsonArray = SharedPreferenceUtil.getInstance(mActivity).getString(SharedPreferenceUtil.DELIVERY_HISTORY);
-        String accpetJsonArray = SharedPreferenceUtil.getInstance(mActivity).getString(SharedPreferenceUtil.DELIVERY_ACCPET);
-        String unaccpetyJsonArray = SharedPreferenceUtil.getInstance(mActivity).getString(SharedPreferenceUtil.DELIVERY_UNACCPET);
+        String historyJsonArray = SharedPreferenceUtil.getInstance(mActivity).getString(SharedPreferenceUtil.REPAIRORDER_HISTORY);
+        String accpetJsonArray = SharedPreferenceUtil.getInstance(mActivity).getString(SharedPreferenceUtil.REPAIRORDER_ACCPET);
+        String unaccpetyJsonArray = SharedPreferenceUtil.getInstance(mActivity).getString(SharedPreferenceUtil.REPAIRORDER_UNACCPET);
 
-        List<DeliveryOrder> tempList = gson.fromJson(historyJsonArray, new TypeToken<List<DeliveryOrder>>() {
+        List<RepairOrder> tempList = gson.fromJson(historyJsonArray, new TypeToken<List<DeliveryOrder>>() {
         }.getType());
         if (tempList != null)
             historyDatas.addAll(tempList);
@@ -128,25 +129,25 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
         accpetListView = (PullToRefreshListView) rootView.findViewById(R.id.pull_refresh_accpet_list);
         unaccpetListView = (PullToRefreshListView) rootView.findViewById(R.id.pull_refresh_un_accpet_list);
 
-        unaccpetAdapter = new CommonAdapter<DeliveryOrder>(mActivity, unaccpetDatas, R.layout.item_delivery_order_history) {
+        unaccpetAdapter = new CommonAdapter<RepairOrder>(mActivity, unaccpetDatas, R.layout.item_delivery_order_history) {
             @Override
-            public void convert(final ViewHolder helper, DeliveryOrder item) {
+            public void convert(final ViewHolder helper, RepairOrder item) {
                 helper.setText(R.id.customer_address, item.getAddress());
                 helper.setText(R.id.customer_name, item.getClient_name());
 
             }
         };
-        accpetAdapter = new CommonAdapter<DeliveryOrder>(mActivity, accpetDatas, R.layout.item_delivery_order_history) {
+        accpetAdapter = new CommonAdapter<RepairOrder>(mActivity, accpetDatas, R.layout.item_delivery_order_history) {
             @Override
-            public void convert(final ViewHolder helper, DeliveryOrder item) {
+            public void convert(final ViewHolder helper, RepairOrder item) {
                 helper.setText(R.id.customer_address, item.getAddress());
                 helper.setText(R.id.customer_name, item.getClient_name());
 
             }
         };
-        historyAdapter = new CommonAdapter<DeliveryOrder>(mActivity, historyDatas, R.layout.item_delivery_order_history) {
+        historyAdapter = new CommonAdapter<RepairOrder>(mActivity, historyDatas, R.layout.item_delivery_order_history) {
             @Override
-            public void convert(ViewHolder helper, DeliveryOrder item) {
+            public void convert(ViewHolder helper, RepairOrder item) {
                 helper.setText(R.id.customer_address, item.getAddress());
                 helper.setText(R.id.customer_name, item.getClient_name());
             }
@@ -292,8 +293,8 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
                 try {
                     JSONObject json = new JSONObject(result);
 
-                    List<DeliveryOrder> tempList = new LinkedList<DeliveryOrder>();
-                    tempList = gson.fromJson(json.getString("all"), new TypeToken<List<DeliveryOrder>>() {
+                    List<RepairOrder> tempList = new LinkedList<RepairOrder>();
+                    tempList = gson.fromJson(json.getString("all"), new TypeToken<List<RepairOrder>>() {
                     }.getType());
                     if (flag == DOWN_FLAG) {
                         if (currentViewPosition == 2) {

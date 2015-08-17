@@ -88,5 +88,12 @@ public class UserWorker extends ITableWorker {
         }
          return user;
     }
+    public int removeAll( long uid )
+    {
+        String where = ID + " = " + uid;
+        return delete( where );
+    }
+    public void DelUser(int userId){
 
+    }
 }

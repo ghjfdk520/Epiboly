@@ -1,5 +1,7 @@
 package com.gas.epiboly;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -18,7 +20,11 @@ import com.google.gson.Gson;
  * Created by Heart on 2015/7/27.
  */
 public class StartActity extends SuperActivity{
-
+    public static void launchActivity(Activity fromActivity) {
+        Intent i = new Intent(fromActivity, StartActity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        fromActivity.startActivity(i);
+    }
     private Button bt_login;
     private EditText edit_name;
     private EditText edit_pass;
@@ -47,7 +53,8 @@ public class StartActity extends SuperActivity{
 
         if(user.getIsLogin() == 1){
             Common.getInstance().user = user;
-            MainActivity.launchActivity(StartActity.this);
+            HomeActivity.launchActivity(StartActity.this);
+            finish();
         }
 }
 
@@ -73,11 +80,11 @@ public class StartActity extends SuperActivity{
                 u.setIsLogin(1);
                 userWorker.addUser(u);
                 Common.getInstance().user = u;
-                MainActivity.launchActivity(StartActity.this);
+                HomeActivity.launchActivity(StartActity.this);
                 finish();
                 Utils.log(" flag", result);
             }
-        },System.currentTimeMillis()/1000-referenceTiem>1000?100:1000);
+        }, System.currentTimeMillis() / 1000 - referenceTiem > 1000 ? 100 : 1000);
 
     }
 
@@ -85,7 +92,7 @@ public class StartActity extends SuperActivity{
     public void onGeneralError(String e, long flag) {
         dismissProgressDialog();
         Utils.toastMsg(this,e);
-        Utils.log(" flag error",Utils.decodeUnicode(e));
+        Utils.log(" flag error", Utils.decodeUnicode(e));
     }
 
     @Override
@@ -93,6 +100,10 @@ public class StartActity extends SuperActivity{
         Utils.log("back", "meiyong ");
         // super.onBackPressed();
     }
-
+    @Override
+    protected void onDestroy() {
+        dismissProgressDialog();
+        super.onDestroy();
+    }
 
 }

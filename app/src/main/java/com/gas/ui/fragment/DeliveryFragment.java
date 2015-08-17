@@ -1,4 +1,5 @@
 package com.gas.ui.fragment;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
 import com.gas.adapter.CommonAdapter;
 import com.gas.adapter.ViewHolder;
 import com.gas.conf.Common;
@@ -25,8 +27,10 @@ import com.gas.utils.Utils;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -71,7 +75,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
 
     private String DOWN_STATE = "1";
     private String UP_STATE = "0";
-    private int currentViewPosition = 2;  //0未接订单  1 已接订单  2 历史订单
+    private int currentViewPosition = 0;  //0未接订单  1 已接订单  2 历史订单
     private Handler handler = new Handler();
 
 
@@ -440,26 +444,26 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
         if (resultCode == 2) {
             DeliveryOrder deliveryOrder = data.getParcelableExtra("itemOrder");
             if (requestCode == REQUEST_CODE_UNACCEPT) {
-                for(DeliveryOrder temp :unaccpetDatas){
-                    if(temp.getId() == deliveryOrder.getId())
-                    {
+                for (int i = 0; i < unaccpetDatas.size(); i++) {
+                    DeliveryOrder temp = unaccpetDatas.get(i);
+                    if (temp.getId() == deliveryOrder.getId()) {
                         unaccpetDatas.remove(temp);
-                        return;
                     }
                 }
                 unaccpetAdapter.notifyDataSetChanged();
                 referenceList(1);
+                return;
             } else if (requestCode == REQUEST_CODE_ACCEPT) {
                 accpetDatas.remove(data.getParcelableExtra("itemOrder"));
-                for(DeliveryOrder temp :accpetDatas){
-                    if(temp.getId() == deliveryOrder.getId())
-                    {
+                for (int i = 0; i < accpetDatas.size(); i++) {
+                    DeliveryOrder temp = accpetDatas.get(i);
+                    if (temp.getId() == deliveryOrder.getId()) {
                         accpetDatas.remove(temp);
-                        return;
                     }
                 }
                 accpetAdapter.notifyDataSetChanged();
                 referenceList(2);
+                return;
             } else if (requestCode == REQUEST_CODE_HISTORY) {
 
             }
@@ -488,9 +492,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
                 Common.deliveryAccept = 0;
             }
         }
-
     }
-
 
 
 }

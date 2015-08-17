@@ -387,5 +387,11 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         });
     }
 
+    @Override
+    protected void onDestroy() {
 
+        if(showWindow != null)
+           showWindow.dismiss();
+        super.onDestroy();
+    }
 }

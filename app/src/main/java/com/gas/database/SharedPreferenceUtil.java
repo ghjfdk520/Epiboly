@@ -3,6 +3,7 @@ package com.gas.database;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+
 /**
  * Created by Heart on 2015/5/28.
  */
@@ -14,6 +15,11 @@ public class SharedPreferenceUtil {
     public final static String DELIVERY_HISTORY="delivery_history";
     public final static String DELIVERY_ACCPET="delivery_accpet";
     public final static String DELIVERY_UNACCPET="delivery_unaccpet";
+
+    public final static String REPAIRORDER_HISTORY="repairorder_history";
+    public final static String REPAIRORDER_ACCPET="repairorder_accpet";
+    public final static String REPAIRORDER_UNACCPET="repairorder_unaccpet";
+
     public final static String ORDER_DELIVERY_BOTTLE ="order_delivery_bottle";
     private static SharedPreferenceUtil sharedPreferenceUtil;
     private static SharedPreferences sharedPreferences;

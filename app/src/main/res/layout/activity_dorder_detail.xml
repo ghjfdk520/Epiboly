@@ -80,7 +80,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -136,7 +136,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:orientation="horizontal">
 
@@ -147,7 +147,7 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="35dp"
+                            android:layout_height="wrap_content"
                             android:orientation="vertical">
 
                             <TextView
@@ -170,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
-                    android:layout_marginTop="65dp"
+                    android:layout_marginTop="60dp"
                     android:src="@mipmap/order_address_nav_bt" />
             </RelativeLayout>
 
