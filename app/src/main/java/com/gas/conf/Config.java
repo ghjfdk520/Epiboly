@@ -31,4 +31,5 @@ public class Config {
     public static String  finishRepairOrder = BASE_URL+"&a=finish_repair_order";
     public static String  gasBottleOut = BASE_URL+"&a=gas_bottle_out";
     public static String  gasBottleIn = BASE_URL+"&a=gas_bottle_in";
+    public static String  finishRepariOrder = BASE_URL+"&a=finish_repair_order";
 }

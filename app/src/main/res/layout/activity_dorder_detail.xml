@@ -333,9 +333,10 @@
             android:layout_toRightOf="@+id/test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textSize="13sp"
             android:textColor="#f4753b"
-            android:background="@drawable/order_detaial_font_oval"
+            android:background="@mipmap/bg_bottle_num"
             android:text="08"/>
     </RelativeLayout>
     <Button

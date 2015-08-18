@@ -141,13 +141,14 @@ public class JGReceiver extends BroadcastReceiver {
                 }
             }else if(order_type ==2){
                 if(must_get == 1){
-                    Common.repairCount =
-                            Common.repairCount+1;
-                    strBuffer.append(Common.repairCount +"条管理员指派维修订单");
+                    Common.repairAccept  =Common.repairAccept+1;
+
+                    strBuffer.append(Common.repairAccept +"条管理员指派维修订单");
                     notificationId =3;
                 }else{
-                    Common.repairAccept  =Common.repairAccept+1;
-                    strBuffer.append(Common.repairAccept +"条未接维修订单");
+                    Common.repairCount =
+                            Common.repairCount+1;
+                    strBuffer.append(Common.repairCount +"条未接维修订单");
                     notificationId =4;
                 }
             }

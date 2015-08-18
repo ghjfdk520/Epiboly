@@ -197,5 +197,8 @@ public abstract class SuperActivity extends Activity implements  Thread.Uncaught
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

@@ -17,9 +17,9 @@ import com.gas.conf.Common;
 import com.gas.connector.HttpCallBack;
 import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.SharedPreferenceUtil;
-import com.gas.entity.DeliveryOrder;
 import com.gas.entity.RepairOrder;
 import com.gas.epiboly.R;
+import com.gas.ui.activity.repairDetail;
 import com.gas.ui.common.BaseFragment;
 import com.gas.utils.Utils;
 import com.google.gson.reflect.TypeToken;
@@ -109,17 +109,17 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
         String accpetJsonArray = SharedPreferenceUtil.getInstance(mActivity).getString(SharedPreferenceUtil.REPAIRORDER_ACCPET);
         String unaccpetyJsonArray = SharedPreferenceUtil.getInstance(mActivity).getString(SharedPreferenceUtil.REPAIRORDER_UNACCPET);
 
-        List<RepairOrder> tempList = gson.fromJson(historyJsonArray, new TypeToken<List<DeliveryOrder>>() {
+        List<RepairOrder> tempList = gson.fromJson(historyJsonArray, new TypeToken<List<RepairOrder>>() {
         }.getType());
         if (tempList != null)
             historyDatas.addAll(tempList);
 
-        tempList = gson.fromJson(unaccpetyJsonArray, new TypeToken<List<DeliveryOrder>>() {
+        tempList = gson.fromJson(unaccpetyJsonArray, new TypeToken<List<RepairOrder>>() {
         }.getType());
         if (tempList != null)
             unaccpetDatas.addAll(tempList);
 
-        tempList = gson.fromJson(accpetJsonArray, new TypeToken<List<DeliveryOrder>>() {
+        tempList = gson.fromJson(accpetJsonArray, new TypeToken<List<RepairOrder>>() {
         }.getType());
         if (tempList != null)
             accpetDatas.addAll(tempList);
@@ -179,20 +179,20 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
         unaccpetListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-              //  orderDetail.launchActivity(DeliveryFragment.this, REQUEST_CODE_UNACCEPT, unaccpetDatas.get(position - 1));
+              repairDetail.launchActivity(RepairFragment.this, REQUEST_CODE_UNACCEPT, unaccpetDatas.get(position - 1));
             }
         });
         accpetListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-              //  orderDetail.launchActivity(DeliveryFragment.this, REQUEST_CODE_ACCEPT, accpetDatas.get(position - 1));
+                repairDetail.launchActivity(RepairFragment.this, REQUEST_CODE_ACCEPT, accpetDatas.get(position - 1));
             }
         });
 
         historyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //  orderDetail.launchActivity(DeliveryFragment.this, REQUEST_CODE_HISTORY, historyDatas.get(position - 1));
+                repairDetail.launchActivity(RepairFragment.this, REQUEST_CODE_HISTORY, historyDatas.get(position - 1));
             }
         });
 
@@ -427,7 +427,7 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
 
         //2数据发生变化
         if (resultCode == 2) {
-            DeliveryOrder deliveryOrder = data.getParcelableExtra("itemOrder");
+            RepairOrder deliveryOrder = data.getParcelableExtra("itemOrder");
             if (requestCode == REQUEST_CODE_UNACCEPT) {
                 for (int i = 0; i < unaccpetDatas.size(); i++) {
                     RepairOrder temp = unaccpetDatas.get(i);
