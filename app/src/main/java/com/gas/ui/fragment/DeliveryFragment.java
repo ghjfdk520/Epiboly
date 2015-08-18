@@ -71,7 +71,6 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
     private long NEW_UP_FLAG = 0;
     private long EMPTY_FLAG = -1;
     private long referenceTime = 0;
-
     private String DOWN_STATE = "1";
     private String UP_STATE = "0";
     private int currentViewPosition = 0;  //0未接订单  1 已接订单  2 历史订单

@@ -2,10 +2,12 @@ package com.gas;
 
 import android.app.Application;
 import android.content.Context;
+import android.telephony.TelephonyManager;
 
 import com.gas.entity.User;
 import com.gas.utils.BaiduLocationUtil;
 import com.gas.utils.ImageViewUtil;
+import com.gas.utils.StringEncrypt;
 import com.pgyersdk.crash.PgyCrashManager;
 
 import cn.jpush.android.api.JPushInterface;
@@ -32,4 +34,15 @@ public class BaseApplication extends Application{
         super.onLowMemory();
         ImageViewUtil.getDefault().clearDefaultLoaderMemoryCache();
     }
+
+
+    /**
+     * 获得设备id
+     * @return
+     */
+    public static String getDeviceId(){
+        String deviceId=((TelephonyManager)mContext.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+        return StringEncrypt.encodeByAsymmetric(deviceId, StringEncrypt.EncodeType.MD5, StringEncrypt.Case.LOWER);
+    }
+
 }

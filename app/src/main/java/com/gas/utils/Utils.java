@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.gas.conf.Common;
 import com.gas.conf.Config;
+import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.User;
 
 import java.io.File;
@@ -281,33 +282,63 @@ public class Utils {
         builder.create().show();
     }
 
-    public static void MapPilot(String address,Context mContext){
+    public static void MapPilot(final String address, final Context mContext){
         try {
 
+            final String latlng[] = SharedPreferenceUtil.getInstance(mContext).getString(SharedPreferenceUtil.LONGITUDE).split("/");
+             final StringBuffer Uri1 =new StringBuffer("intent://map/direction?origin=");
+
+
             User user = Common.getInstance().user;
-            Intent intent = Intent.getIntent("intent://map/direction?origin=latlng:"+" "+","+" "+"|name:顾客&destination=大雁塔&mode=drivingion=西安&referer=Autohome|GasStation#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
+        //    Intent intent = Intent.getIntent("intent://map/direction?origin=latlng:"+" "+","+" "+"|name:顾客&destination=大雁塔&mode=drivingion=西安&referer=Autohome|GasStation#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
 
 
-            BaiduLocationUtil  mBaiduLocationutil = BaiduLocationUtil.getInstance(mContext);
-            mBaiduLocationutil.startBaiduListener(new BaiduLocationUtil.BaiduCallBack() {
+            if(latlng.length <2) {
+                BaiduLocationUtil.getInstance(mContext).startBaiduListener(new BaiduLocationUtil.BaiduCallBack() {
 
-                public void updateBaidu(int type, int lat, int lng, String address,
-                                        String simpleAddress) {
+                    public void updateBaidu(int type, int lat, int lng, String addressLoc,
+                                            String simpleAddress) {
+                        try {
+                            StringBuffer uriNew = new StringBuffer("intent://map/direction?origin=");
+                            uriNew.append("latlng:" + latlng[0] + "," + latlng[1]);
+                            uriNew.append("&destination=" + address);
+                            uriNew.append("&mode=driving");
+                            uriNew.append("&src=yourCompanyName|yourAppName#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
+                            if(isInstallByread("com.baidu.BaiduMap")){
+
+                                Intent intent = Intent.getIntent(uriNew.toString());
+                                mContext.startActivity(intent);
+
+                            }else{
+
+                                Log.e("GasStation", "没有安装百度地图客户端") ;
+
+                            }
+                            return;
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }else {
+                Uri1.append("latlng:"+latlng[0]+","+latlng[1]);
+                Uri1.append("&destination="+address);
+                Uri1.append("&mode=driving");
+                Uri1.append("&src=yourCompanyName|yourAppName#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
+
+                if(isInstallByread("com.baidu.BaiduMap")){
+
+                    Intent intent = Intent.getIntent(Uri1.toString());
+                    mContext.startActivity(intent);
+
+                }else{
+
+                    Log.e("GasStation", "没有安装百度地图客户端") ;
 
                 }
-            });
-
-            if(isInstallByread("com.baidu.BaiduMap")){
-
-                mContext.startActivity(intent); //启动调用
-
-                Log.e("GasStation", "百度地图客户端已经安装") ;
-
-            }else{
-
-                Log.e("GasStation", "没有安装百度地图客户端") ;
 
             }
+
 
         } catch (URISyntaxException e) {
 
@@ -336,7 +367,10 @@ public class Utils {
 
         try {
 
-           Intent intent = Intent.getIntent("androidamap://path?sourceApplication=GasStation&sid=BGVIS1&slat=34.264642646862&slon=108.95108518068&sname=当前位置&did=BGVIS2&dlat=36.3&dlon=116.2&dname=终点位置&dev=1&m=2&t=0");
+           Intent intent = Intent.getIntent("androidamap://path?sourceApplication=GasStation" +
+                   "&sid=BGVIS1&slat=34.264642646862&slon=108.95108518068" +
+                   "&sname=当前位置" +
+                   "&did=BGVIS2&dlat=36.3&dlon=116.2&dname=终点位置&dev=1&m=2&t=0");
 
             if(isInstallByread("com.autonavi.minimap")){
 
