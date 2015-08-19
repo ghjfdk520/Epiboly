@@ -18,33 +18,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="输入金额"
+            android:text="输入瓶号"
             android:textSize="30sp" />
 
         <EditText
-            android:id="@+id/repair_cost"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
+
+            android:id="@+id/bottle_code"
+            android:layout_width="120dp"
+            android:layout_height="30dp"
             android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="1223456"
             android:background="@null"
             android:cursorVisible="false"
             android:inputType="number"
-            android:maxLength="6"
             android:textColor="#f4753b"
-            android:textSize="28sp" />
+            android:textSize="13sp" />
 
         <View
-            android:layout_width="90dp"
+            android:layout_width="120dp"
             android:layout_height="2dp"
             android:background="#f4753b" />
 
-        <TextView
-            android:id="@+id/prompt_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="元"
-            android:textSize="30sp" />
+
     </LinearLayout>
 
 
@@ -84,7 +80,7 @@
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-             />
+            />
     </LinearLayout>
     <include layout="@layout/layout_loading" />
 </RelativeLayout>

@@ -58,15 +58,19 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
     private TextView order_status;
     private TextView repair_type;
     private TextView repair_remark;
+    private TextView total_cost;
+    private LinearLayout ly_repair_cost;
     private EditText repair_cost;
     private RelativeLayout ly_accept_order;
     private LinearLayout ly_unaccept_order;
-
+    private View loading_progress_layout;
     public static int REQUEST_CODE;
     private static RepairOrder itemOrder;
     private Gson gson = new Gson();
     private View rootView;
     private View popupProgress;
+    private boolean isPay = false;
+
     private Handler handler = new Handler();
 
     public static void launchActivity(Fragment mContext, int requestCode, RepairOrder item) {
@@ -89,6 +93,7 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
     }
 
     public void init() {
+
         accpet_order = (Button) findViewById(R.id.accpet_order);
         refuse_order = (Button) findViewById(R.id.refuse_order);
         finish_order = (Button) findViewById(R.id.finish_order);
@@ -105,6 +110,8 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
         repair_type = (TextView) findViewById(R.id.repair_type);
         repair_remark = (TextView) findViewById(R.id.repair_remark);
         order_status.setText(getOrderStutus(itemOrder.getStatus() + ""));
+        total_cost = (TextView) findViewById(R.id.total_cost);
+        ly_repair_cost = (LinearLayout) findViewById(R.id.ly_repair_cost);
 
         custom_name.setText(itemOrder.getClient_name());
         order_no.setText(itemOrder.getOrder_no());
@@ -115,6 +122,13 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
         order_delivery_hours.setText(itemOrder.getRepair_time());
         repair_remark.setText(itemOrder.getRemark());
         repair_type.setText(itemOrder.getRepair_type());
+
+
+        total_cost.setText(itemOrder.getTotal_cost());
+        if(itemOrder.getStatus()>=4){
+            ly_repair_cost.setVisibility(View.VISIBLE);
+        }
+
         showBottomLy();
 
     }
@@ -139,6 +153,7 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
                 showWindow(2);
             }
         });
+        order_address_nav_bt.setOnClickListener(this);
         findViewById(R.id.title_back).setOnClickListener(this);
     }
 
@@ -150,6 +165,7 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
                 public void run() {
                     if(popupProgress != null && popupProgress.isShown()) popupProgress.setVisibility(View.GONE);
                     dismissProgressDialog();
+                    hiddenPopLoading();
                     Utils.toastMsg(repairDetail.this, e);
                 }
             });
@@ -159,13 +175,15 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
     @Override
     public void onGeneralSuccess(String result, long flag) {
         try {
+            dismissProgressDialog();
             JSONObject json = new JSONObject(result);
-            if(ACCEPT_ORDER_FLAG == flag ||REJECT_ORDER_FLAG == flag || FINISH_ORDER_FLAG==flag ){
+            if(ACCEPT_ORDER_FLAG == flag ||REJECT_ORDER_FLAG == flag ){
                 if(popupProgress != null && popupProgress.isShown()) popupProgress.setVisibility(View.GONE);
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        dismissProgressDialog();
+
+                        hiddenPopLoading();
                         showWindow.dismiss();
                     }
                 });
@@ -179,6 +197,15 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
                         finish();
                     }
                 }, 1000);
+            }else if(FINISH_ORDER_FLAG==flag){
+                isPay = true;
+                showWindow.dismiss();
+                order_status.setText("维修完成");
+                total_cost.setText(repair_cost.getText().toString()+"￥");
+                ly_repair_cost.setVisibility(View.VISIBLE);
+                ly_unaccept_order.setVisibility(View.GONE);
+                finish_order.setVisibility(View.GONE);
+                Utils.toastMsg(this, Utils.decodeUnicode(json.getString("msg")));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,7 +224,7 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
             case "5":
                 return "已完成";
             case "8":
-                return "w维修完成";
+                return "维修完成";
         }
         return "";
     }
@@ -224,9 +251,10 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
         } else if (position == 2) {
             finishView = LayoutInflater.from(this).inflate(
                     R.layout.dialog_repair_finish, null);
-            finishView.findViewById(R.id.submit).setTag(((EditText)finishView.findViewById(R.id.repair_cost)).getText().toString());
+            repair_cost = (EditText)finishView.findViewById(R.id.repair_cost);
             finishView.findViewById(R.id.submit).setOnClickListener(this);
             finishView.findViewById(R.id.cancle).setOnClickListener(this);
+            loading_progress_layout = finishView.findViewById(R.id.loading_progress_layout);
         }
         titleView.setText(title);
         contentView.setText(content);
@@ -273,12 +301,18 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
 
         switch (v.getId()) {
             case R.id.title_back:
+                if(isPay){
+                    Intent intent = new Intent();
+                    intent.putExtra("itemOrder", itemOrder);
+                    setResult(2, intent);
+                }
                 finish();
                 break;
             case R.id.customer_phone:
                 Utils.dialAlert(itemOrder.getTelphone(), this);
                 break;
             case R.id.order_address_nav_bt:
+                Utils.MapPilot(itemOrder.getAddress(),this);
                 break;
             case R.id.ly_prompt:
 
@@ -302,10 +336,8 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
                 }, 100);
                 break;
             case R.id.submit:
-                String cost = (String) v.getTag();
-
-                popupProgress =  v.getRootView();
-                popupProgress.findViewById(R.id.ly_progress).setVisibility(View.VISIBLE);
+                showPopLoading();
+                String cost = repair_cost.getText().toString();
                 FINISH_ORDER_FLAG = BusinessHttpProtocol.finishRepariOrder(repairDetail.this, user.getId(), itemOrder.getId(), cost);
                 break;
             case R.id.cancle:
@@ -317,6 +349,7 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        isPay = false;
         if (showWindow != null && showWindow.isShowing()) showWindow.dismiss();
     }
 
@@ -337,5 +370,15 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
             case 5:
                 break;
         }
+    }
+
+    public void showPopLoading(){
+        if(loading_progress_layout != null && !loading_progress_layout.isShown())
+            loading_progress_layout.setVisibility(View.VISIBLE);
+    }
+
+    public void hiddenPopLoading(){
+        if(loading_progress_layout != null && loading_progress_layout.isShown())
+            loading_progress_layout.setVisibility(View.GONE);
     }
 }

@@ -19,6 +19,7 @@ import com.gas.connector.HttpCallBack;
 import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.DeliveryOrder;
+import com.gas.epiboly.MainActivity;
 import com.gas.epiboly.R;
 import com.gas.ui.activity.orderDetail;
 import com.gas.ui.common.BaseFragment;
@@ -93,7 +94,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
         sharedPreferenceUtil = SharedPreferenceUtil.getInstance(mActivity);
         init();
         initListener();
-
+        MainActivity.showLoading();
         showListView(currentViewPosition);
         referenceList(currentViewPosition);
     }
@@ -324,7 +325,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
             @Override
             public void run() {
                 onRefreshComplete();
-
+                MainActivity.hidenLoading();
                 try {
                     JSONObject json = new JSONObject(result);
 
@@ -401,6 +402,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                MainActivity.hidenLoading();
                 dismissProgressDialog();
                 onRefreshComplete();
                 Utils.toastMsg(getActivity(), e);

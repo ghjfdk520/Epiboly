@@ -304,15 +304,14 @@ public class Utils {
                             uriNew.append("&destination=" + address);
                             uriNew.append("&mode=driving");
                             uriNew.append("&src=yourCompanyName|yourAppName#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
+                            log("baidu uriNew", Uri1.toString());
                             if(isInstallByread("com.baidu.BaiduMap")){
 
                                 Intent intent = Intent.getIntent(uriNew.toString());
                                 mContext.startActivity(intent);
 
                             }else{
-
-                                Log.e("GasStation", "没有安装百度地图客户端") ;
-
+                                toastMsg(mContext,"请先安装百度地图客户端");
                             }
                             return;
                         } catch (URISyntaxException e) {
@@ -321,20 +320,21 @@ public class Utils {
                     }
                 });
             }else {
-                Uri1.append("latlng:"+latlng[0]+","+latlng[1]);
+
+
+                Uri1.append("latlng:"+latlng[0]+","+latlng[1]+"|name:位置");
                 Uri1.append("&destination="+address);
                 Uri1.append("&mode=driving");
                 Uri1.append("&src=yourCompanyName|yourAppName#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
 
+                log("baidu",Uri1.toString());
                 if(isInstallByread("com.baidu.BaiduMap")){
 
                     Intent intent = Intent.getIntent(Uri1.toString());
                     mContext.startActivity(intent);
 
                 }else{
-
-                    Log.e("GasStation", "没有安装百度地图客户端") ;
-
+                    toastMsg(mContext, "请先安装百度地图客户端");
                 }
 
             }
@@ -364,26 +364,26 @@ public class Utils {
 
        // 使用Intent调用高德地图
 
-
-        try {
-
-           Intent intent = Intent.getIntent("androidamap://path?sourceApplication=GasStation" +
-                   "&sid=BGVIS1&slat=34.264642646862&slon=108.95108518068" +
-                   "&sname=当前位置" +
-                   "&did=BGVIS2&dlat=36.3&dlon=116.2&dname=终点位置&dev=1&m=2&t=0");
-
-            if(isInstallByread("com.autonavi.minimap")){
-
-                mContext.startActivity(intent); //启动调用
-
-                Log.i("GasStation", "高德地图客户端已经安装") ;
-            }else{
-                Log.d("GasStation", "没有安装高德地图客户端") ;
-            }
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-
-        }
+//
+//        try {
+//
+//           Intent intent = Intent.getIntent("androidamap://path?sourceApplication=GasStation" +
+//                   "&sid=BGVIS1&slat=34.264642646862&slon=108.95108518068" +
+//                   "&sname=当前位置" +
+//                   "&did=BGVIS2&dlat=36.3&dlon=116.2&dname=终点位置&dev=1&m=2&t=0");
+//
+//            if(isInstallByread("com.autonavi.minimap")){
+//
+//                mContext.startActivity(intent); //启动调用
+//
+//                Log.i("GasStation", "高德地图客户端已经安装") ;
+//            }else{
+//                Log.d("GasStation", "没有安装高德地图客户端") ;
+//            }
+//        } catch (URISyntaxException e) {
+//            e.printStackTrace();
+//
+//        }
     }
 
 

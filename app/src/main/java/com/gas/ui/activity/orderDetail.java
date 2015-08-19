@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -82,6 +83,11 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
     private ListView productListView;
     private RelativeLayout ly_accept_order;
     private LinearLayout ly_unaccept_order;
+    private Button bottle_type_in;
+    private Button bottle_list;
+    private EditText bottle_code;
+    private View popupLoading;
+
     private static DeliveryOrder itemOrder;
     private Gson gson = new Gson();
     private Handler handler = new Handler();
@@ -138,6 +144,10 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         ly_accept_order = (RelativeLayout) findViewById(R.id.ly_accept_order);
         ly_unaccept_order = (LinearLayout) findViewById(R.id.ly_unaccept_order);
         productListView = (ListView) findViewById(R.id.product_list);
+        bottle_type_in = (Button) findViewById(R.id.bottle_type_in);
+        bottle_list= (Button) findViewById(R.id.bottle_list);
+
+
         custom_name.setText(itemOrder.getClient_name());
         order_no.setText(itemOrder.getOrder_no() + "");
         order_status.setText(getOrderStutus(itemOrder.getStatus()));
@@ -164,6 +174,8 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
     }
 
     public void initListener() {
+        bottle_list.setOnClickListener(this);
+        bottle_type_in.setOnClickListener(this);
         accpet_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,6 +208,20 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.cancle:
+                showWindow.dismiss();
+                break;
+            case R.id.submit:
+                showPopLoading();
+                String code = bottle_code.getText().toString();
+                VERIFY_BOTTLE_FLAG = BusinessHttpProtocol.gasBottleOut(this, user.getId(), itemOrder.getId(), code);
+                bottleMap.put(VERIFY_BOTTLE_FLAG, code);
+                break;
+            case R.id.bottle_list:
+                break;
+            case R.id.bottle_type_in:
+                showWindow(3);
+                break;
             case R.id.title_back:
                 finish();
                 break;
@@ -203,6 +229,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
                 Utils.dialAlert(itemOrder.getTelphone(), this);
                 break;
             case R.id.order_address_nav_bt:
+                Utils.MapPilot(itemOrder.getAddress(),this);
                 break;
             case R.id.ly_prompt:
                 final int position = (int) v.getTag();
@@ -232,6 +259,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
 
     @Override
     public void onGeneralError(final String e, long flag) {
+        hidenPopLoading();
         if (bottleMap.containsKey(flag)) {
             bottleMap.remove(flag);
             Utils.toastMsg(this, "煤气瓶号错误");
@@ -249,6 +277,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
     @Override
     public void onGeneralSuccess(String result, long flag) {
         try {
+            hidenPopLoading();
             JSONObject json = new JSONObject(result);
             if (bottleMap.containsKey(flag)) {
                 bottleList.add(bottleMap.get(flag));
@@ -348,41 +377,55 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         return "";
     }
 
-    //接单0  拒绝1  确认订单2
+    //接单0  拒绝1  确认订单2  手工输入3
     private void showWindow(int position) {
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.alpha = 0.7f;
         getWindow().setAttributes(params);
-        View showView = LayoutInflater.from(this).inflate(
-                R.layout.ly_prompt_dialog, null);
-        TextView titleView = (TextView) showView.findViewById(R.id.prompt_title);
-        TextView contentView = (TextView) showView.findViewById(R.id.prompt_content);
-        String title = "";
-        String content = "";
-        if (position == 0) {
-            title = "接收订单";
-            content = "确定接收订单？";
-        } else if (position == 1) {
-            title = "拒绝订单";
-            content = "确定拒绝订单？";
-        } else if (position == 2) {
-            title = "派送完成";
-            content = "确定派送完成？";
-        }
-        titleView.setText(title);
-        contentView.setText(content);
-
-        LinearLayout ly_prompt = (LinearLayout) showView.findViewById(R.id.ly_prompt);
-        ly_prompt.setTag(position);
-        ly_prompt.setOnClickListener(this);
-
+        View showView = null;
         if (showWindow == null) {
             showWindow = new PopupWindow(this);
         }
+        if (position != 3) {
+            showView = LayoutInflater.from(this).inflate(
+                    R.layout.ly_prompt_dialog, null);
+            TextView titleView = (TextView) showView.findViewById(R.id.prompt_title);
+            TextView contentView = (TextView) showView.findViewById(R.id.prompt_content);
+            String title = "";
+            String content = "";
+            if (position == 0) {
+                title = "接收订单";
+                content = "确定接收订单？";
+            } else if (position == 1) {
+                title = "拒绝订单";
+                content = "确定拒绝订单？";
+            } else if (position == 2) {
+                title = "派送完成";
+                content = "确定派送完成？";
+            }
+            titleView.setText(title);
+            contentView.setText(content);
+
+            LinearLayout ly_prompt = (LinearLayout) showView.findViewById(R.id.ly_prompt);
+            ly_prompt.setTag(position);
+            ly_prompt.setOnClickListener(this);
+            showWindow.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+            showWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        }else if(position == 3){
+            showView = LayoutInflater.from(this).inflate(
+                    R.layout.dialog_type_in_bottle, null);
+            showView.findViewById(R.id.submit).setOnClickListener(this);
+            showView.findViewById(R.id.cancle).setOnClickListener(this);
+            bottle_code = (EditText) showView.findViewById(R.id.bottle_code);
+            showWindow.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+            showWindow.setHeight(LinearLayout.LayoutParams.MATCH_PARENT);
+            popupLoading = showView.findViewById(R.id.loading_progress_layout);
+        }
+
+
 
         showWindow.setContentView(showView);
-        showWindow.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
-        showWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+
 
         showWindow.setFocusable(true);
         showWindow.setOutsideTouchable(true);
@@ -407,5 +450,15 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         if(showWindow != null)
            showWindow.dismiss();
         super.onDestroy();
+    }
+
+   public void showPopLoading(){
+       if(popupLoading != null && !popupLoading.isShown())
+       popupLoading.setVisibility(View.VISIBLE);
+   }
+
+    public void hidenPopLoading(){
+        if(popupLoading != null && popupLoading.isShown())
+         popupLoading.setVisibility(View.GONE);
     }
 }

@@ -18,6 +18,7 @@ import com.gas.connector.HttpCallBack;
 import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.RepairOrder;
+import com.gas.epiboly.MainActivity;
 import com.gas.epiboly.R;
 import com.gas.ui.activity.repairDetail;
 import com.gas.ui.common.BaseFragment;
@@ -46,7 +47,7 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
     //当前显示list
     private LinkedList<RepairOrder> currentList;
 
-
+    private View loading_progress_layout;
     private List<RepairOrder> historyDatas = new LinkedList<>();
     private List<RepairOrder> accpetDatas = new LinkedList<>();
     private List<RepairOrder> unaccpetDatas = new LinkedList<>();
@@ -98,6 +99,7 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
         initListener();
 
         showListView(currentViewPosition);
+        MainActivity.showLoading();
         referenceList(currentViewPosition);
     }
 
@@ -138,7 +140,7 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
         historyListView = (PullToRefreshListView) rootView.findViewById(R.id.pull_refresh_history_list);
         accpetListView = (PullToRefreshListView) rootView.findViewById(R.id.pull_refresh_accpet_list);
         unaccpetListView = (PullToRefreshListView) rootView.findViewById(R.id.pull_refresh_un_accpet_list);
-
+        loading_progress_layout = rootView.findViewById(R.id.loading_progress_layout);
         unaccpetAdapter = new CommonAdapter<RepairOrder>(mActivity, unaccpetDatas, R.layout.item_delivery_order_history) {
             @Override
             public void convert(final ViewHolder helper, RepairOrder item) {
@@ -324,8 +326,8 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                MainActivity.hidenLoading();
                 onRefreshComplete();
-
                 try {
                     JSONObject json = new JSONObject(result);
 
@@ -391,6 +393,7 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                MainActivity.hidenLoading();
                 dismissProgressDialog();
                 onRefreshComplete();
                 Utils.toastMsg(getActivity(), e);

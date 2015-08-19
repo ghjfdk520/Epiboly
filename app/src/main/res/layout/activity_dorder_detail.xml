@@ -4,8 +4,7 @@
     android:background="@mipmap/backgroup"
     android:orientation="vertical">
 
-    <include layout="@layout/title_navigation_bar"
-        />
+    <include layout="@layout/title_navigation_bar" />
 
     <ScrollView
         android:layout_width="wrap_content"
@@ -37,13 +36,27 @@
                     android:layout_gravity="center_vertical"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/custom_name"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:textColor="#f4753b"
-                        android:textSize="23sp" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/custom_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:textColor="#f4753b"
+                            android:textSize="23sp" />
+
+                        <Button
+                            android:id="@+id/bottle_type_in"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/order_type_in" />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -59,9 +72,9 @@
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/order_no"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/order_no"
                             android:text="123456"
                             android:textColor="#f4753b"
                             android:textSize="14sp" />
@@ -178,38 +191,41 @@
                 android:id="@+id/ly_product"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_margin="10dp"
-                android:background="@drawable/bg_translucence">
+                android:background="@drawable/bg_translucence"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
                     <TextView
                         style="@style/common_gray"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:text="商品规格"/>
+                        android:text="商品规格" />
+
                     <TextView
                         style="@style/common_gray"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:text="商品数量"/>
+                        android:text="商品数量" />
                 </LinearLayout>
 
                 <ListView
-                    android:divider="@null"
+                    android:id="@+id/product_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/product_list"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="10dp"
+                    android:divider="@null" />
             </LinearLayout>
+
             <LinearLayout
-                android:layout_margin="10dp"
-                android:background="@drawable/bg_translucence"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_translucence"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -269,8 +285,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -289,61 +305,81 @@
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/ly_unaccept_order"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ly_unaccept_order"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/accpet_order"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:background="@drawable/order_accept"
-             />
+            android:layout_weight="1"
+            android:background="@drawable/order_accept" />
 
         <Button
-            android:background="@drawable/order_reject"
             android:id="@+id/refuse_order"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            />
+            android:layout_weight="1"
+            android:background="@drawable/order_reject" />
     </LinearLayout>
 
-    <RelativeLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:id="@+id/ly_accept_order"
-        android:orientation="horizontal"
-        android:background="#f4753b"
-         >
-        <TextView
-            android:id="@+id/test"
-            android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/ly_accept_order"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="#f4753b"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="满气出库"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/bottle_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="23dp"
+                android:layout_toRightOf="@+id/test"
+                android:background="@mipmap/bg_bottle_num"
+                android:gravity="center"
+                android:text="08"
+                android:textColor="#f4753b"
+                android:textSize="13sp" />
+
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/bottle_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="满气出库"
-            android:textColor="@color/white"
-            android:layout_gravity="center"/>
-        <TextView
-            android:id="@+id/bottle_num"
-            android:layout_marginLeft="23dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="13sp"
-            android:textColor="#f4753b"
-            android:background="@mipmap/bg_bottle_num"
-            android:text="08"/>
-    </RelativeLayout>
+            android:background="@drawable/order_bottle_list" />
+    </LinearLayout>
+
     <Button
-        android:visibility="gone"
         android:id="@+id/finish_order"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/order_delivery_finish"/>
+        android:background="@drawable/order_delivery_finish"
+        android:visibility="gone" />
 </LinearLayout>

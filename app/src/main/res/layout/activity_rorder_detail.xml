@@ -234,6 +234,24 @@
                         android:text="阀门维修，其他不详细" />
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/ly_repair_cost"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+                    <TextView
+                        style="@style/common_gray"
+                        android:layout_width="120dp"
+                        android:text="维修金额：" />
+
+                    <TextView
+                        android:id="@+id/total_cost"
+                        style="@style/common_orange"
+                        />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

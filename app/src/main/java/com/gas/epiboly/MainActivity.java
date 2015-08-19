@@ -43,7 +43,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     private int REQUEST_CODE_MAIN_SCAN = 0X01101;
     public static final String KEY_MESSAGE = "message";
     private MessageReceiver mMessageReceiver;
-
+    private static View loading_progress_layout;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private Fragment[] mFragments;
@@ -107,6 +107,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     public void init() {
         initJpush();
      //   registerMessageReceiver();
+        loading_progress_layout = findViewById(R.id.loading_progress_layout);
         mNestRadioGroup = (NestRadioGroup) findViewById(R.id.nav_radio_group);
         fragmentManager = getFragmentManager();
         attendanceFragment = (AttendanceFragment) fragmentManager.findFragmentById(R.id.attendance_fragment);
@@ -326,4 +327,13 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         showFragment(checkId);
         super.onNewIntent(intent);
     }
+
+    public static void showLoading(){
+        loading_progress_layout.setVisibility(View.VISIBLE);
+    }
+
+    public static void hidenLoading(){
+        loading_progress_layout.setVisibility(View.GONE);
+    }
+
 }

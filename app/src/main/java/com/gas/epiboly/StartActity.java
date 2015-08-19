@@ -25,6 +25,7 @@ public class StartActity extends SuperActivity{
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         fromActivity.startActivity(i);
     }
+    private View loading_progress_layout;
     private Button bt_login;
     private EditText edit_name;
     private EditText edit_pass;
@@ -45,6 +46,7 @@ public class StartActity extends SuperActivity{
         bt_login = (Button) findViewById(R.id.bt_login);
         edit_name = (EditText) findViewById(R.id.edit_name);
         edit_pass= (EditText) findViewById(R.id.edit_pass);
+        loading_progress_layout = findViewById(R.id.loading_progress_layout);
         setOnDismissListener(this);
         LoginHttpProtocol.serviceTime();
         userWorker = new UserWorker(this);
@@ -62,7 +64,7 @@ public class StartActity extends SuperActivity{
         bt_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressDialog();
+                loading_progress_layout.setVisibility(View.VISIBLE);
                 referenceTiem = System.currentTimeMillis()/1000;
                 loginFlag = LoginHttpProtocol.login(StartActity.this, edit_name.getText().toString(),edit_pass.getText().toString());
             }
@@ -75,7 +77,7 @@ public class StartActity extends SuperActivity{
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                dismissProgressDialog();
+                loading_progress_layout.setVisibility(View.GONE);
                 User u = new Gson().fromJson(result, User.class);
                 u.setIsLogin(1);
                 userWorker.addUser(u);
@@ -90,7 +92,7 @@ public class StartActity extends SuperActivity{
 
     @Override
     public void onGeneralError(String e, long flag) {
-        dismissProgressDialog();
+        loading_progress_layout.setVisibility(View.GONE);
         Utils.toastMsg(this,e);
         Utils.log(" flag error", Utils.decodeUnicode(e));
     }

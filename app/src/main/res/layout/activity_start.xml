@@ -46,7 +46,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
-
                 <TextView
                     android:layout_width="64dip"
                     android:layout_height="wrap_content"
@@ -66,8 +65,6 @@
                     android:text="1591872796"
                     android:textSize="12sp" />
             </LinearLayout>
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -95,7 +92,6 @@
                     android:textSize="12sp" />
 
             </LinearLayout>
-
             <Button
                 android:id="@+id/bt_login"
                 android:layout_width="match_parent"

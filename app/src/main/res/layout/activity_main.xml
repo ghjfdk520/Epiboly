@@ -1,39 +1,51 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@mipmap/backgroup"
-    android:orientation="vertical">
-    <include layout="@layout/title_navigation_bar"/>
-     <fragment
-         android:name="com.gas.ui.fragment.PersonalFrament"
-         android:layout_width="match_parent"
-         android:layout_height="0dip"
-         android:layout_weight="1"
-         android:id="@+id/personal_fragment" />
-    <fragment
-        android:name="com.gas.ui.fragment.AttendanceFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:id="@+id/attendance_fragment" />
-    <fragment
-        android:name="com.gas.ui.fragment.DeliveryFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:id="@+id/delivery_fragment" />
-    <fragment
-        android:name="com.gas.ui.fragment.RepairFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:id="@+id/repair_fragment" />
-    <fragment
-        android:name="com.gas.ui.fragment.GasFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:id="@+id/gas_fragment" />
-    <include layout="@layout/layout_foot_navigation_bars"
-     />
-</LinearLayout>
+    android:layout_height="fill_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@mipmap/backgroup"
+        android:orientation="vertical">
+
+        <include layout="@layout/title_navigation_bar" />
+
+        <fragment
+            android:id="@+id/personal_fragment"
+            android:name="com.gas.ui.fragment.PersonalFrament"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1" />
+
+        <fragment
+            android:id="@+id/attendance_fragment"
+            android:name="com.gas.ui.fragment.AttendanceFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1" />
+
+        <fragment
+            android:id="@+id/delivery_fragment"
+            android:name="com.gas.ui.fragment.DeliveryFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1" />
+
+        <fragment
+            android:id="@+id/repair_fragment"
+            android:name="com.gas.ui.fragment.RepairFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1" />
+
+        <fragment
+            android:id="@+id/gas_fragment"
+            android:name="com.gas.ui.fragment.GasFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1" />
+
+        <include layout="@layout/layout_foot_navigation_bars" />
+    </LinearLayout>
+    <include layout="@layout/layout_loading" />
+</merge>
