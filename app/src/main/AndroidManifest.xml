@@ -94,6 +94,9 @@
        <activity
             android:name="com.gas.ui.activity.orderDetail"
             android:label="@string/app_name"></activity>
+        <activity
+            android:name="com.gas.ui.activity.repairDetail"
+            android:label="@string/app_name"></activity>
 
         <service
             android:name="com.baidu.location.f"

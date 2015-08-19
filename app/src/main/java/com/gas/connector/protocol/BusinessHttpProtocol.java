@@ -145,4 +145,14 @@ public class BusinessHttpProtocol {
         entity.put("code",code+"");
         return Post(Config.gasBottleIn, entity, callback);
     }
+
+    //完成抢修
+    public static long finishRepariOrder(HttpCallBack callback,int userId,int orderId,String total_cost){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",userId+"");
+        entity.put("id",orderId+"");
+        entity.put("total_cost",total_cost);
+        return Post(Config.finishRepariOrder, entity, callback);
+    }
+
 }

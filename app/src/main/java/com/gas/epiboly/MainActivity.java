@@ -287,6 +287,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
                 HomeActivity.launchActivity(this);
                 finish();
                 break;
+
         }
     }
 

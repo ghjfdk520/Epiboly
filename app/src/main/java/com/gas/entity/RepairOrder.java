@@ -23,8 +23,8 @@ public class RepairOrder implements Parcelable {
     private int status;
     private String total_cost;
     private String pay_time;
-    private String ctime;
-    private String utime;
+    private long ctime;
+    private long utime;
 
     public String getAddress() {
         return address;
@@ -50,15 +50,11 @@ public class RepairOrder implements Parcelable {
         this.client_name = client_name;
     }
 
-    public static Creator<RepairOrder> getCREATOR() {
-        return CREATOR;
-    }
-
-    public String getCtime() {
+    public long getCtime() {
         return ctime;
     }
 
-    public void setCtime(String ctime) {
+    public void setCtime(long ctime) {
         this.ctime = ctime;
     }
 
@@ -166,11 +162,11 @@ public class RepairOrder implements Parcelable {
         this.total_cost = total_cost;
     }
 
-    public String getUtime() {
+    public long getUtime() {
         return utime;
     }
 
-    public void setUtime(String utime) {
+    public void setUtime(long utime) {
         this.utime = utime;
     }
 
@@ -197,8 +193,8 @@ public class RepairOrder implements Parcelable {
         dest.writeInt(this.status);
         dest.writeString(this.total_cost);
         dest.writeString(this.pay_time);
-        dest.writeString(this.ctime);
-        dest.writeString(this.utime);
+        dest.writeLong(this.ctime);
+        dest.writeLong(this.utime);
     }
 
     public RepairOrder() {
@@ -221,11 +217,11 @@ public class RepairOrder implements Parcelable {
         this.status = in.readInt();
         this.total_cost = in.readString();
         this.pay_time = in.readString();
-        this.ctime = in.readString();
-        this.utime = in.readString();
+        this.ctime = in.readLong();
+        this.utime = in.readLong();
     }
 
-    public static final Parcelable.Creator<RepairOrder> CREATOR = new Parcelable.Creator<RepairOrder>() {
+    public static final Creator<RepairOrder> CREATOR = new Creator<RepairOrder>() {
         public RepairOrder createFromParcel(Parcel source) {
             return new RepairOrder(source);
         }
@@ -234,28 +230,4 @@ public class RepairOrder implements Parcelable {
             return new RepairOrder[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "RepairOrder{" +
-                "address='" + address + '\'' +
-                ", id=" + id +
-                ", order_no='" + order_no + '\'' +
-                ", client_name='" + client_name + '\'' +
-                ", openid='" + openid + '\'' +
-                ", gas_card='" + gas_card + '\'' +
-                ", area_id='" + area_id + '\'' +
-                ", depot_id='" + depot_id + '\'' +
-                ", telphone='" + telphone + '\'' +
-                ", repair_date=" + repair_date +
-                ", repair_time='" + repair_time + '\'' +
-                ", repair_type='" + repair_type + '\'' +
-                ", remark='" + remark + '\'' +
-                ", status=" + status +
-                ", total_cost='" + total_cost + '\'' +
-                ", pay_time='" + pay_time + '\'' +
-                ", ctime='" + ctime + '\'' +
-                ", utime='" + utime + '\'' +
-                '}';
-    }
 }

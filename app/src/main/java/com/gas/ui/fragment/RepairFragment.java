@@ -19,6 +19,7 @@ import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.RepairOrder;
 import com.gas.epiboly.R;
+import com.gas.ui.activity.repairDetail;
 import com.gas.ui.common.BaseFragment;
 import com.gas.utils.Utils;
 import com.google.gson.reflect.TypeToken;
@@ -178,20 +179,20 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
         unaccpetListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-              //  orderDetail.launchActivity(DeliveryFragment.this, REQUEST_CODE_UNACCEPT, unaccpetDatas.get(position - 1));
+              repairDetail.launchActivity(RepairFragment.this, REQUEST_CODE_UNACCEPT, unaccpetDatas.get(position - 1));
             }
         });
         accpetListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-              //  orderDetail.launchActivity(DeliveryFragment.this, REQUEST_CODE_ACCEPT, accpetDatas.get(position - 1));
+                repairDetail.launchActivity(RepairFragment.this, REQUEST_CODE_ACCEPT, accpetDatas.get(position - 1));
             }
         });
 
         historyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //  orderDetail.launchActivity(DeliveryFragment.this, REQUEST_CODE_HISTORY, historyDatas.get(position - 1));
+                repairDetail.launchActivity(RepairFragment.this, REQUEST_CODE_HISTORY, historyDatas.get(position - 1));
             }
         });
 

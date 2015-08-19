@@ -115,6 +115,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
             if (!Utils.isEmptyOrNullStr(temp)) bottleList.add(temp);
         }
 
+
         ORDER_DETAIL_FLAG = BusinessHttpProtocol.getOrderDetails(this, itemOrder.getId());
         accpet_order = (Button) findViewById(R.id.accpet_order);
         refuse_order = (Button) findViewById(R.id.refuse_order);
@@ -189,11 +190,15 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         });
         customer_phone.setOnClickListener(this);
         order_address_nav_bt.setOnClickListener(this);
+        findViewById(R.id.title_back).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.title_back:
+                finish();
+                break;
             case R.id.customer_phone:
                 Utils.dialAlert(itemOrder.getTelphone(), this);
                 break;
@@ -201,8 +206,14 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
                 break;
             case R.id.ly_prompt:
                 final int position = (int) v.getTag();
+                showWindow.dismiss();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        showProgressDialog();
+                    }
+                });
 
-                showProgressDialog();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -215,20 +226,23 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
                         }
                     }
                 },100);
-
-
                 break;
         }
     }
 
     @Override
-    public void onGeneralError(String e, long flag) {
+    public void onGeneralError(final String e, long flag) {
         if (bottleMap.containsKey(flag)) {
             bottleMap.remove(flag);
             Utils.toastMsg(this, "煤气瓶号错误");
         }else if(ACCEPT_ORDER_FLAG == flag ||REJECT_ORDER_FLAG == flag || FINISH_ORDER_FLAG==flag ){
-            dismissProgressDialog();
-            Utils.toastMsg(this,e);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    dismissProgressDialog();
+                    Utils.toastMsg(orderDetail.this, e);
+                }
+            });
         }
     }
 
