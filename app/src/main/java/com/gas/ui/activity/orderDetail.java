@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gas.adapter.CommonAdapter;
@@ -26,6 +26,7 @@ import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.DeliveryOrder;
 import com.gas.entity.User;
+import com.gas.epiboly.MainActivity;
 import com.gas.epiboly.R;
 import com.gas.ui.codeScan.CaptureActivity;
 import com.gas.ui.common.SuperActivity;
@@ -81,7 +82,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
     private TextView cash_pledge;
     private TextView bottle_num;
     private ListView productListView;
-    private RelativeLayout ly_accept_order;
+    private LinearLayout ly_accept_order;
     private LinearLayout ly_unaccept_order;
     private Button bottle_type_in;
     private Button bottle_list;
@@ -141,7 +142,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         custom_name = (TextView) findViewById(R.id.custom_name);
         cash_pledge = (TextView) findViewById(R.id.cash_pledge);
         bottle_num = (TextView) findViewById(R.id.bottle_num);
-        ly_accept_order = (RelativeLayout) findViewById(R.id.ly_accept_order);
+        ly_accept_order = (LinearLayout) findViewById(R.id.ly_accept_order);
         ly_unaccept_order = (LinearLayout) findViewById(R.id.ly_unaccept_order);
         productListView = (ListView) findViewById(R.id.product_list);
         bottle_type_in = (Button) findViewById(R.id.bottle_type_in);
@@ -218,6 +219,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
                 bottleMap.put(VERIFY_BOTTLE_FLAG, code);
                 break;
             case R.id.bottle_list:
+                showWindow(4);
                 break;
             case R.id.bottle_type_in:
                 showWindow(3);
@@ -237,7 +239,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        showProgressDialog();
+                        MainActivity.showLoading();
                     }
                 });
 
@@ -280,6 +282,14 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
             hidenPopLoading();
             JSONObject json = new JSONObject(result);
             if (bottleMap.containsKey(flag)) {
+
+
+                Utils.toastMsg(this,Utils.decodeUnicode(json.getString("msg")));
+                if(showWindow != null && showWindow.isShowing())
+                    showWindow.dismiss();
+                hidenPopLoading();
+
+
                 bottleList.add(bottleMap.get(flag));
                 bottle_num.setText(itemOrder.getTotal_count() - bottleList.size() + "");
                 String tempStr = "";
@@ -308,7 +318,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        dismissProgressDialog();
+                        MainActivity.hidenLoading();
                         showWindow.dismiss();
                     }
                 });
@@ -377,7 +387,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         return "";
     }
 
-    //接单0  拒绝1  确认订单2  手工输入3
+    //接单0  拒绝1  确认订单2  手工输入3  煤气瓶列表4
     private void showWindow(int position) {
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.alpha = 0.7f;
@@ -386,7 +396,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         if (showWindow == null) {
             showWindow = new PopupWindow(this);
         }
-        if (position != 3) {
+        if (position < 3) {
             showView = LayoutInflater.from(this).inflate(
                     R.layout.ly_prompt_dialog, null);
             TextView titleView = (TextView) showView.findViewById(R.id.prompt_title);
@@ -420,6 +430,30 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
             showWindow.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
             showWindow.setHeight(LinearLayout.LayoutParams.MATCH_PARENT);
             popupLoading = showView.findViewById(R.id.loading_progress_layout);
+        }else if(position ==4){
+            showView = LayoutInflater.from(this).inflate(
+                    R.layout.dialog_order_bottle_list, null);
+            ListView listVIew = (ListView) showView.findViewById(R.id.bottle_list_view);
+            CommonAdapter<String> commonAdapter = new CommonAdapter<String>(this,bottleList,R.layout.item_bottle_list) {
+                @Override
+                public void convert(ViewHolder helper, String item) {
+                     helper.setText(R.id.bottle_code,item);
+                     helper.getView(R.id.bottle_del);
+                }
+            };
+            if(bottleList.size()==0){
+                showView.findViewById(R.id.tv_empty).setVisibility(View.VISIBLE);
+            }
+            DisplayMetrics dm = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(dm);
+            int h = dm.heightPixels;
+            int w = dm.widthPixels;
+
+            listVIew.setAdapter(commonAdapter);
+            Utils.setListViewHeightBasedOnChildren(listVIew);
+            showWindow.setWidth((int) (w*0.8));
+            showWindow.setHeight( (int) (h*0.8));
+
         }
 
 

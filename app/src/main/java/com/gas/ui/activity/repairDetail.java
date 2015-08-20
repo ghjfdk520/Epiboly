@@ -179,14 +179,7 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
             JSONObject json = new JSONObject(result);
             if(ACCEPT_ORDER_FLAG == flag ||REJECT_ORDER_FLAG == flag ){
                 if(popupProgress != null && popupProgress.isShown()) popupProgress.setVisibility(View.GONE);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
 
-                        hiddenPopLoading();
-                        showWindow.dismiss();
-                    }
-                });
                 Utils.toastMsg(this,Utils.decodeUnicode(json.getString("msg")));
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -199,7 +192,9 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
                 }, 1000);
             }else if(FINISH_ORDER_FLAG==flag){
                 isPay = true;
+                if(showWindow.isShowing() || showWindow != null)
                 showWindow.dismiss();
+                hiddenPopLoading();
                 order_status.setText("维修完成");
                 total_cost.setText(repair_cost.getText().toString()+"￥");
                 ly_repair_cost.setVisibility(View.VISIBLE);

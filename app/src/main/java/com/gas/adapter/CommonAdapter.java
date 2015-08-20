@@ -21,8 +21,6 @@ public abstract class CommonAdapter<T> extends BaseAdapter{
 	    this.mItemLayoutId= itemLayoutId;
 	}
 
-
-
 	public void addItem(T item){
 		mDatas.add(item);
 		notifyDataSetChanged();

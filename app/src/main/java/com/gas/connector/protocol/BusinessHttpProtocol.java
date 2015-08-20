@@ -155,4 +155,77 @@ public class BusinessHttpProtocol {
         return Post(Config.finishRepariOrder, entity, callback);
     }
 
+
+    //煤气瓶信息查询
+    public static long searchBottle(HttpCallBack callback,String code){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("code",code);
+        return Post(Config.searchBottle, entity, callback);
+    }
+    //煤气瓶操作日志
+    public static long searchBottleLog(HttpCallBack callback,String code){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("code",code);
+        return Post(Config.bottleLog, entity, callback);
+    }
+
+    //满气入库
+    public static long  bottleFullIn(HttpCallBack callback,String code){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("code",code);
+        return Post(Config.bottleFullin, entity, callback);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static long getCar(HttpCallBack callback,String driver_id,String depot_id){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",driver_id+"");
+        entity.put("depot_id",depot_id+"");
+        return Post(Config.getCar, entity, callback);
+    }
+
+
+
+   public static long wrapCar(HttpCallBack callback,String driver_id,String car_id){
+       LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+       entity.put("driver_id",driver_id+"");
+       entity.put("depot_id",car_id+"");
+       return Post(Config.wrapCar, entity, callback);
+   }
+
+    public static long unwrapCar(HttpCallBack callback,String driver_id){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",driver_id+"");
+        return Post(Config.unwrapCar, entity, callback);
+    }
+
+    public static long siteCar(HttpCallBack callback,String car_id,String lat,String lng){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("car_id",car_id+"");
+        entity.put("lat",lat+"");
+        entity.put("lng",lng+"");
+        return Post(Config.siteCar, entity, callback);
+    }
+
+
+
+
+
+
+
+
+
 }

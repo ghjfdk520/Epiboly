@@ -49,12 +49,11 @@
                             android:layout_weight="1"
                             android:textColor="#f4753b"
                             android:textSize="23sp" />
-
                         <Button
-                            android:id="@+id/bottle_type_in"
+                            android:id="@+id/bottle_list"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/order_type_in" />
+                            android:background="@drawable/order_bottle_list" />
 
                     </LinearLayout>
 
@@ -327,12 +326,12 @@
 
 
     <LinearLayout
+        android:id="@+id/ly_accept_order"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <RelativeLayout
-            android:id="@+id/ly_accept_order"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
@@ -367,12 +366,17 @@
         <View
             android:layout_width="0.5dp"
             android:layout_height="match_parent" />
-
         <Button
+            android:id="@+id/bottle_type_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/order_type_in" />
+
+       <!-- <Button
             android:id="@+id/bottle_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/order_bottle_list" />
+            android:background="@drawable/order_bottle_list" />-->
     </LinearLayout>
 
     <Button

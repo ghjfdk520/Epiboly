@@ -32,4 +32,14 @@ public class Config {
     public static String  gasBottleOut = BASE_URL+"&a=gas_bottle_out";
     public static String  gasBottleIn = BASE_URL+"&a=gas_bottle_in";
     public static String  finishRepariOrder = BASE_URL+"&a=finish_repair_order";
+
+    public static String searchBottle = BASE_URL+"&a=select_bottle";
+    public static String bottleLog = BASE_URL+"&a=select_bottle_log";
+    public static String selectBottle = BASE_URL+"&a=select_bottle";
+    public static String bottleFullin = BASE_URL +"&a=gas_bottle_full_in";
+    public static String getCar = BASE_URL+"&a=car";
+    public static String wrapCar = BASE_URL+"&a=car_wrap";
+    public static String unwrapCar= BASE_URL+"&a=car_unwrap";
+    public static String siteCar = BASE_URL+"&a=car_site";
 }
+
