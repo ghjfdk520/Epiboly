@@ -51,6 +51,7 @@
                             android:textSize="23sp" />
                         <Button
                             android:id="@+id/bottle_list"
+                            android:layout_marginRight="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/order_bottle_list" />

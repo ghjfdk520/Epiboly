@@ -17,6 +17,7 @@ package com.gas.ui.codeScan;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -74,6 +75,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     private boolean isHasSurface = false;
 
+    public static void launchActivity(Fragment fragment,int CaptrueCode) {
+        Intent i = new Intent(fragment.getActivity(), CaptureActivity.class);
+        REQUEST_CODE = CaptrueCode;
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        fragment.startActivityForResult(i,CaptrueCode);
+    }
     public static void launchActivity(Activity fromActivity,int CaptrueCode) {
         Intent i = new Intent(fromActivity, CaptureActivity.class);
         REQUEST_CODE = CaptrueCode;
@@ -172,9 +179,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
      * @param bundle    The extras
      */
     public void handleDecode(Result rawResult, Bundle bundle) {
-
-        
-
                verifyBottle = true;
                inactivityTimer.onActivity();
                beepManager.playBeepSoundAndVibrate();
@@ -185,7 +189,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                intent.putExtra("code", rawResult.getText());
                setResult(RESULT_OK, intent);
                finish();
-
          //startActivity(new Intent(CaptureActivity.this, ResultActivity.class).putExtras(bundle));
     }
 

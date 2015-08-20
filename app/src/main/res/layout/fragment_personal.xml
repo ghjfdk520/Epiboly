@@ -88,7 +88,7 @@
                 android:id="@+id/user_address"
                 style="@style/font_personal_black_one"
                 android:layout_marginLeft="8dip"
-                android:text="XXXXXXXXXXXXXXXX" />
+                 />
         </LinearLayout>
 
         <LinearLayout
@@ -141,18 +141,7 @@
                 android:layout_marginLeft="8dip"
                 android:text="煤气   维修" />
         </LinearLayout>
-        <RelativeLayout
-            android:visibility="gone"
-            style="@style/hweight_wfill">
 
-            <ImageView
-                android:id="@+id/personal_modified_data"
-                style="@style/double_wrap"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_margin="15dip"
-                android:src="@drawable/personal_modified_data" />
-        </RelativeLayout>
     </LinearLayout>
 
 
@@ -240,7 +229,7 @@
                 android:id="@+id/user_edit_alternate_phone"
                 style="@style/edit_personal_gray"
                 android:layout_marginLeft="8dip"
-                android:hint="120316205" />
+              />
         </LinearLayout>
 
         <LinearLayout
@@ -279,16 +268,6 @@
                 android:button="@drawable/personal_radio"
                 android:checked="true" />
         </LinearLayout>
-
-
-
-            <ImageView
-                android:visibility="gone"
-                android:id="@+id/personal_edit_save"
-                style="@style/double_wrap"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="55dp"
-                android:src="@drawable/personal_edit_save" />
 
     </LinearLayout>
 

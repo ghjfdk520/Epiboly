@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -34,8 +33,6 @@ public class PersonalFrament extends BaseFragment implements View.OnClickListene
     private TextView user_sex;      //性别
     private TextView user_alternate_phone;  //备用电话
     private TextView user_service;   //服务项目
-    private ImageView personal_modified_data;
-    private ImageView personal_edit_save;
     private EditText edit_user_address;
     private EditText user_edit_alternate_phone;
     private RadioGroup sex_radioGrop;
@@ -66,8 +63,6 @@ public class PersonalFrament extends BaseFragment implements View.OnClickListene
         user_sex = (TextView) rootView.findViewById(R.id.user_sex);
         user_alternate_phone = (TextView) rootView.findViewById(R.id.user_alternate_phone);
         user_service = (TextView) rootView.findViewById(R.id.user_service);
-        personal_modified_data = (ImageView) rootView.findViewById(R.id.personal_modified_data);
-        personal_edit_save = (ImageView) rootView.findViewById(R.id.personal_edit_save);
         edit_user_address = (EditText) rootView.findViewById(R.id.edit_user_address);
         user_edit_alternate_phone = (EditText) rootView.findViewById(R.id.user_edit_alternate_phone);
         sex_radioGrop = (RadioGroup) rootView.findViewById(R.id.sex_radioGrop);
@@ -79,21 +74,10 @@ public class PersonalFrament extends BaseFragment implements View.OnClickListene
     }
 
     public void initListener() {
-        personal_modified_data.setOnClickListener(this);
-        personal_edit_save.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.personal_modified_data:
-                ly_text_personal.setVisibility(View.GONE);
-                ly_edit_personal.setVisibility(View.VISIBLE);
-                break;
-            case R.id.personal_edit_save:
-                ly_text_personal.setVisibility(View.VISIBLE);
-                ly_edit_personal.setVisibility(View.GONE);
-                break;
-        }
+
     }
 }

@@ -25,7 +25,7 @@ import com.gas.ui.codeScan.CaptureActivity;
 import com.gas.ui.common.SuperActivity;
 import com.gas.ui.fragment.AttendanceFragment;
 import com.gas.ui.fragment.DeliveryFragment;
-import com.gas.ui.fragment.GasFragment;
+import com.gas.ui.fragment.BottleFragment;
 import com.gas.ui.fragment.PersonalFrament;
 import com.gas.ui.fragment.RepairFragment;
 import com.gas.ui.view.NestRadioGroup;
@@ -49,7 +49,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     private Fragment[] mFragments;
     private AttendanceFragment attendanceFragment;
     private DeliveryFragment deliveryFragment;
-    private GasFragment gasFragment;
+    private BottleFragment gasFragment;
     private PersonalFrament personalFrament;
     private RepairFragment repairFragment;
     private NestRadioGroup mNestRadioGroup;
@@ -113,7 +113,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         attendanceFragment = (AttendanceFragment) fragmentManager.findFragmentById(R.id.attendance_fragment);
 
         deliveryFragment = (DeliveryFragment) fragmentManager.findFragmentById(R.id.delivery_fragment);
-        gasFragment = (GasFragment) fragmentManager.findFragmentById(R.id.gas_fragment);
+        gasFragment = (BottleFragment) fragmentManager.findFragmentById(R.id.gas_fragment);
         personalFrament = (PersonalFrament) fragmentManager.findFragmentById(R.id.personal_fragment);
         repairFragment = (RepairFragment) fragmentManager.findFragmentById(R.id.repair_fragment);
         scan_code = (ImageView) findViewById(R.id.scan_code);

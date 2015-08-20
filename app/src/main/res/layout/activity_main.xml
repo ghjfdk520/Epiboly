@@ -40,7 +40,7 @@
 
         <fragment
             android:id="@+id/gas_fragment"
-            android:name="com.gas.ui.fragment.GasFragment"
+            android:name="com.gas.ui.fragment.BottleFragment"
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="1" />
