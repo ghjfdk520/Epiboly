@@ -213,7 +213,7 @@ public class BusinessHttpProtocol {
     }
 
     public static long siteCar(HttpCallBack callback,String car_id,String lat,String lng){
-        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        LinkedHashMap< String , Object > entity  = new LinkedHashMap< String , Object >( );
         entity.put("car_id",car_id+"");
         entity.put("lat",lat+"");
         entity.put("lng",lng+"");

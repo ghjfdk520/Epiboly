@@ -90,6 +90,10 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
          */
 
         Intent intent = getIntent();
+
+        if(intent.getIntExtra("checkId",-1)!= -1)
+            checkId = intent.getIntExtra("checkId",2);
+
         int order_type = intent.getIntExtra("order_type",0);
         int must_get = intent.getIntExtra("must_get",-1);
         Utils.log("czd order_type", order_type + " " + must_get);
@@ -100,7 +104,8 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         }else if(order_type == 2){
             checkId = 3;
         }
-        checkId = intent.getIntExtra("checkId",1);
+
+
         showFragment(checkId);
     }
 
