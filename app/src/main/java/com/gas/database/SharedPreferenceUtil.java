@@ -9,6 +9,10 @@ import android.content.SharedPreferences.Editor;
  */
 public class SharedPreferenceUtil {
 
+
+    public final static String SHARED_PLACES ="shared_places";
+    public final static String SHARED_CAR = "shared_car";
+    public final static String WRAP_CAR="WRAP_CAR";
     public final static String LONGITUDE = "longitude";
     public final static String TIME_DIFFERENCE="time_difference";
     public final static String SERVICE_TIEM = "service_tiem";

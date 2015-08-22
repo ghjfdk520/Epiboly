@@ -14,9 +14,15 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.gas.conf.Common;
+import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.UserWorker;
 import com.gas.entity.User;
+import com.gas.ui.codeScan.CaptureActivity;
 import com.gas.ui.common.SuperActivity;
+import com.gas.utils.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -24,6 +30,8 @@ import cn.jpush.android.api.JPushInterface;
  * Created by Heart on 2015/8/17.
  */
 public class HomeActivity extends SuperActivity implements View.OnClickListener{
+    private long FLAG_EMPTY_BOTTLE = -1;
+    private final int REQUEST_CODE_EMPTY = 0X00012;
     private User user = Common.getInstance().user;
     private ImageButton home_person;
     private ImageButton home_repair;
@@ -67,11 +75,25 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
     }
     @Override
     public void onGeneralError(String e, long flag) {
-
+        dismissProgressDialog();
+        if (flag == FLAG_EMPTY_BOTTLE) {
+            Utils.toastMsg(this, "空气瓶回收 " + e);
+        }
     }
 
     @Override
     public void onGeneralSuccess(String result, long flag) {
+
+        JSONObject json = null;
+        try {
+            json = new JSONObject(result);
+            if (flag == FLAG_EMPTY_BOTTLE) {
+                dismissProgressDialog();
+                Utils.toastMsg(this, "空气瓶回收 " + Utils.decodeUnicode(json.getString("msg")));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -93,6 +115,9 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.home_empty :
+                CaptureActivity.launchActivity(this, REQUEST_CODE_EMPTY);
+                break;
             case R.id.home_person:
                 MainActivity.lauchActivity(this, 0);break;
             case R.id.home_repair:
@@ -112,6 +137,19 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (-1 == resultCode) {
+            switch (requestCode) {
+                case REQUEST_CODE_EMPTY:
+                    FLAG_EMPTY_BOTTLE = BusinessHttpProtocol.gasBottleIn(this, Common.getInstance().user.getId(), data.getStringExtra("code"));
+                    showProgressDialog(FLAG_EMPTY_BOTTLE);
+                    break;
+            }
+        }
+    }
 
     private void showWindow() {
         WindowManager.LayoutParams params = getWindow().getAttributes();

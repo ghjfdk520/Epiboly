@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/ly_dialog"
     android:orientation="vertical">
 
     <TextView
@@ -64,6 +65,22 @@
                 style="@style/common_orange"
                 android:text="09988023" />
         </LinearLayout>
+        <LinearLayout android:layout_marginTop="26dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/common_gray"
+                android:layout_width="130dp"
+                android:text="第二次复检日期：" />
+
+            <TextView
+                android:id="@+id/detection_two_time"
+                style="@style/common_orange"
+                android:text="09988023" />
+        </LinearLayout>
+
         <LinearLayout android:layout_marginTop="26dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

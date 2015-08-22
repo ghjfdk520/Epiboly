@@ -6,22 +6,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.gas.conf.Common;
+import com.gas.connector.HttpCallBack;
+import com.gas.connector.protocol.BusinessHttpProtocol;
+import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.User;
 import com.gas.epiboly.R;
 import com.gas.ui.common.BaseFragment;
+import com.gas.utils.Utils;
+import com.gas.utils.wrapCarUtil;
+
+import org.json.JSONObject;
 
 /**
  * Created by Heart on 2015/7/22.
  */
-public class PersonalFrament extends BaseFragment implements View.OnClickListener {
+public class PersonalFrament extends BaseFragment implements View.OnClickListener,HttpCallBack {
 
-
+    private long GET_CAR_FLAG = -1;
     private User user =  Common.getInstance().user;
     private Activity mActivity;
     private View rootView;
@@ -29,16 +38,18 @@ public class PersonalFrament extends BaseFragment implements View.OnClickListene
     private LinearLayout ly_edit_personal;
     private TextView user_name;
     private TextView user_phone;
-    private TextView user_address;  //地址
-    private TextView user_sex;      //性别
-    private TextView user_alternate_phone;  //备用电话
+    private TextView area;  //地址
+    private TextView depot;      //性别
+    private TextView position;  //备用电话
     private TextView user_service;   //服务项目
     private EditText edit_user_address;
     private EditText user_edit_alternate_phone;
     private RadioGroup sex_radioGrop;
     private CheckBox checkbox_deliver_gas;
     private CheckBox checkbox_repair;
+    private Switch shareSwitch;
 
+    private boolean isSharePlaces=false;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_personal, container,
@@ -59,25 +70,72 @@ public class PersonalFrament extends BaseFragment implements View.OnClickListene
         ly_edit_personal = (LinearLayout) rootView.findViewById(R.id.ly_edit_personal);
         user_name = (TextView) rootView.findViewById(R.id.user_name);
         user_phone = (TextView) rootView.findViewById(R.id.user_phone);
-        user_address = (TextView) rootView.findViewById(R.id.user_address);
-        user_sex = (TextView) rootView.findViewById(R.id.user_sex);
-        user_alternate_phone = (TextView) rootView.findViewById(R.id.user_alternate_phone);
+        area = (TextView) rootView.findViewById(R.id.user_address);
+        depot = (TextView) rootView.findViewById(R.id.user_sex);
+        position = (TextView) rootView.findViewById(R.id.user_alternate_phone);
         user_service = (TextView) rootView.findViewById(R.id.user_service);
         edit_user_address = (EditText) rootView.findViewById(R.id.edit_user_address);
         user_edit_alternate_phone = (EditText) rootView.findViewById(R.id.user_edit_alternate_phone);
         sex_radioGrop = (RadioGroup) rootView.findViewById(R.id.sex_radioGrop);
         checkbox_deliver_gas = (CheckBox) rootView.findViewById(R.id.checkbox_deliver_gas);
         checkbox_repair = (CheckBox) rootView.findViewById(R.id.checkbox_repair);
+        shareSwitch = (Switch) rootView.findViewById(R.id.switch_button);
 
         user_name.setText(user.getName());
         user_phone.setText(user.getPhone());
+
+        area.setText(user.getArea());
+        depot.setText(user.getDepot());
+        position.setText(user.getPosition());
+
+        isSharePlaces = SharedPreferenceUtil.getInstance(getActivity()).getString(SharedPreferenceUtil.SHARED_PLACES).equals("1");
+        shareSwitch.setChecked(isSharePlaces);
     }
 
     public void initListener() {
+        shareSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked) {
+                    if(!wrapCarUtil.startLocation(getActivity())) {
+                        GET_CAR_FLAG = BusinessHttpProtocol.getCar(PersonalFrament.this, user.getId() + "", user.getDepot_id() + "");
+                        showProgressDialog(GET_CAR_FLAG);
+                    }
+                }else {
+                    wrapCarUtil.stopLocation(getActivity());
+                }
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onGeneralSuccess(String result, long flag) {
+
+        try {
+            JSONObject json = new JSONObject(result);
+            if(flag == GET_CAR_FLAG){
+                dismissProgressDialog();
+                if(json.optString("sign").equals("one")){
+                    JSONObject carJson =  json.getJSONObject("car_one");
+                    wrapCarUtil.startLocation(getActivity(),carJson.optString("id"));
+                }else {
+                    Utils.toastMsg(getActivity(),"请先绑定车号");
+                    shareSwitch.setChecked(false);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onGeneralError(String e, long flag) {
 
     }
 }

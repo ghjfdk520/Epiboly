@@ -70,7 +70,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <service android:name="com.gas.ui.common.LocationService" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </service>
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name">
@@ -79,6 +84,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
+        <activity android:name="com.gas.ui.activity.checkActivity" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"

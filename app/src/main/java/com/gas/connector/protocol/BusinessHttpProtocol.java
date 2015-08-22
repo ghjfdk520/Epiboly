@@ -32,8 +32,16 @@ public class BusinessHttpProtocol {
     //获取考勤信息
     public static long checkingInfo(HttpCallBack callback,String id){
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
-        entity.put("id",id);
-        return Post(Config.checkInfo, entity, callback);
+        entity.put("driver_id",id);
+        return Post(Config.check, entity, callback);
+    }
+
+    //获取考勤信息
+    public static long checkSearch(HttpCallBack callback,String id,int type){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",id);
+        entity.put("type",type+"");
+        return Post(Config.checkSearch, entity, callback);
     }
 
     //派送历史订单
@@ -170,9 +178,10 @@ public class BusinessHttpProtocol {
     }
 
     //满气入库
-    public static long  bottleFullIn(HttpCallBack callback,String code){
+    public static long  bottleFullIn(HttpCallBack callback,String code,String user_id){
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
         entity.put("code",code);
+        entity.put("driver_id",user_id);
         return Post(Config.bottleFullin, entity, callback);
     }
 
@@ -212,20 +221,11 @@ public class BusinessHttpProtocol {
         return Post(Config.unwrapCar, entity, callback);
     }
 
-    public static long siteCar(HttpCallBack callback,String car_id,String lat,String lng){
+    public static long siteCar(HttpCallBack callback,String car_id,int lat,int lng){
         LinkedHashMap< String , Object > entity  = new LinkedHashMap< String , Object >( );
         entity.put("car_id",car_id+"");
-        entity.put("lat",lat+"");
-        entity.put("lng",lng+"");
+        entity.put("lat",lat/1E6+"");
+        entity.put("lng",lng/1E6+"");
         return Post(Config.siteCar, entity, callback);
     }
-
-
-
-
-
-
-
-
-
 }

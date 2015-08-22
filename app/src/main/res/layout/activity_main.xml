@@ -47,5 +47,7 @@
 
         <include layout="@layout/layout_foot_navigation_bars" />
     </LinearLayout>
+
+
     <include layout="@layout/layout_loading" />
 </merge>

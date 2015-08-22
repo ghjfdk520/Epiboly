@@ -19,7 +19,40 @@ public class User implements Parcelable {
     private String last_login_time;
     private String create_time;
     private String update_time;
+    private String  area;
+    private String depot;
+    private String position;
     private int isLogin;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "area='" + area + '\'' +
+                ", id=" + id +
+                ", depot_id=" + depot_id +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", qq='" + qq + '\'' +
+                ", areaid='" + areaid + '\'' +
+                ", carid='" + carid + '\'' +
+                ", in_time='" + in_time + '\'' +
+                ", last_login_time='" + last_login_time + '\'' +
+                ", create_time='" + create_time + '\'' +
+                ", update_time='" + update_time + '\'' +
+                ", depot='" + depot + '\'' +
+                ", position='" + position + '\'' +
+                ", isLogin=" + isLogin +
+                '}';
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
 
     public String getAreaid() {
         return areaid;
@@ -43,6 +76,14 @@ public class User implements Parcelable {
 
     public void setCreate_time(String create_time) {
         this.create_time = create_time;
+    }
+
+    public String getDepot() {
+        return depot;
+    }
+
+    public void setDepot(String depot) {
+        this.depot = depot;
     }
 
     public int getDepot_id() {
@@ -109,6 +150,14 @@ public class User implements Parcelable {
         this.phone = phone;
     }
 
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
     public String getQq() {
         return qq;
     }
@@ -144,6 +193,9 @@ public class User implements Parcelable {
         dest.writeString(this.last_login_time);
         dest.writeString(this.create_time);
         dest.writeString(this.update_time);
+        dest.writeString(this.area);
+        dest.writeString(this.depot);
+        dest.writeString(this.position);
         dest.writeInt(this.isLogin);
     }
 
@@ -163,10 +215,13 @@ public class User implements Parcelable {
         this.last_login_time = in.readString();
         this.create_time = in.readString();
         this.update_time = in.readString();
+        this.area = in.readString();
+        this.depot = in.readString();
+        this.position = in.readString();
         this.isLogin = in.readInt();
     }
 
-    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+    public static final Creator<User> CREATOR = new Creator<User>() {
         public User createFromParcel(Parcel source) {
             return new User(source);
         }
@@ -175,23 +230,4 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "areaid='" + areaid + '\'' +
-                ", id=" + id +
-                ", depot_id=" + depot_id +
-                ", name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", password='" + password + '\'' +
-                ", qq='" + qq + '\'' +
-                ", carid='" + carid + '\'' +
-                ", in_time='" + in_time + '\'' +
-                ", last_login_time='" + last_login_time + '\'' +
-                ", create_time='" + create_time + '\'' +
-                ", update_time='" + update_time + '\'' +
-                ", isLogin=" + isLogin +
-                '}';
-    }
 }

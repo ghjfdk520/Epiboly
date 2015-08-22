@@ -71,23 +71,24 @@ public class ConnectorManage {
                         try {
                             jsonObject = new JSONObject(response);
 
-                        if (response == null) {
-                            if (callback != null) {
-                                callback.onGeneralError("数据为空", flag);
-                            }
-                        } else {
-                            if (!jsonObject.optString("flag").equals("error")){
+                            if (response == null) {
                                 if (callback != null) {
-                                    callback.onGeneralSuccess(response, flag);
+                                    callback.onGeneralError("数据为空", flag);
                                 }
-                            }else{
-                                if (callback != null) {
-                                    callback.onGeneralError(Utils.decodeUnicode(jsonObject.optString("msg")), flag);
+                            } else {
+                                if (!jsonObject.optString("flag").equals("error")) {
+                                    if (callback != null) {
+                                        callback.onGeneralSuccess(response, flag);
+                                    }
+                                } else {
+                                    if (callback != null) {
+                                        callback.onGeneralError(Utils.decodeUnicode(jsonObject.optString("msg")), flag);
+                                    }
                                 }
                             }
-                        }
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            callback.onGeneralError("解析异常", flag);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -100,7 +101,6 @@ public class ConnectorManage {
                 if (callback != null) {
                     callback.onGeneralError(error.getMessage(), flag);
                 }
-
             }
         }) {
 
@@ -109,7 +109,6 @@ public class ConnectorManage {
                 // TODO Auto-generated method stub
                 return map;
             }
-
         };
 
         rQueue.add(stringRequest).setTag(flag);

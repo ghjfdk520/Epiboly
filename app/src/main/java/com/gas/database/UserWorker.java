@@ -26,9 +26,12 @@ public class UserWorker extends ITableWorker {
     public static final String LAST_LOGIN_TIME = "last_login_time";
     public static final String CREATE_TIME = "create_time";
     public static final String UPDATE_TIME = "update_time";
+    public static final String AREA = "area";
+    public static final String DEPOT = "depot";
+    public static final String POSITION = "position";
     public static final String ISLOGIN = "isLogin";
     public static final String[] selectors = {
-            ID, DEPOT_ID, NAME, PHONE, PASSWORD, QQ, AREAID, CARID, IN_TIME, LAST_LOGIN_TIME, CREATE_TIME,UPDATE_TIME,ISLOGIN
+            ID, DEPOT_ID, NAME, PHONE, PASSWORD, QQ, AREAID, CARID, IN_TIME, LAST_LOGIN_TIME, CREATE_TIME,UPDATE_TIME,ISLOGIN,AREA,DEPOT,POSITION
     };
     public static final String deleteAll = "DELETE FROM TB_NAME";
     public static final String tableSql = "CREATE TABLE IF NOT EXISTS " + TB_NAME + " ( " +
@@ -39,6 +42,9 @@ public class UserWorker extends ITableWorker {
             PHONE + " TEXT," +
             PASSWORD + " TEXT," +
             QQ + " TEXT," +
+            AREA + " TEXT," +
+            DEPOT + " TEXT," +
+            POSITION + " TEXT," +
             AREAID + " TEXT," +
             CARID + " TEXT," +
             IN_TIME + " TEXT," +
@@ -62,6 +68,11 @@ public class UserWorker extends ITableWorker {
         values.put(AREAID,user.getAreaid());
         values.put(CARID,user.getCarid());
         values.put(IN_TIME,user.getIn_time());
+
+        values.put(AREA,user.getArea());
+        values.put(DEPOT,user.getDepot());
+        values.put(POSITION,user.getPosition());
+
         values.put(LAST_LOGIN_TIME,user.getLast_login_time());
         values.put(CREATE_TIME,user.getCreate_time());
         values.put(UPDATE_TIME,user.getUpdate_time());
@@ -85,6 +96,9 @@ public class UserWorker extends ITableWorker {
             user.setCreate_time(cursor.getString(cursor.getColumnIndex(CREATE_TIME)));
             user.setUpdate_time(cursor.getString(cursor.getColumnIndex(UPDATE_TIME)));
             user.setIsLogin(cursor.getInt(cursor.getColumnIndex(ISLOGIN)));
+            user.setArea(cursor.getString(cursor.getColumnIndex(AREA)));
+            user.setDepot(cursor.getString(cursor.getColumnIndex(DEPOT)));
+            user.setPosition(cursor.getString(cursor.getColumnIndex(POSITION)));
         }
          return user;
     }

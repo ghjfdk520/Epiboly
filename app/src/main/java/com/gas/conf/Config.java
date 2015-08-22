@@ -41,5 +41,8 @@ public class Config {
     public static String wrapCar = BASE_URL+"&a=car_wrap";
     public static String unwrapCar= BASE_URL+"&a=car_unwrap";
     public static String siteCar = BASE_URL+"&a=car_site";
+
+    public static String check = BASE_URL +"&a=check";
+    public static String checkSearch = BASE_URL +"&a=check_search";
 }
 

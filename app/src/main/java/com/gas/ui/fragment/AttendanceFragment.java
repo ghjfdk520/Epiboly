@@ -17,6 +17,7 @@ import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.User;
 import com.gas.epiboly.R;
+import com.gas.ui.activity.checkActivity;
 import com.gas.ui.common.BaseFragment;
 import com.gas.utils.BaiduLocationUtil;
 import com.gas.utils.Utils;
@@ -94,7 +95,8 @@ public class AttendanceFragment extends BaseFragment implements HttpCallBack,Vie
                workFlag =  BusinessHttpProtocol.ClockIn(this,u.getId()+"",temp[0],temp[1],temp[2],String.format("%d",System.currentTimeMillis() / 1000+3*24*60*60),1);
                break;
            case R.id.bt_check_all:
-               checkallFlag =  BusinessHttpProtocol.checkingInfo(this,u.getId()+"");
+               checkActivity.launchActivity(getActivity());
+             //  checkallFlag =  BusinessHttpProtocol.checkingInfo(this,u.getId()+"");
                break;
        }
     }
