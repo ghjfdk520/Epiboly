@@ -17,6 +17,7 @@ import com.gas.conf.Common;
 import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.UserWorker;
 import com.gas.entity.User;
+import com.gas.ui.activity.carManagerActivity;
 import com.gas.ui.codeScan.CaptureActivity;
 import com.gas.ui.common.SuperActivity;
 import com.gas.utils.Utils;
@@ -56,10 +57,10 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
         setContentView(R.layout.activity_home);
         init();
         initListener();
+
     }
 
     public void init(){
-
     }
 
     public void initListener(){
@@ -122,7 +123,9 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
                 MainActivity.lauchActivity(this, 0);break;
             case R.id.home_repair:
                 MainActivity.lauchActivity(this,3);break;
-          //  case R.id.home_vehicles: MainActivity.lauchActivity(this,2);break;
+             case R.id.home_vehicles:
+                 carManagerActivity.launchActivity(this);
+                 break;
             case R.id.home_bottle: MainActivity.lauchActivity(this,4);break;
             case R.id.home_delivery:
                 MainActivity.lauchActivity(this,2);break;

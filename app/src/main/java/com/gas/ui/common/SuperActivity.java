@@ -9,7 +9,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.gas.CloseAllActivity;
-import com.gas.conf.Config;
 import com.gas.connector.ConnectorManage;
 import com.gas.connector.HttpCallBack;
 import com.gas.utils.Utils;
@@ -31,8 +30,8 @@ public abstract class SuperActivity extends Activity implements  Thread.Uncaught
 
     protected void onCreate(Bundle savedInstanceState, boolean addToStack) {
         super.onCreate(savedInstanceState);
-        if(!Config.DEBUG)
-         Thread.setDefaultUncaughtExceptionHandler(this);
+         // if(!Config.DEBUG)
+         //Thread.setDefaultUncaughtExceptionHandler(this);
         mContext = this;
         if (addToStack)
             CloseAllActivity.getInstance().addActivity(this);
@@ -72,6 +71,7 @@ public abstract class SuperActivity extends Activity implements  Thread.Uncaught
      * 显示等待对话框np
      */
     public void showProgressDialog() {
+
         // 显示进度对话框
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = 0.7f; // 0.0-1.0
@@ -184,13 +184,11 @@ public abstract class SuperActivity extends Activity implements  Thread.Uncaught
 
     @Override
     public void onBackPressed() {
-        Utils.log("back","0001");
         super.onBackPressed();
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        Utils.log("back","xiaoshi ");
         if(currentFlag != 0){
             ConnectorManage.getInstance().cancleRequest(currentFlag);
             currentFlag = 0;

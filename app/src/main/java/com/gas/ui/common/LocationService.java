@@ -44,7 +44,7 @@ public class LocationService extends Service implements HttpCallBack{
                 sendLocation();
             }
         };
-       // if(Config.DEBUG) loopTime = 10000;
+        // if(Config.DEBUG) loopTime = 10000;
         locationTimer.startTimer(loopTime);
         super.onCreate();
     }

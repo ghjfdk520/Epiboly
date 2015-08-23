@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gas.epiboly">
+    package="com.gas.epiboly"
+    android:versionName="2.0.1">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
@@ -14,7 +15,8 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 允许程序录制音频 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 允许程序录制音频 -->
 
 
     <!-- 这个权限用于进行网络定位-->
@@ -70,12 +72,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="com.gas.ui.common.LocationService" >
+        <service android:name="com.gas.ui.common.LocationService">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </service>
+
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name">
@@ -85,6 +88,7 @@
             </intent-filter>-->
         </activity>
         <activity android:name="com.gas.ui.activity.checkActivity" />
+        <activity android:name="com.gas.ui.activity.carManagerActivity" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
@@ -97,12 +101,16 @@
 
         <activity android:name="com.gas.ui.codeScan.CaptureActivity" />
         <activity android:name="com.gas.ui.codeScan.ResultActivity" />
-       <activity
+        <activity android:name="com.gas.ui.activity.AddoilActivity" />
+        <activity
             android:name="com.gas.ui.activity.orderDetail"
             android:label="@string/app_name"></activity>
         <activity
             android:name="com.gas.ui.activity.repairDetail"
             android:label="@string/app_name"></activity>
+
+        <activity android:name="com.gas.ui.activity.OilActivity" />
+        <activity android:name="com.gas.ui.activity.WrapActivity" />
 
         <service
             android:name="com.baidu.location.f"

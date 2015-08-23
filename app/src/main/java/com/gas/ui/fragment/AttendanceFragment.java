@@ -160,4 +160,9 @@ public class AttendanceFragment extends BaseFragment implements HttpCallBack,Vie
             }
         });
     }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+    }
 }

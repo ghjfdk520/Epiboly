@@ -432,8 +432,8 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
             popupLoading = showView.findViewById(R.id.loading_progress_layout);
         }else if(position ==4){
             showView = LayoutInflater.from(this).inflate(
-                    R.layout.dialog_order_bottle_list, null);
-            ListView listVIew = (ListView) showView.findViewById(R.id.bottle_list_view);
+                    R.layout.dialog_list, null);
+            ListView listVIew = (ListView) showView.findViewById(R.id.list_view);
             CommonAdapter<String> commonAdapter = new CommonAdapter<String>(this,bottleList,R.layout.item_bottle_list) {
                 @Override
                 public void convert(ViewHolder helper, String item) {

@@ -2,6 +2,7 @@ package com.gas.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 时间规范类
@@ -54,5 +55,21 @@ public class TimeFormat {
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		return sdf.format(time);
+	}
+
+	public static String getToday()
+	{
+		Calendar today = Calendar.getInstance( ); // 计算今天的界限
+		today.set( Calendar.YEAR , today.get( Calendar.YEAR ) );
+		today.set( Calendar.MONTH , today.get( Calendar.MONTH ) );
+		today.set( Calendar.DAY_OF_MONTH , today.get( Calendar.DAY_OF_MONTH ) );
+		// Calendar.HOUR——12小时制的小时数 Calendar.HOUR_OF_DAY——24小时制的小时数
+		today.set( Calendar.HOUR_OF_DAY , 0 );
+		today.set( Calendar.MINUTE , 0 );
+		today.set( Calendar.SECOND , 0 );
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		Date date = today.getTime();
+		sdf.applyPattern("yyyy-MM-dd");
+		return sdf.format(date);
 	}
 }

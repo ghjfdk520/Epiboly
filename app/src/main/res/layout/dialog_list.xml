@@ -7,7 +7,8 @@
     android:orientation="horizontal">
 
     <ListView
-        android:id="@+id/bottle_list_view"
+        android:scrollbars="none"
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

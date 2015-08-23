@@ -107,6 +107,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
 
 
         showFragment(checkId);
+
     }
 
     public void init() {
@@ -166,7 +167,8 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
                 });
         scan_code.setOnClickListener(this);
         findViewById(R.id.title_home).setOnClickListener(this);
-        findViewById(R.id.title_back).setOnClickListener(this);
+        findViewById(R.id.title_back).setVisibility(View.GONE);
+
     }
     @Override
     protected void onDestroy() {
@@ -206,6 +208,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
                     .hide(mFragments[3]).hide(mFragments[4]);
             fragmentTransaction.show(mFragments[position]);
             fragmentTransaction.commit();
+
 
         switch (position) {
             case 0:

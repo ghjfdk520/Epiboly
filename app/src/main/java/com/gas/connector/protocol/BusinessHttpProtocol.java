@@ -211,7 +211,7 @@ public class BusinessHttpProtocol {
    public static long wrapCar(HttpCallBack callback,String driver_id,String car_id){
        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
        entity.put("driver_id",driver_id+"");
-       entity.put("depot_id",car_id+"");
+       entity.put("car_id",car_id+"");
        return Post(Config.wrapCar, entity, callback);
    }
 
