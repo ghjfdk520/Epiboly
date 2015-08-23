@@ -1,51 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:layout_height="fill_parent">
+
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
 
-    <RelativeLayout
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/bottle_empty"
-            android:layout_marginBottom="3dp"
-            android:background="@drawable/bottle_empty"/>
-        <Button
-            android:layout_toRightOf="@+id/bottle_empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/bottle_full"
-            android:layout_marginLeft="3dp"
-            android:layout_marginBottom="3dp"
-            android:background="@drawable/bottle_full"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/bottle_msg"
-            android:layout_below="@+id/bottle_empty"
-            android:background="@drawable/bottle_msg"/>
-        <Button
-            android:layout_toRightOf="@+id/bottle_msg"
-            android:layout_below="@+id/bottle_full"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:id="@+id/bottle_log"
-            android:background="@drawable/bottle_log"
-            android:translationZ="1dp" />
+            <Button
+                android:id="@+id/bottle_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:background="@drawable/bottle_empty" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@mipmap/bottle_mark"
-            />
-    </RelativeLayout>
-</LinearLayout>
+            <Button
+                android:id="@+id/bottle_full"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="3dp"
+                android:layout_toRightOf="@+id/bottle_empty"
+                android:background="@drawable/bottle_full" />
+
+            <Button
+                android:id="@+id/bottle_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bottle_empty"
+                android:background="@drawable/bottle_msg" />
+
+            <Button
+                android:id="@+id/bottle_log"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bottle_full"
+                android:layout_marginLeft="3dp"
+                android:layout_toRightOf="@+id/bottle_msg"
+                android:background="@drawable/bottle_log"
+                android:translationZ="1dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@mipmap/bottle_mark" />
+        </RelativeLayout>
+    </LinearLayout>
+</FrameLayout>

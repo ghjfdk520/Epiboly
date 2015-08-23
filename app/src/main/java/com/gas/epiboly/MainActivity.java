@@ -111,7 +111,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     }
 
     public void init() {
-        initJpush();
+        //initJpush();
      //   registerMessageReceiver();
         loading_progress_layout = findViewById(R.id.loading_progress_layout);
         mNestRadioGroup = (NestRadioGroup) findViewById(R.id.nav_radio_group);
@@ -344,4 +344,14 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         loading_progress_layout.setVisibility(View.GONE);
     }
 
+
+    @Override
+    public void onBackPressed() {
+
+        if(loading_progress_layout.isShown()){
+            hidenLoading();
+            return;
+        }
+        super.onBackPressed();
+    }
 }

@@ -3,6 +3,8 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
     android:layout_marginTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp"
     android:orientation="horizontal">
 
     <TextView
@@ -33,7 +35,7 @@
         android:id="@+id/time"
         style="@style/common_gray"
         android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center"
         android:text="123" />
 </LinearLayout>

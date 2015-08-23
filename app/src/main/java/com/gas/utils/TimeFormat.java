@@ -56,7 +56,53 @@ public class TimeFormat {
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		return sdf.format(time);
 	}
-
+	public static long convertTimeString2Long( String time , int level )
+	{
+		String format = "yyyy-M-d H:mm:ss";
+		switch ( level )
+		{
+			case Calendar.MINUTE :
+			{
+				format = "yyyy-M-d H:mm";
+			}
+			break;
+			case Calendar.HOUR :
+			{
+				format = "yyyy-M-d H";
+			}
+			break;
+			case Calendar.DATE :
+			{
+				format = "yyyy-M-d";
+			}
+			break;
+			case Calendar.MONTH :
+			{
+				format = "yyyy-M";
+			}
+			break;
+			case Calendar.YEAR :
+			{
+				format = "yyyy";
+			}
+			break;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat( format );
+		Date date = null;
+		long second = 0;
+		try
+		{
+			date = sdf.parse( time );
+		}
+		 catch (java.text.ParseException e) {
+			e.printStackTrace();
+		}
+		if ( date != null )
+		{
+			second = date.getTime( );
+		}
+		return second;
+	}
 	public static String getToday()
 	{
 		Calendar today = Calendar.getInstance( ); // 计算今天的界限

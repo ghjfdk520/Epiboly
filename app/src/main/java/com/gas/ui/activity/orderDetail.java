@@ -213,8 +213,14 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
                 showWindow.dismiss();
                 break;
             case R.id.submit:
-                showPopLoading();
                 String code = bottle_code.getText().toString();
+                if(Utils.isEmptyOrNullStr(code)){
+                    Utils.toastMsg(this,"瓶号不能留空");
+                    return;
+                }
+                showPopLoading();
+
+
                 VERIFY_BOTTLE_FLAG = BusinessHttpProtocol.gasBottleOut(this, user.getId(), itemOrder.getId(), code);
                 bottleMap.put(VERIFY_BOTTLE_FLAG, code);
                 break;

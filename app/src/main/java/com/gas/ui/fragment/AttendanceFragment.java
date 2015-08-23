@@ -16,6 +16,7 @@ import com.gas.connector.HttpCallBack;
 import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.User;
+import com.gas.epiboly.MainActivity;
 import com.gas.epiboly.R;
 import com.gas.ui.activity.checkActivity;
 import com.gas.ui.common.BaseFragment;
@@ -89,9 +90,11 @@ public class AttendanceFragment extends BaseFragment implements HttpCallBack,Vie
     public void onClick(View v) {
        switch (v.getId()){
            case R.id.imageview_off_bt:
+               MainActivity.showLoading();
                offFlag = BusinessHttpProtocol.ClockIn(this,u.getId()+"",temp[0],temp[1],temp[2],String.format("%d",System.currentTimeMillis() / 1000+3*24*60*60),2);
                break;
            case R.id.imageview_work_bt:
+               MainActivity.showLoading();
                workFlag =  BusinessHttpProtocol.ClockIn(this,u.getId()+"",temp[0],temp[1],temp[2],String.format("%d",System.currentTimeMillis() / 1000+3*24*60*60),1);
                break;
            case R.id.bt_check_all:
@@ -103,6 +106,7 @@ public class AttendanceFragment extends BaseFragment implements HttpCallBack,Vie
 
     @Override
     public void onGeneralSuccess(String result, long flag) {
+        MainActivity.hidenLoading();
         try {
             Utils.log(" flag result",Utils.decodeUnicode(result));
             if(workFlag == flag){
@@ -121,7 +125,7 @@ public class AttendanceFragment extends BaseFragment implements HttpCallBack,Vie
 
     @Override
     public void onGeneralError(String e, long flag) {
-        Utils.log(" flag result eeor",Utils.decodeUnicode(e));
+        MainActivity.hidenLoading();
         Utils.toastMsg(getActivity(), Utils.decodeUnicode(e));
     }
 

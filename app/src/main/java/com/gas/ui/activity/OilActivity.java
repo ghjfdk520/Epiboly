@@ -15,16 +15,35 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.gas.adapter.CommonAdapter;
+import com.gas.adapter.ViewHolder;
+import com.gas.conf.Common;
+import com.gas.connector.protocol.BusinessHttpProtocol;
+import com.gas.entity.CarBean;
+import com.gas.entity.OilBean;
+import com.gas.entity.User;
 import com.gas.epiboly.R;
 import com.gas.ui.common.SuperActivity;
+import com.gas.utils.TimeFormat;
+import com.gas.utils.Utils;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Heart on 2015/8/23.
  * 油耗记录
  */
 public class OilActivity extends SuperActivity implements View.OnClickListener {
+    private User user = Common.getInstance().user;
+    private long FLAG_OIL_LOG = -1;
+    private long FLAG_CAR_WRAP = -1 ;
     private Button log_add;
-
+    private CarBean carBean;
     private ListView logList;
     private PopupWindow showWindow;
 
@@ -39,7 +58,10 @@ public class OilActivity extends SuperActivity implements View.OnClickListener {
 
     private Button submit;
     private Button cancle;
-
+    private List<OilBean.Oil> oil_log;
+    private Gson gson = new Gson();
+    private View loading_progress_layout;
+    private CommonAdapter<OilBean.Oil> oilCommonAdapter;
     public static void launchActivity(Activity fromActivity) {
         Intent i = new Intent(fromActivity, OilActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -55,30 +77,76 @@ public class OilActivity extends SuperActivity implements View.OnClickListener {
     }
 
     public void init() {
+        loading_progress_layout = findViewById(R.id.loading_progress_layout);
+        showLoading();
+
         findViewById(R.id.add_record).setOnClickListener(this);
+        findViewById(R.id.title_back).setOnClickListener(this);
+        findViewById(R.id.title_home).setVisibility(View.GONE);
+        findViewById(R.id.scan_code).setVisibility(View.GONE);
+
+        oil_log = new ArrayList<>();
+        FLAG_OIL_LOG=   BusinessHttpProtocol.oilLog(this, user.getId());
+        logList = (ListView) findViewById(R.id.log_list);
+
+
+        oilCommonAdapter = new CommonAdapter<OilBean.Oil>(this,oil_log,R.layout.item_oil_log) {
+            @Override
+            public void convert(ViewHolder helper, OilBean.Oil item) {
+                helper.setText(R.id.car_no,item.getCar_no());
+                helper.setText(R.id.capacity,item.getOil()+"L");
+                helper.setText(R.id.spend,item.getOil_cost()+"元");
+                helper.setText(R.id.time, TimeFormat.convertTimeLong2String(item.getAdd_date()*1000, Calendar.DATE));
+            }
+        };
+        logList.setAdapter(oilCommonAdapter);
     }
 
     @Override
     public void onGeneralError(String e, long flag) {
-
+        hidenLoading();
     }
 
     @Override
     public void onGeneralSuccess(String result, long flag) {
+        hidenLoading();
+        if(flag == FLAG_OIL_LOG){
 
+            oil_log = gson.fromJson(result,OilBean.class).oil_log;
+            oilCommonAdapter.replaceItems(oil_log);
+
+            for (OilBean.Oil oil : oil_log) {
+                Utils.log("oil",oil.toString());
+            }
+        }else if(FLAG_CAR_WRAP == flag){
+            try {
+                JSONObject json = new JSONObject(result);
+                if (json.optString("sign").equals("one")) {
+                    carBean = gson.fromJson(json.optString("car_one"), CarBean.class);
+                    AddoilActivity.launchActivity(this, carBean.getCar_no());
+                }else {
+                    Utils.toastMsg(this,"请先绑定车辆");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_record:
-                AddoilActivity.launchActivity(this);
-               // showWindow();
+                showLoading();
+                FLAG_CAR_WRAP = BusinessHttpProtocol.getCar(this, user.getId() + "", user.getDepot_id() + "");
+                //   AddoilActivity.launchActivity(this);
+                // showWindow();
                 break;
-
+            case R.id.title_back:
+                finish();
+                break;
         }
     }
-
 
 
     private void showWindow() {
@@ -116,6 +184,15 @@ public class OilActivity extends SuperActivity implements View.OnClickListener {
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            showLoading();
+            FLAG_OIL_LOG=   BusinessHttpProtocol.oilLog(this, user.getId());
+        }
+    }
+
     public void loadDate(View parent) {
         car_no = (TextView) parent.findViewById(R.id.car_no);
         capactiy = (EditText) parent.findViewById(R.id.capactiy);
@@ -128,5 +205,24 @@ public class OilActivity extends SuperActivity implements View.OnClickListener {
         submit.setOnClickListener(this);
         cancle.setOnClickListener(this);
         car_no.setOnClickListener(this);
+    }
+
+    public void showLoading() {
+        loading_progress_layout.setVisibility(View.VISIBLE);
+    }
+
+    public void hidenLoading() {
+        loading_progress_layout.setVisibility(View.GONE);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if(loading_progress_layout.isShown()){
+            hidenLoading();
+            return;
+        }
+        super.onBackPressed();
+
     }
 }

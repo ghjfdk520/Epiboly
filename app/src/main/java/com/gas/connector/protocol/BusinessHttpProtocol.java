@@ -228,4 +228,19 @@ public class BusinessHttpProtocol {
         entity.put("lng",lng/1E6+"");
         return Post(Config.siteCar, entity, callback);
     }
+
+    public static long carOil(HttpCallBack callback,int driver_id,double oil,double oil_cost,long add_date){
+        LinkedHashMap< String , Object > entity  = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",driver_id+"");
+        entity.put("oil",String.format("%.2f", oil));
+        entity.put("oil_cost",String.format("%.2f", oil_cost));
+        entity.put("add_date",add_date+"");
+        return Post(Config.carOil, entity, callback);
+    }
+
+    public static long oilLog(HttpCallBack callback,int driver_id){
+        LinkedHashMap< String , Object > entity  = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",driver_id+"");
+        return Post(Config.oilLog, entity, callback);
+    }
 }

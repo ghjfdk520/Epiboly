@@ -5,7 +5,7 @@ package com.gas.conf;
  * Created by Heart on 2015/7/16.
  */
 public class Config {
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     public static int PLAT = 1;
     public static String APP_VERSION = "1.0";
 
@@ -44,5 +44,8 @@ public class Config {
 
     public static String check = BASE_URL +"&a=check";
     public static String checkSearch = BASE_URL +"&a=check_search";
+
+    public static String oilLog = BASE_URL +"&a=oil_log";
+    public static String carOil = BASE_URL +"&a=car_oil";
 }
 

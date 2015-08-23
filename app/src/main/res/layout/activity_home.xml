@@ -1,74 +1,93 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@mipmap/backgroup"
-    android:orientation="vertical">
-    <View
-        android:background="@drawable/title_navigation_bg"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"/>
+    android:layout_height="match_parent">
 
     <LinearLayout
-       android:layout_marginTop="25dp"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-        <LinearLayout android:gravity="center_horizontal"
-            style="@style/wweight_hwarp"
-             android:orientation="vertical">
-            <ImageButton
-                android:id="@+id/home_person"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/home_person"/>
-            <ImageButton
-                android:layout_marginTop="8dp"
-                android:id="@+id/home_repair"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/home_repair"/>
-            <ImageButton
-                android:layout_marginTop="8dp"
-                android:id="@+id/home_vehicles"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/home_vehicles"/>
+        android:layout_height="match_parent"
+        android:background="@mipmap/backgroup"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:background="@drawable/title_navigation_bg" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="25dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                style="@style/wweight_hwarp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/home_person"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/home_person" />
+
+                <ImageButton
+                    android:id="@+id/home_repair"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/home_repair" />
+
+                <ImageButton
+                    android:id="@+id/home_vehicles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/home_vehicles" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/wweight_hwarp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/home_bottle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/home_bottle" />
+
+                <ImageButton
+                    android:id="@+id/home_delivery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/home_delivery" />
+
+                <ImageButton
+                    android:id="@+id/home_attendance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/home_attendance" />
+
+                <ImageButton
+                    android:id="@+id/home_empty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp"
+                    android:background="@drawable/home_empty" />
+            </LinearLayout>
         </LinearLayout>
-        <LinearLayout android:gravity="center_horizontal"
-            style="@style/wweight_hwarp"
-            android:orientation="vertical">
-            <ImageButton
-                android:id="@+id/home_bottle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/home_bottle"/>
-            <ImageButton
-                android:id="@+id/home_delivery"
-                android:layout_marginTop="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/home_delivery"/>
-            <ImageButton
-                android:layout_marginTop="8dp"
-                android:id="@+id/home_attendance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/home_attendance"/>
-            <ImageButton
-                android:layout_marginTop="13dp"
-                android:id="@+id/home_empty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/home_empty"/>
-        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/home_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="13dp"
+            android:background="@drawable/home_logout" />
     </LinearLayout>
 
-    <ImageButton
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="13dp"
-        android:id="@+id/home_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/home_logout"/>
-</LinearLayout>
+    <include layout="@layout/layout_loading" />
+</RelativeLayout>

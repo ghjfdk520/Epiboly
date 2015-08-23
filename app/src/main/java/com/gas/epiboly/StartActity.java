@@ -44,6 +44,7 @@ public class StartActity extends SuperActivity {
         setContentView(R.layout.activity_start);
         init();
         initListener();
+
     }
 
     public void init() {
@@ -75,6 +76,11 @@ public class StartActity extends SuperActivity {
         bt_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Utils.isEmptyOrNullStr(edit_name.getText().toString()) || Utils.isEmptyOrNullStr(edit_pass.getText().toString())){
+                    Utils.toastMsg(StartActity.this,"账号密码不能为空");
+                    return;
+                }
+
                 loading_progress_layout.setVisibility(View.VISIBLE);
                 referenceTiem = System.currentTimeMillis() / 1000;
                 loginFlag = LoginHttpProtocol.login(StartActity.this, edit_name.getText().toString(), edit_pass.getText().toString());
@@ -110,8 +116,7 @@ public class StartActity extends SuperActivity {
 
     @Override
     public void onBackPressed() {
-        Utils.log("back", "meiyong ");
-        // super.onBackPressed();
+       super.onBackPressed();
     }
 
     @Override

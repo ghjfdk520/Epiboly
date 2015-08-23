@@ -74,13 +74,14 @@
                     android:id="@+id/capactiy"
                     style="@style/common_gray"
                     android:layout_width="76dp"
+                    android:inputType="numberDecimal"
                     android:layout_gravity="center_horizontal"
                     android:background="@drawable/bg_edit_car"
                     android:paddingBottom="3dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingTop="3dp"
-                    android:text="0"
+                    android:hint="0"
                     android:textSize="15sp" />
 
                 <TextView
@@ -107,6 +108,7 @@
                 <EditText
                     android:id="@+id/spend"
                     style="@style/common_gray"
+                    android:inputType="numberDecimal"
                     android:layout_width="76dp"
                     android:layout_gravity="center_horizontal"
                     android:background="@drawable/bg_edit_car"
@@ -114,7 +116,7 @@
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingTop="3dp"
-                    android:text="0"
+                    android:hint="0"
                     android:textSize="15sp" />
 
                 <TextView

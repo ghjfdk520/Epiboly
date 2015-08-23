@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +22,16 @@ import com.gas.entity.User;
 import com.gas.ui.activity.carManagerActivity;
 import com.gas.ui.codeScan.CaptureActivity;
 import com.gas.ui.common.SuperActivity;
+import com.gas.utils.CommonUtil;
 import com.gas.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Set;
+
 import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 /**
  * Created by Heart on 2015/8/17.
@@ -43,7 +49,7 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
     private ImageButton home_empty;
     private ImageButton home_logout;
     private PopupWindow showWindow;
-    private View rootView;
+    private View rootView;  private View loading_progress_layout;
     public static void launchActivity(Activity fromActivity) {
         Intent i = new Intent(fromActivity, HomeActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -57,10 +63,10 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
         setContentView(R.layout.activity_home);
         init();
         initListener();
-
+        initJpush();
     }
 
-    public void init(){
+    public void init(){  loading_progress_layout = findViewById(R.id.loading_progress_layout);
     }
 
     public void initListener(){
@@ -106,11 +112,18 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
     }
 
     public void logout(){
-        JPushInterface.setAliasAndTags(getApplicationContext(), "", null, null);
-        new UserWorker(this).removeAll(user.getId());
-        Common.getInstance().user = null;
-        StartActity.launchActivity(this);
-        finish();
+        showLoading();
+        JPushInterface.setAliasAndTags(getApplicationContext(), "", null, mAliasCallback);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hidenLoading();
+                new UserWorker(HomeActivity.this).removeAll(user.getId());
+                Common.getInstance().user = null;
+                StartActity.launchActivity(HomeActivity.this);
+                finish();
+            }
+        }, 1500);
     }
 
     @Override
@@ -193,5 +206,58 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
                 getWindow().setAttributes(params);
             }
         });
+    }
+
+    private static final int MSG_SET_ALIAS = 1001;
+    public void initJpush(){
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, Common.getInstance().user.getPhone()));
+    }
+    private final Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case MSG_SET_ALIAS:
+                    JPushInterface.setAliasAndTags(getApplicationContext(), (String) msg.obj, null, mAliasCallback);
+                    break;
+            }
+        }
+    };
+    private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs ;
+            switch (code) {
+                case 0:
+                    logs = "Set tag and alias success";
+                    Utils.log("JPUSH", logs);
+                    break;
+                case 6002:
+                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+                    Utils.log("JPUSH", logs);
+                    if (CommonUtil.isNetworkAvailable(getApplicationContext())) {
+                        mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
+                    } else {
+                        Utils.log("JPUSH", "No network");
+                    }
+                    break;
+
+                default:
+                    logs = "Failed with errorCode = " + code;
+                    Utils.log("JPUSH", logs);
+            }
+
+            //Utils.toastMsg(MainActivity.this,logs);
+        }
+
+    };
+
+    public void showLoading() {
+        loading_progress_layout.setVisibility(View.VISIBLE);
+    }
+
+    public void hidenLoading() {
+        loading_progress_layout.setVisibility(View.GONE);
     }
 }
