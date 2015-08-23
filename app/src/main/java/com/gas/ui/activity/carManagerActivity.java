@@ -12,6 +12,7 @@ import com.gas.entity.CarList;
 import com.gas.entity.User;
 import com.gas.epiboly.R;
 import com.gas.ui.common.SuperActivity;
+import com.gas.utils.Utils;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -69,7 +70,11 @@ public class carManagerActivity extends SuperActivity implements View.OnClickLis
                     WrapActivity.launchActivity(this, carBean);
                 } else {
                     CarList carList = gson.fromJson(result, CarList.class);
-                    WrapActivity.launchActivity(this,carList);
+                    if (carList.car_no.size() == 0) {
+                        Utils.toastMsg(this, "没有可绑定车辆");
+                        return;
+                    }
+                    WrapActivity.launchActivity(this, carList);
                 }
 
 
@@ -86,7 +91,7 @@ public class carManagerActivity extends SuperActivity implements View.OnClickLis
 
         switch (v.getId()) {
             case R.id.car_oil_wear:
-             //   showLoading();
+                //   showLoading();
                 OilActivity.launchActivity(this);
                 break;
 

@@ -80,11 +80,12 @@
                         android:id="@+id/tv_license_number"
                         style="@style/common_orange"
                         android:layout_gravity="center_horizontal"
-                        android:background="@mipmap/car_text_bg"
+                        android:background="@drawable/car_spinner_bg"
                         android:paddingLeft="15dp"
                         android:textSize="24sp" />
 
                     <ImageView
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@mipmap/car_arrow_down" />

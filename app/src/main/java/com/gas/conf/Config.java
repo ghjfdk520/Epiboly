@@ -7,7 +7,7 @@ package com.gas.conf;
 public class Config {
     public static boolean DEBUG = false;
     public static int PLAT = 1;
-    public static String APP_VERSION = "1.0";
+    public static String APP_VERSION = "2.0";
 
     public static String BASE_URL ="http://www.weithink.com.cn/ranqi/index.php?g=Admin&m=Android";
     public static String localTime =" http://www.weithink.com.cn/ranqi/index.php/Admin/Android/localtime";
