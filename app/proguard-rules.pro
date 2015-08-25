@@ -66,7 +66,7 @@
 -keepclassmembers class * implements java.io.Serializable {*;}
 
 #项目数据模型
--keep class **.bean.* {*;}
+-keep class **.entity.* {*;}
 #lib
 -keep class com.google.zxing.** {*;}
 -dontwarn   com.google.zxing.**

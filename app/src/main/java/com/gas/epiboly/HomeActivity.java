@@ -36,7 +36,7 @@ import cn.jpush.android.api.TagAliasCallback;
 /**
  * Created by Heart on 2015/8/17.
  */
-public class HomeActivity extends SuperActivity implements View.OnClickListener{
+public class HomeActivity extends SuperActivity implements View.OnClickListener {
     private long FLAG_EMPTY_BOTTLE = -1;
     private final int REQUEST_CODE_EMPTY = 0X00012;
     private User user = Common.getInstance().user;
@@ -49,7 +49,9 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
     private ImageButton home_empty;
     private ImageButton home_logout;
     private PopupWindow showWindow;
-    private View rootView;  private View loading_progress_layout;
+    private View rootView;
+    private View loading_progress_layout;
+
     public static void launchActivity(Activity fromActivity) {
         Intent i = new Intent(fromActivity, HomeActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -59,17 +61,18 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        rootView  = LayoutInflater.from(this).inflate(R.layout.activity_home,null);
+        rootView = LayoutInflater.from(this).inflate(R.layout.activity_home, null);
         setContentView(R.layout.activity_home);
         init();
         initListener();
         initJpush();
     }
 
-    public void init(){  loading_progress_layout = findViewById(R.id.loading_progress_layout);
+    public void init() {
+        loading_progress_layout = findViewById(R.id.loading_progress_layout);
     }
 
-    public void initListener(){
+    public void initListener() {
         findViewById(R.id.home_person).setOnClickListener(this);
         findViewById(R.id.home_repair).setOnClickListener(this);
         findViewById(R.id.home_vehicles).setOnClickListener(this);
@@ -80,6 +83,7 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
         findViewById(R.id.home_logout).setOnClickListener(this);
 
     }
+
     @Override
     public void onGeneralError(String e, long flag) {
         dismissProgressDialog();
@@ -106,12 +110,12 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
 
     @Override
     protected void onDestroy() {
-        if(showWindow != null)
-        showWindow.dismiss();
+        if (showWindow != null)
+            showWindow.dismiss();
         super.onDestroy();
     }
 
-    public void logout(){
+    public void logout() {
         showLoading();
         JPushInterface.setAliasAndTags(getApplicationContext(), "", null, mAliasCallback);
         mHandler.postDelayed(new Runnable() {
@@ -128,26 +132,40 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.home_empty :
-                CaptureActivity.launchActivity(this, REQUEST_CODE_EMPTY);
+        switch (v.getId()) {
+            case R.id.home_empty:
+                showWindow(2);
+
                 break;
             case R.id.home_person:
-                MainActivity.lauchActivity(this, 0);break;
+                MainActivity.lauchActivity(this, 0);
+                break;
             case R.id.home_repair:
-                MainActivity.lauchActivity(this,3);break;
-             case R.id.home_vehicles:
-                 carManagerActivity.launchActivity(this);
-                 break;
-            case R.id.home_bottle: MainActivity.lauchActivity(this,4);break;
+                MainActivity.lauchActivity(this, 3);
+                break;
+            case R.id.home_vehicles:
+                carManagerActivity.launchActivity(this);
+                break;
+            case R.id.home_bottle:
+                MainActivity.lauchActivity(this, 4);
+                break;
             case R.id.home_delivery:
-                MainActivity.lauchActivity(this,2);break;
-            case R.id.home_attendance: MainActivity.lauchActivity(this,1);break;
-           //case R.id.home_empty: MainActivity.lauchActivity(this,2);break;
-            case R.id.home_logout: showWindow();break;
+                MainActivity.lauchActivity(this, 2);
+                break;
+            case R.id.home_attendance:
+                MainActivity.lauchActivity(this, 1);
+                break;
+            //case R.id.home_empty: MainActivity.lauchActivity(this,2);break;
+            case R.id.home_logout:
+                showWindow(1);
+                break;
             case R.id.ly_prompt:
                 showWindow.dismiss();
-                logout();
+                int position = (int) v.getTag();
+                if (position == 1)
+                    logout();
+                else if (position == 2)
+                    CaptureActivity.launchActivity(this, REQUEST_CODE_EMPTY);
                 break;
         }
     }
@@ -167,7 +185,7 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
         }
     }
 
-    private void showWindow() {
+    private void showWindow(int position) {
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.alpha = 0.7f;
         getWindow().setAttributes(params);
@@ -175,14 +193,22 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
                 R.layout.ly_prompt_dialog, null);
         TextView titleView = (TextView) showView.findViewById(R.id.prompt_title);
         TextView contentView = (TextView) showView.findViewById(R.id.prompt_content);
-        String title = "确定退出";
-        String content  = "确定退出登录？";
+        String title = "";
+        String content = "";
+        if (position == 1) {
+            title = "确定退出";
+            content = "确定退出登录？";
+
+        } else if (position == 2) {
+            title = "回收空瓶";
+            content = "确定回收空瓶？";
+        }
         titleView.setText(title);
         contentView.setText(content);
 
         LinearLayout ly_prompt = (LinearLayout) showView.findViewById(R.id.ly_prompt);
         ly_prompt.setOnClickListener(this);
-
+        ly_prompt.setTag(position);
         if (showWindow == null) {
             showWindow = new PopupWindow(this);
         }
@@ -209,10 +235,12 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
     }
 
     private static final int MSG_SET_ALIAS = 1001;
-    public void initJpush(){
+
+    public void initJpush() {
         mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, Common.getInstance().user.getPhone()));
     }
-    private final Handler mHandler = new Handler(){
+
+    private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -227,7 +255,7 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener{
 
         @Override
         public void gotResult(int code, String alias, Set<String> tags) {
-            String logs ;
+            String logs;
             switch (code) {
                 case 0:
                     logs = "Set tag and alias success";

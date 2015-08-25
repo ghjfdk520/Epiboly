@@ -100,6 +100,8 @@ public class StartActity extends SuperActivity {
                 userWorker.addUser(u);
                 Common.getInstance().user = u;
                 HomeActivity.launchActivity(StartActity.this);
+
+                Utils.log("User",userWorker.getUser().toString());
                 finish();
                 Utils.log(" flag", result);
             }

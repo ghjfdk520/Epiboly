@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -128,16 +129,27 @@ public class BottleFragment extends BaseFragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bottle_empty:
-                CaptureActivity.launchActivity(this, REQUEST_CODE_EMPTY);
+                showWindow(3);
+               //
                 break;
             case R.id.bottle_full:
-                CaptureActivity.launchActivity(this, REQUEST_CODE_FULL);
+                showWindow(4);
+               //
                 break;
             case R.id.bottle_msg:
                 CaptureActivity.launchActivity(this, REQUEST_MSG_BOTTLE);
                 break;
             case R.id.bottle_log:
                 CaptureActivity.launchActivity(this, REQUEST_LOG_BOTTLE);
+                break;
+            case R.id.ly_prompt:
+                showWindow.dismiss();
+                int position = (int) v.getTag();
+                if(position ==3) {
+                    CaptureActivity.launchActivity(this, REQUEST_CODE_EMPTY);
+                }else {
+                    CaptureActivity.launchActivity(this, REQUEST_CODE_FULL);
+                }
                 break;
         }
     }
@@ -228,6 +240,34 @@ public class BottleFragment extends BaseFragment implements View.OnClickListener
 
             showWindow.setWidth((int) (w * 0.9));
             showWindow.setHeight((int) (h * 0.8));
+        }else if( position ==3){
+            showView = LayoutInflater.from(getActivity()).inflate(
+                    R.layout.ly_prompt_dialog, null);
+            TextView titleView = (TextView) showView.findViewById(R.id.prompt_title);
+            TextView contentView = (TextView) showView.findViewById(R.id.prompt_content);
+            String title = "回收空瓶";
+            String  content = "确定回收空瓶？";
+            titleView.setText(title);
+            contentView.setText(content);
+            LinearLayout ly_prompt = (LinearLayout) showView.findViewById(R.id.ly_prompt);
+            ly_prompt.setTag(position);
+            ly_prompt.setOnClickListener(this);
+            showWindow.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+            showWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        }else if(position ==4){
+            showView = LayoutInflater.from(getActivity()).inflate(
+                    R.layout.ly_prompt_dialog, null);
+            TextView titleView = (TextView) showView.findViewById(R.id.prompt_title);
+            TextView contentView = (TextView) showView.findViewById(R.id.prompt_content);
+            String title = "满气入库";
+            String  content = "确定满气入库？";
+            titleView.setText(title);
+            contentView.setText(content);
+            LinearLayout ly_prompt = (LinearLayout) showView.findViewById(R.id.ly_prompt);
+            ly_prompt.setTag(position);
+            ly_prompt.setOnClickListener(this);
+            showWindow.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+            showWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         }
 
 

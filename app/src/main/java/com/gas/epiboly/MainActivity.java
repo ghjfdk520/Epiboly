@@ -8,27 +8,34 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.gas.conf.Common;
 import com.gas.connector.HttpCallBack;
 import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.UserWorker;
-import com.gas.utils.BaiduLocationUtil;
 import com.gas.ui.codeScan.CaptureActivity;
 import com.gas.ui.common.SuperActivity;
 import com.gas.ui.fragment.AttendanceFragment;
-import com.gas.ui.fragment.DeliveryFragment;
 import com.gas.ui.fragment.BottleFragment;
+import com.gas.ui.fragment.DeliveryFragment;
 import com.gas.ui.fragment.PersonalFrament;
 import com.gas.ui.fragment.RepairFragment;
 import com.gas.ui.view.NestRadioGroup;
+import com.gas.utils.BaiduLocationUtil;
 import com.gas.utils.CommonUtil;
 import com.gas.utils.Utils;
 
@@ -60,8 +67,9 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     private BaiduLocationUtil mBaiduLocationutil;
     private Button button;
     public static boolean isForeground = false;
-
+    private PopupWindow showWindow;
     private long GAS_BOTTLE_IN = -1;
+    private View rootView;
     public static void launchActivity(Activity fromActivity) {
         Intent i = new Intent(fromActivity, MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -78,6 +86,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        rootView = LayoutInflater.from(this).inflate(R.layout.activity_home, null);
         setContentView(R.layout.activity_main);
         init();
         initListeners();
@@ -290,11 +299,16 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.scan_code:
-                CaptureActivity.launchActivity(this,REQUEST_CODE_MAIN_SCAN);
+                showWindow();
+              //
                 break;
             case R.id.title_home:
                 HomeActivity.launchActivity(this);
                 finish();
+                break;
+            case R.id.ly_prompt:
+               showWindow.dismiss();
+                CaptureActivity.launchActivity(this, REQUEST_CODE_MAIN_SCAN);
                 break;
 
         }
@@ -353,5 +367,50 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
             return;
         }
         super.onBackPressed();
+    }
+
+
+    private void showWindow() {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.alpha = 0.7f;
+        getWindow().setAttributes(params);
+        View showView = LayoutInflater.from(this).inflate(
+                R.layout.ly_prompt_dialog, null);
+        TextView titleView = (TextView) showView.findViewById(R.id.prompt_title);
+        TextView contentView = (TextView) showView.findViewById(R.id.prompt_content);
+        String title = "";
+        String content = "";
+
+            title = "回收空瓶";
+            content = "确定回收空瓶？";
+
+        titleView.setText(title);
+        contentView.setText(content);
+
+        LinearLayout ly_prompt = (LinearLayout) showView.findViewById(R.id.ly_prompt);
+        ly_prompt.setOnClickListener(this);
+        if (showWindow == null) {
+            showWindow = new PopupWindow(this);
+        }
+
+        showWindow.setContentView(showView);
+        showWindow.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        showWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        showWindow.setFocusable(true);
+        showWindow.setOutsideTouchable(true);
+        ColorDrawable dw = new ColorDrawable(0000000000);
+        // 点back键和其他地方使其消失,设置了这个才能触发OnDismisslistener ，设置其他控件变化等操作
+        showWindow.setBackgroundDrawable(dw);
+        showWindow.showAtLocation(rootView, Gravity.CENTER, 0, 0);
+
+        showWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams params = getWindow().getAttributes();
+                params.alpha = 1.0f;
+                getWindow().setAttributes(params);
+            }
+        });
     }
 }

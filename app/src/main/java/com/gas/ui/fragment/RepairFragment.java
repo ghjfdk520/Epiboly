@@ -22,6 +22,7 @@ import com.gas.epiboly.MainActivity;
 import com.gas.epiboly.R;
 import com.gas.ui.activity.repairDetail;
 import com.gas.ui.common.BaseFragment;
+import com.gas.utils.TimeFormat;
 import com.gas.utils.Utils;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -30,6 +31,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -148,6 +150,10 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
                 helper.setText(R.id.customer_name, item.getClient_name());
                 helper.setText(R.id.order_no, "订单序号：" + item.getId());
 
+                helper.setText(R.id.service_date, TimeFormat.convertTimeLong2String(item.getRepair_date() * 1000, Calendar.DATE));
+                helper.setText(R.id.service_time, item.getRepair_time());
+                helper.setText(R.id.ctime, TimeFormat.convertTimeLong2String(item.getCtime()*1000, Calendar.DATE));
+
             }
         };
         accpetAdapter = new CommonAdapter<RepairOrder>(mActivity, accpetDatas, R.layout.item_delivery_order_history) {
@@ -157,6 +163,10 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
                 helper.setText(R.id.customer_name, item.getClient_name());
                 helper.setText(R.id.order_no, "订单序号：" + item.getId());
 
+                helper.setText(R.id.service_date, TimeFormat.convertTimeLong2String(item.getRepair_date() * 1000, Calendar.DATE));
+                helper.setText(R.id.service_time, item.getRepair_time());
+                helper.setText(R.id.ctime, TimeFormat.convertTimeLong2String(item.getCtime()*1000, Calendar.DATE));
+
             }
         };
         historyAdapter = new CommonAdapter<RepairOrder>(mActivity, historyDatas, R.layout.item_delivery_order_history) {
@@ -165,6 +175,10 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
                 helper.setText(R.id.customer_address, item.getAddress());
                 helper.setText(R.id.customer_name, item.getClient_name());
                 helper.setText(R.id.order_no, "订单序号：" + item.getId());
+
+                helper.setText(R.id.service_date, TimeFormat.convertTimeLong2String(item.getRepair_date() * 1000, Calendar.DATE));
+                helper.setText(R.id.service_time, item.getRepair_time());
+                helper.setText(R.id.ctime, TimeFormat.convertTimeLong2String(item.getCtime()*1000, Calendar.DATE));
             }
         };
         group_status_selector = (RadioGroup) rootView.findViewById(R.id.group_status_selector);
