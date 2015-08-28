@@ -23,6 +23,7 @@ import com.gas.epiboly.MainActivity;
 import com.gas.epiboly.R;
 import com.gas.ui.activity.orderDetail;
 import com.gas.ui.common.BaseFragment;
+import com.gas.utils.EventBus;
 import com.gas.utils.TimeFormat;
 import com.gas.utils.Utils;
 import com.google.gson.reflect.TypeToken;
@@ -494,6 +495,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
                 Common.order_type = -1;
                 Common.must_get = -1;
                 Common.deliveryCount = 0;
+                EventBus.getInstatnce().post(true);
             } else if (Common.order_type == 1 && Common.must_get == 1) {
                 currentViewPosition = 1;
                 showListView(currentViewPosition);
@@ -501,6 +503,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
                 Common.order_type = -1;
                 Common.must_get = -1;
                 Common.deliveryAccept = 0;
+                EventBus.getInstatnce().post(true);
             }
         }
     }

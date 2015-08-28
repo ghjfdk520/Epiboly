@@ -1,6 +1,8 @@
 package com.gas.epiboly;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,7 +23,7 @@ import com.google.gson.Gson;
 /**
  * Created by Heart on 2015/7/27.
  */
-public class StartActity extends SuperActivity {
+public class StartActity extends SuperActivity implements View.OnClickListener {
     public static void launchActivity(Activity fromActivity) {
         Intent i = new Intent(fromActivity, StartActity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -37,7 +39,7 @@ public class StartActity extends SuperActivity {
     private long referenceTiem;
     private User user;
     private Handler handler = new Handler();
-
+    private Button quit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, false);
@@ -53,10 +55,11 @@ public class StartActity extends SuperActivity {
         edit_name = (EditText) findViewById(R.id.edit_name);
         edit_pass = (EditText) findViewById(R.id.edit_pass);
         loading_progress_layout = findViewById(R.id.loading_progress_layout);
+        findViewById(R.id.title_back).setVisibility(View.GONE);
         setOnDismissListener(this);
         LoginHttpProtocol.serviceTime();
         userWorker = new UserWorker(this);
-
+        quit = (Button) findViewById(R.id.quit);
         user = userWorker.getUser();
 
         if (user.getIsLogin() == 1) {
@@ -86,6 +89,7 @@ public class StartActity extends SuperActivity {
                 loginFlag = LoginHttpProtocol.login(StartActity.this, edit_name.getText().toString(), edit_pass.getText().toString());
             }
         });
+        quit.setOnClickListener(this);
     }
 
     @Override
@@ -127,4 +131,25 @@ public class StartActity extends SuperActivity {
         super.onDestroy();
     }
 
+    @Override
+    public void onClick(View v) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(StartActity.this);
+       builder.setMessage("确认退出吗？");
+       builder.setTitle("提示");
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+             @Override
+            public void onClick(DialogInterface dialog, int which) {
+                  dialog.dismiss();
+                  StartActity.this.finish();
+               }
+        });
+         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+             public void onClick(DialogInterface dialog, int which) {
+                  dialog.dismiss();
+              }
+             });
+       builder.create().show();
+    }
 }

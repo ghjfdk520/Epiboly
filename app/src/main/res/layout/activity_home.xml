@@ -90,4 +90,6 @@
     </LinearLayout>
 
     <include layout="@layout/layout_loading" />
+
+
 </RelativeLayout>

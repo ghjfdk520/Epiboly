@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -114,9 +115,9 @@ public class JGReceiver extends BroadcastReceiver {
 
             Notification notification = new Notification();
             notification.icon = R.drawable.indicator_arrow;
-            notification.defaults = Notification.DEFAULT_SOUND;
             notification.audioStreamType = android.media.AudioManager.ADJUST_LOWER;
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            notification.sound = Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.sound); ;
             Intent intent = new Intent(mContext, MainActivity.class);
             Bundle bundle1 = new Bundle();
             intent.putExtra("text","s");

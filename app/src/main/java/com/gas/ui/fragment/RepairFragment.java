@@ -22,6 +22,7 @@ import com.gas.epiboly.MainActivity;
 import com.gas.epiboly.R;
 import com.gas.ui.activity.repairDetail;
 import com.gas.ui.common.BaseFragment;
+import com.gas.utils.EventBus;
 import com.gas.utils.TimeFormat;
 import com.gas.utils.Utils;
 import com.google.gson.reflect.TypeToken;
@@ -489,6 +490,7 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
                 Common.order_type = -1;
                 Common.must_get = -1;
                 Common.repairCount = 0;
+                EventBus.getInstatnce().post(true);
             } else if (Common.order_type == 2 && Common.must_get == 1) {
                 currentViewPosition = 1;
                 showListView(currentViewPosition);
@@ -496,6 +498,7 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
                 Common.order_type = -1;
                 Common.must_get = -1;
                 Common.repairAccept = 0;
+                EventBus.getInstatnce().post(true);
             }
         }
     }

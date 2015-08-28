@@ -12,7 +12,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +36,7 @@ import com.gas.ui.fragment.RepairFragment;
 import com.gas.ui.view.NestRadioGroup;
 import com.gas.utils.BaiduLocationUtil;
 import com.gas.utils.CommonUtil;
+import com.gas.utils.EventBus;
 import com.gas.utils.Utils;
 
 import java.util.Set;
@@ -70,6 +70,9 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     private PopupWindow showWindow;
     private long GAS_BOTTLE_IN = -1;
     private View rootView;
+    private TextView unread_repair;
+    private TextView unread_delivery;
+
     public static void launchActivity(Activity fromActivity) {
         Intent i = new Intent(fromActivity, MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -86,7 +89,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        rootView = LayoutInflater.from(this).inflate(R.layout.activity_home, null);
+        rootView = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
         setContentView(R.layout.activity_main);
         init();
         initListeners();
@@ -116,12 +119,14 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
 
 
         showFragment(checkId);
-
+        resetUnread();
     }
 
     public void init() {
         //initJpush();
      //   registerMessageReceiver();
+        unread_repair = (TextView) findViewById(R.id.unread_repair);
+        unread_delivery= (TextView) findViewById(R.id.unread_delivery);
         loading_progress_layout = findViewById(R.id.loading_progress_layout);
         mNestRadioGroup = (NestRadioGroup) findViewById(R.id.nav_radio_group);
         fragmentManager = getFragmentManager();
@@ -177,12 +182,13 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         scan_code.setOnClickListener(this);
         findViewById(R.id.title_home).setOnClickListener(this);
         findViewById(R.id.title_back).setVisibility(View.GONE);
-
+        EventBus.getInstatnce().register(this);
     }
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
+        EventBus.getInstatnce().unregister(this);
     }
 
     @Override
@@ -198,8 +204,6 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
 
     @Override
     public void onGeneralSuccess(String result, long flag) {
-        System.out.print(result);
-        Log.d("czd result", result);
         if(GAS_BOTTLE_IN == flag){
             Utils.toastMsg(this,Utils.decodeUnicode(result));
         }
@@ -350,6 +354,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         super.onNewIntent(intent);
     }
 
+
     public static void showLoading(){
         loading_progress_layout.setVisibility(View.VISIBLE);
     }
@@ -412,5 +417,31 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
                 getWindow().setAttributes(params);
             }
         });
+    }
+
+
+    public void resetUnread(){
+        int repairUnread = Common.repairCount+Common.repairAccept;
+        int deliveryUnread = Common.deliveryCount + Common.deliveryAccept;
+
+        if(repairUnread == 0){
+            unread_repair.setVisibility(View.GONE);
+        }else {
+            unread_repair.setVisibility(View.VISIBLE);
+        }
+        if(deliveryUnread == 0){
+            unread_delivery.setVisibility(View.GONE);
+        }else {
+            unread_delivery.setVisibility(View.VISIBLE);
+        }
+        unread_delivery.setText(deliveryUnread+"");
+        unread_repair.setText(repairUnread+"");
+    }
+
+    public void onEventUI(boolean isChange) {
+
+        if(true){
+            resetUnread();
+        }
     }
 }

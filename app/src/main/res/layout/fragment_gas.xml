@@ -47,12 +47,12 @@
                 android:layout_toRightOf="@+id/bottle_msg"
                 android:background="@drawable/bottle_log"
                 android:translationZ="1dp" />
-
+<!--
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@mipmap/bottle_mark" />
+                android:background="@mipmap/bottle_mark" />-->
         </RelativeLayout>
     </LinearLayout>
 </FrameLayout>

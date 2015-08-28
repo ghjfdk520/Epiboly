@@ -1,4 +1,4 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
@@ -11,7 +11,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dip"
+            android:layout_height="50dip"
             android:background="@drawable/title_navigation_bg"
             android:gravity="center_vertical">
 
@@ -20,6 +20,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="5dip"
+                android:id="@+id/title_back"
                 android:src="@drawable/title_back" />
         </LinearLayout>
 
@@ -29,7 +30,7 @@
             android:gravity="center"
             android:text="快速 便捷 诚信 勤奋"
             android:textColor="#da7e46"
-            android:textSize="16sp" />
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,23 +48,25 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <TextView
-                    android:layout_width="64dip"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="用户名:"
                     android:textColor="#f47539"
-                    android:textSize="12sp" />
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/edit_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="38.5dp"
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="50.5dp"
                     android:layout_marginRight="5dip"
                     android:background="@drawable/bg_edit_login"
                     android:hint="手机号码"
                     android:paddingLeft="7dp"
                     android:text="1591872796"
-                    android:textSize="12sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,24 +75,26 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="64dip"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="密码:"
                     android:textColor="#f47539"
-                    android:textSize="12sp" />
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/edit_pass"
-                    android:layout_width="match_parent"
-                    android:layout_height="38.5dp"
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="50.5dp"
                     android:layout_marginRight="5dip"
                     android:background="@drawable/bg_edit_login"
                     android:hint="密码"
                     android:inputType="textPassword"
                     android:paddingLeft="7dp"
                     android:text="888888"
-                    android:textSize="12sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
             <Button
@@ -103,4 +108,12 @@
         </LinearLayout>
     </LinearLayout>
     <include layout="@layout/layout_loading" />
-</merge>
+
+    <Button
+        android:id="@+id/quit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/quit"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>
