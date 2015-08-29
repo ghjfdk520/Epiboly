@@ -196,7 +196,7 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
                 showWindow.dismiss();
                 hiddenPopLoading();
                 order_status.setText("维修完成");
-                total_cost.setText(repair_cost.getText().toString()+"￥");
+                total_cost.setText("￥"+repair_cost.getText().toString());
                 ly_repair_cost.setVisibility(View.VISIBLE);
                 ly_unaccept_order.setVisibility(View.GONE);
                 finish_order.setVisibility(View.GONE);

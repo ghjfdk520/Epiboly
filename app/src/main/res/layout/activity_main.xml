@@ -66,12 +66,12 @@
 
                     <TextView
                         android:id="@+id/unread_delivery"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="right"
                         android:layout_margin="3dp"
                         android:background="@mipmap/bg_unread"
-                        android:padding="3dp"
+                       android:gravity="center"
                         android:text="10"
                         android:textColor="@color/white" />
                 </FrameLayout>
@@ -80,12 +80,12 @@
 
                     <TextView
                         android:id="@+id/unread_repair"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="right"
                         android:layout_margin="3dp"
                         android:background="@mipmap/bg_unread"
-                        android:padding="3dp"
+                        android:gravity="center"
                         android:text="10"
                         android:textColor="@color/white" />
                 </FrameLayout>

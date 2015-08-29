@@ -44,7 +44,7 @@ import java.util.Set;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
-public class MainActivity extends SuperActivity implements HttpCallBack,View.OnClickListener {
+public class MainActivity extends SuperActivity implements HttpCallBack, View.OnClickListener {
     private static final int MSG_SET_ALIAS = 1001;
     public static final String MESSAGE_RECEIVED_ACTION = "com.gas.epiboly.MESSAGE_RECEIVED_ACTION";
     private int REQUEST_CODE_MAIN_SCAN = 0X01101;
@@ -79,41 +79,43 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         fromActivity.startActivity(i);
     }
 
-    public static void lauchActivity(Activity fromActivity,int CheckId){
+    public static void lauchActivity(Activity fromActivity, int CheckId) {
         Intent i = new Intent(fromActivity, MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.putExtra("checkId",CheckId);
+        i.putExtra("checkId", CheckId);
         fromActivity.startActivity(i);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        rootView = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
+        rootView = LayoutInflater.from(this).inflate(R.layout.activity_home, null);
         setContentView(R.layout.activity_main);
+
+
         init();
         initListeners();
         new UserWorker(this).getUser();
     }
 
-    public void getExtra(){
+    public void getExtra() {
         /**
          * order_type 1为送气；2为抢修； must_get 1为系统派送（不可拒绝）；0反之
          */
 
         Intent intent = getIntent();
 
-        if(intent.getIntExtra("checkId",-1)!= -1)
-            checkId = intent.getIntExtra("checkId",2);
+        if (intent.getIntExtra("checkId", -1) != -1)
+            checkId = intent.getIntExtra("checkId", 2);
 
-        int order_type = intent.getIntExtra("order_type",0);
-        int must_get = intent.getIntExtra("must_get",-1);
+        int order_type = intent.getIntExtra("order_type", 0);
+        int must_get = intent.getIntExtra("must_get", -1);
         Utils.log("czd order_type", order_type + " " + must_get);
         Common.order_type = order_type;
         Common.must_get = must_get;
-        if(order_type == 1){
+        if (order_type == 1) {
             checkId = 2;
-        }else if(order_type == 2){
+        } else if (order_type == 2) {
             checkId = 3;
         }
 
@@ -124,9 +126,9 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
 
     public void init() {
         //initJpush();
-     //   registerMessageReceiver();
+        registerMessageReceiver();
         unread_repair = (TextView) findViewById(R.id.unread_repair);
-        unread_delivery= (TextView) findViewById(R.id.unread_delivery);
+        unread_delivery = (TextView) findViewById(R.id.unread_delivery);
         loading_progress_layout = findViewById(R.id.loading_progress_layout);
         mNestRadioGroup = (NestRadioGroup) findViewById(R.id.nav_radio_group);
         fragmentManager = getFragmentManager();
@@ -144,14 +146,15 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         mFragments[3] = repairFragment;
         mFragments[4] = gasFragment;
 
-         fragmentTransaction = fragmentManager.beginTransaction()
-                 .hide(mFragments[0])
+        fragmentTransaction = fragmentManager.beginTransaction()
+                .hide(mFragments[0])
                 .hide(mFragments[1]).hide(mFragments[2])
                 .hide(mFragments[3]).hide(mFragments[4]);
         fragmentTransaction.show(mFragments[checkId]);
         fragmentTransaction.commit();
         getExtra();
     }
+
     public void initListeners() {
         mNestRadioGroup
                 .setOnCheckedChangeListener(new NestRadioGroup.OnCheckedChangeListener() {
@@ -166,9 +169,15 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
                                 showFragment(1);
                                 break;
                             case R.id.radio_delivery:
+                                Common.deliveryCount = 0;
+                                Common.deliveryAccept = 0;
+                                resetUnread();
                                 showFragment(2);
                                 break;
                             case R.id.radio_repair:
+                                Common.repairCount = 0;
+                                Common.repairAccept = 0;
+                                resetUnread();
                                 showFragment(3);
                                 break;
                             case R.id.radio_gas:
@@ -182,8 +191,9 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         scan_code.setOnClickListener(this);
         findViewById(R.id.title_home).setOnClickListener(this);
         findViewById(R.id.title_back).setVisibility(View.GONE);
-        EventBus.getInstatnce().register(this);
+
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -196,6 +206,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         isForeground = true;
         super.onResume();
     }
+
     @Override
     protected void onPause() {
         isForeground = false;
@@ -204,8 +215,8 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
 
     @Override
     public void onGeneralSuccess(String result, long flag) {
-        if(GAS_BOTTLE_IN == flag){
-            Utils.toastMsg(this,Utils.decodeUnicode(result));
+        if (GAS_BOTTLE_IN == flag) {
+            Utils.toastMsg(this, Utils.decodeUnicode(result));
         }
     }
 
@@ -215,12 +226,12 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     }
 
     public void showFragment(int position) {
-            fragmentTransaction = fragmentManager
-                    .beginTransaction().hide(mFragments[0])
-                    .hide(mFragments[1]).hide(mFragments[2])
-                    .hide(mFragments[3]).hide(mFragments[4]);
-            fragmentTransaction.show(mFragments[position]);
-            fragmentTransaction.commit();
+        fragmentTransaction = fragmentManager
+                .beginTransaction().hide(mFragments[0])
+                .hide(mFragments[1]).hide(mFragments[2])
+                .hide(mFragments[3]).hide(mFragments[4]);
+        fragmentTransaction.show(mFragments[position]);
+        fragmentTransaction.commit();
 
 
         switch (position) {
@@ -244,13 +255,13 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         }
     }
 
-    public void initJpush(){
+    public void initJpush() {
 
 
         mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, Common.getInstance().user.getPhone()));
     }
 
-    private final Handler mHandler = new Handler(){
+    private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -266,7 +277,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
 
         @Override
         public void gotResult(int code, String alias, Set<String> tags) {
-            String logs ;
+            String logs;
             switch (code) {
                 case 0:
                     logs = "Set tag and alias success";
@@ -291,6 +302,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         }
 
     };
+
     public void registerMessageReceiver() {
         mMessageReceiver = new MessageReceiver();
         IntentFilter filter = new IntentFilter();
@@ -301,29 +313,28 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.scan_code:
                 showWindow();
-              //
+                //
                 break;
             case R.id.title_home:
                 HomeActivity.launchActivity(this);
                 finish();
                 break;
             case R.id.ly_prompt:
-               showWindow.dismiss();
+                showWindow.dismiss();
                 CaptureActivity.launchActivity(this, REQUEST_CODE_MAIN_SCAN);
                 break;
 
         }
     }
 
-    public class MessageReceiver extends BroadcastReceiver{
+    public class MessageReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(MESSAGE_RECEIVED_ACTION.equals(intent.getAction())){
-                String message= intent.getStringExtra(KEY_MESSAGE);
-                Utils.log("Main",message);
+            if (MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {
+                resetUnread();
             }
         }
     }
@@ -331,23 +342,23 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(RESULT_OK == resultCode)
-         GAS_BOTTLE_IN =  BusinessHttpProtocol.gasBottleIn(this, Common.getInstance().user.getId(), data.getStringExtra("code"));
+        if (RESULT_OK == resultCode)
+            GAS_BOTTLE_IN = BusinessHttpProtocol.gasBottleIn(this, Common.getInstance().user.getId(), data.getStringExtra("code"));
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
 
-        int order_type = intent.getIntExtra("order_type",0);
-        int must_get = intent.getIntExtra("must_get",0);
+        int order_type = intent.getIntExtra("order_type", 0);
+        int must_get = intent.getIntExtra("must_get", 0);
 
         Common.order_type = order_type;
         Common.must_get = must_get;
 
-        Utils.log("czd order_type",order_type+" "+must_get);
-        if(order_type == 1){
+        Utils.log("czd order_type", order_type + " " + must_get);
+        if (order_type == 1) {
             checkId = 2;
-        }else if(order_type == 2){
+        } else if (order_type == 2) {
             checkId = 3;
         }
         showFragment(checkId);
@@ -355,11 +366,11 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     }
 
 
-    public static void showLoading(){
+    public static void showLoading() {
         loading_progress_layout.setVisibility(View.VISIBLE);
     }
 
-    public static void hidenLoading(){
+    public static void hidenLoading() {
         loading_progress_layout.setVisibility(View.GONE);
     }
 
@@ -367,7 +378,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     @Override
     public void onBackPressed() {
 
-        if(loading_progress_layout.isShown()){
+        if (loading_progress_layout.isShown()) {
             hidenLoading();
             return;
         }
@@ -386,8 +397,8 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
         String title = "";
         String content = "";
 
-            title = "回收空瓶";
-            content = "确定回收空瓶？";
+        title = "回收空瓶";
+        content = "确定回收空瓶？";
 
         titleView.setText(title);
         contentView.setText(content);
@@ -420,27 +431,27 @@ public class MainActivity extends SuperActivity implements HttpCallBack,View.OnC
     }
 
 
-    public void resetUnread(){
-        int repairUnread = Common.repairCount+Common.repairAccept;
+    public void resetUnread() {
+        int repairUnread = Common.repairCount + Common.repairAccept;
         int deliveryUnread = Common.deliveryCount + Common.deliveryAccept;
 
-        if(repairUnread == 0){
+        if (repairUnread == 0) {
             unread_repair.setVisibility(View.GONE);
-        }else {
+        } else {
             unread_repair.setVisibility(View.VISIBLE);
         }
-        if(deliveryUnread == 0){
+        if (deliveryUnread == 0) {
             unread_delivery.setVisibility(View.GONE);
-        }else {
+        } else {
             unread_delivery.setVisibility(View.VISIBLE);
         }
-        unread_delivery.setText(deliveryUnread+"");
-        unread_repair.setText(repairUnread+"");
+        unread_delivery.setText(deliveryUnread + "");
+        unread_repair.setText(repairUnread + "");
     }
 
     public void onEventUI(boolean isChange) {
 
-        if(true){
+        if (true) {
             resetUnread();
         }
     }
