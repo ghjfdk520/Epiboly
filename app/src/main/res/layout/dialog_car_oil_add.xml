@@ -204,16 +204,18 @@
             android:id="@+id/ly_unaccept_order"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="?android:attr/buttonBarStyle"
             android:orientation="horizontal">
 
             <Button
+                style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/submit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/order_accept" />
 
-            <Button
+            <Button  style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/cancle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

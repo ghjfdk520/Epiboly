@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="bg_color">#fef3df</color>
+
     <color name="white">#FFFFFF</color>
     <!--白色 -->
     <color name="white1">#99FFFFFF</color>

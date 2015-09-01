@@ -55,7 +55,6 @@ public class StartActity extends SuperActivity implements View.OnClickListener {
         edit_name = (EditText) findViewById(R.id.edit_name);
         edit_pass = (EditText) findViewById(R.id.edit_pass);
         loading_progress_layout = findViewById(R.id.loading_progress_layout);
-        findViewById(R.id.title_back).setVisibility(View.GONE);
         setOnDismissListener(this);
         LoginHttpProtocol.serviceTime();
         userWorker = new UserWorker(this);

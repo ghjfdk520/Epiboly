@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/bg_color"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120dip"
         android:layout_margin="10dp"
-        android:background="@drawable/bg_translucence"
+        android:background="@drawable/backgroup_opacity"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -65,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@drawable/bg_translucence"
+        android:background="@drawable/backgroup_opacity"
         android:orientation="vertical"
         android:paddingBottom="25dp"
         android:paddingLeft="65dip">
@@ -145,7 +146,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_marginTop="24dip"
-        android:background="@drawable/bg_translucence"
+        android:background="@drawable/backgroup_opacity"
         android:paddingLeft="65dip">
 
         <LinearLayout

@@ -5,7 +5,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@mipmap/backgroup"
+        android:background="@mipmap/backgroup_one"
         android:orientation="vertical">
 
         <include layout="@layout/title_navigation_bar" />
