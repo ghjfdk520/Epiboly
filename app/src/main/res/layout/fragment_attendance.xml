@@ -49,4 +49,13 @@
                 android:src="@drawable/attendance_off" />
         </LinearLayout>
     </LinearLayout>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ly_button"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:src="@mipmap/bg_marking" />
 </RelativeLayout>

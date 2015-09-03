@@ -169,132 +169,15 @@
 
 
     </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/ly_edit_personal"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="55dip"
-        android:paddingRight="42dip"
-        android:visibility="gone">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dip"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/font_personal_gray"
-                android:gravity="top"
-                android:text="住址:" />
-
-            <EditText
-                android:id="@+id/edit_user_address"
-                style="@style/edit_personal_gray"
-                android:layout_marginLeft="5dip"
-                android:hint="住址" />
-        </LinearLayout>
-
-        <LinearLayout
+        <ImageView
+            android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dip"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/font_personal_gray"
-                android:text="性别:" />
-
-
-            <RadioGroup
-                android:id="@+id/sex_radioGrop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/font_personal_black"
-                    android:layout_marginLeft="8dip"
-                    android:layout_marginRight="4dip"
-                    android:text="男: " />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:button="@drawable/personal_radio" />
-
-                <TextView
-                    style="@style/font_personal_black"
-                    android:layout_marginLeft="8dip"
-                    android:layout_marginRight="4dip"
-                    android:text="女: " />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:button="@drawable/personal_radio" />
-            </RadioGroup>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dip"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/font_personal_gray"
-                android:text="备用联系电话:" />
-
-            <EditText
-                android:id="@+id/user_edit_alternate_phone"
-                style="@style/edit_personal_gray"
-                android:layout_marginLeft="8dip" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dip"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/font_personal_gray"
-                android:text="配送项目 :" />
-
-            <TextView
-                style="@style/font_personal_black"
-                android:layout_marginLeft="8dip"
-                android:text="煤气" />
-
-            <CheckBox
-                android:id="@+id/checkbox_deliver_gas"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/personal_radio"
-                android:checked="true" />
-
-            <TextView
-
-                style="@style/font_personal_black"
-                android:layout_marginLeft="15dip"
-                android:text="维修" />
-
-            <CheckBox
-                android:id="@+id/checkbox_repair"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/personal_radio"
-                android:checked="true" />
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-
+            android:src="@mipmap/bg_marking" />
+    </RelativeLayout>
 </LinearLayout>

@@ -5,11 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -42,11 +39,6 @@ public class PersonalFrament extends BaseFragment implements View.OnClickListene
     private TextView depot;      //性别
     private TextView position;  //备用电话
     private TextView user_service;   //服务项目
-    private EditText edit_user_address;
-    private EditText user_edit_alternate_phone;
-    private RadioGroup sex_radioGrop;
-    private CheckBox checkbox_deliver_gas;
-    private CheckBox checkbox_repair;
     private Switch shareSwitch;
 
     private boolean isSharePlaces=false;
@@ -67,18 +59,12 @@ public class PersonalFrament extends BaseFragment implements View.OnClickListene
 
     public void init() {
         ly_text_personal = (LinearLayout) rootView.findViewById(R.id.ly_text_personal);
-        ly_edit_personal = (LinearLayout) rootView.findViewById(R.id.ly_edit_personal);
         user_name = (TextView) rootView.findViewById(R.id.user_name);
         user_phone = (TextView) rootView.findViewById(R.id.user_phone);
         area = (TextView) rootView.findViewById(R.id.user_address);
         depot = (TextView) rootView.findViewById(R.id.user_sex);
         position = (TextView) rootView.findViewById(R.id.user_alternate_phone);
         user_service = (TextView) rootView.findViewById(R.id.user_service);
-        edit_user_address = (EditText) rootView.findViewById(R.id.edit_user_address);
-        user_edit_alternate_phone = (EditText) rootView.findViewById(R.id.user_edit_alternate_phone);
-        sex_radioGrop = (RadioGroup) rootView.findViewById(R.id.sex_radioGrop);
-        checkbox_deliver_gas = (CheckBox) rootView.findViewById(R.id.checkbox_deliver_gas);
-        checkbox_repair = (CheckBox) rootView.findViewById(R.id.checkbox_repair);
         shareSwitch = (Switch) rootView.findViewById(R.id.switch_button);
 
         user_name.setText(user.getName());

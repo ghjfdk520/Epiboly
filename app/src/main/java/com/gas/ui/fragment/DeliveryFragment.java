@@ -148,7 +148,9 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
                 helper.setText(R.id.service_date, TimeFormat.convertTimeLong2String(item.getSend_date()*1000, Calendar.DATE));
                 helper.setText(R.id.service_time, item.getSend_time());
                 helper.setText(R.id.ctime, TimeFormat.convertTimeLong2String(item.getAdd_time()*1000, Calendar.DATE));
-
+                if(helper.getPosition()%2 == 0){
+                    helper.getView(R.id.ly_item).setBackgroundColor(getResources().getColor(R.color.white));
+                }
             }
         };
         accpetAdapter = new CommonAdapter<DeliveryOrder>(mActivity, accpetDatas, R.layout.item_delivery_order_history) {
@@ -161,6 +163,9 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
                 helper.setText(R.id.service_date, TimeFormat.convertTimeLong2String(item.getSend_date() * 1000, Calendar.DATE));
                 helper.setText(R.id.service_time, item.getSend_time());
                 helper.setText(R.id.ctime, TimeFormat.convertTimeLong2String(item.getAdd_time()*1000, Calendar.DATE));
+                if(helper.getPosition()%2 == 0){
+                    helper.getView(R.id.ly_item).setBackgroundColor(getResources().getColor(R.color.white));
+                }
             }
         };
         historyAdapter = new CommonAdapter<DeliveryOrder>(mActivity, historyDatas, R.layout.item_delivery_order_history) {
@@ -173,6 +178,10 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
                 helper.setText(R.id.service_date, TimeFormat.convertTimeLong2String(item.getSend_date() * 1000, Calendar.DATE));
                 helper.setText(R.id.service_time, item.getSend_time());
                 helper.setText(R.id.ctime, TimeFormat.convertTimeLong2String(item.getAdd_time()*1000, Calendar.DATE));
+
+                if(helper.getPosition()%2 == 0){
+                    helper.getView(R.id.ly_item).setBackgroundColor(getResources().getColor(R.color.white));
+                }
             }
         };
         group_status_selector = (RadioGroup) rootView.findViewById(R.id.group_status_selector);

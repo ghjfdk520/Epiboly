@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:text="首页"
+         android:background="@drawable/title_home"
         android:textColor="@color/white"
         android:textSize="23sp" />
 

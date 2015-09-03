@@ -152,8 +152,10 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
 
                 helper.setText(R.id.service_date, TimeFormat.convertTimeLong2String(item.getRepair_date() * 1000, Calendar.DATE));
                 helper.setText(R.id.service_time, item.getRepair_time());
-                helper.setText(R.id.ctime, TimeFormat.convertTimeLong2String(item.getCtime()*1000, Calendar.DATE));
-
+                helper.setText(R.id.ctime, TimeFormat.convertTimeLong2String(item.getCtime() * 1000, Calendar.DATE));
+                if (helper.getPosition() % 2 == 0) {
+                    helper.getView(R.id.ly_item).setBackgroundColor(getResources().getColor(R.color.white));
+                }
             }
         };
         accpetAdapter = new CommonAdapter<RepairOrder>(mActivity, accpetDatas, R.layout.item_delivery_order_history) {
@@ -165,8 +167,10 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
 
                 helper.setText(R.id.service_date, TimeFormat.convertTimeLong2String(item.getRepair_date() * 1000, Calendar.DATE));
                 helper.setText(R.id.service_time, item.getRepair_time());
-                helper.setText(R.id.ctime, TimeFormat.convertTimeLong2String(item.getCtime()*1000, Calendar.DATE));
-
+                helper.setText(R.id.ctime, TimeFormat.convertTimeLong2String(item.getCtime() * 1000, Calendar.DATE));
+                if (helper.getPosition() % 2 == 0) {
+                    helper.getView(R.id.ly_item).setBackgroundColor(getResources().getColor(R.color.white));
+                }
             }
         };
         historyAdapter = new CommonAdapter<RepairOrder>(mActivity, historyDatas, R.layout.item_delivery_order_history) {
@@ -178,7 +182,10 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
 
                 helper.setText(R.id.service_date, TimeFormat.convertTimeLong2String(item.getRepair_date() * 1000, Calendar.DATE));
                 helper.setText(R.id.service_time, item.getRepair_time());
-                helper.setText(R.id.ctime, TimeFormat.convertTimeLong2String(item.getCtime()*1000, Calendar.DATE));
+                helper.setText(R.id.ctime, TimeFormat.convertTimeLong2String(item.getCtime() * 1000, Calendar.DATE));
+                if (helper.getPosition() % 2 == 0) {
+                    helper.getView(R.id.ly_item).setBackgroundColor(getResources().getColor(R.color.white));
+                }
             }
         };
         group_status_selector = (RadioGroup) rootView.findViewById(R.id.group_status_selector);
@@ -195,7 +202,7 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
         unaccpetListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-              repairDetail.launchActivity(RepairFragment.this, REQUEST_CODE_UNACCEPT, unaccpetDatas.get(position - 1));
+                repairDetail.launchActivity(RepairFragment.this, REQUEST_CODE_UNACCEPT, unaccpetDatas.get(position - 1));
             }
         });
         accpetListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -492,7 +499,7 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
                 Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
                 msgIntent.putExtra(MainActivity.KEY_MESSAGE, true);
                 getActivity().sendBroadcast(msgIntent);
-             //   EventBus.getInstatnce().post(true);
+                //   EventBus.getInstatnce().post(true);
             } else if (Common.order_type == 2 && Common.must_get == 1) {
                 currentViewPosition = 1;
                 showListView(currentViewPosition);
@@ -500,7 +507,7 @@ public class RepairFragment extends BaseFragment implements HttpCallBack {
                 Common.order_type = -1;
                 Common.must_get = -1;
                 Common.repairAccept = 0;
-            //    EventBus.getInstatnce().post(true);
+                //    EventBus.getInstatnce().post(true);
 
                 Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
                 msgIntent.putExtra(MainActivity.KEY_MESSAGE, true);

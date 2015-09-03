@@ -92,7 +92,11 @@
         <item name="android:layout_height">1dip</item>
         <item name="android:background">#f3753d</item>
     </style>
-
+    <style name="line_three_order">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dip</item>
+        <item name="android:background">#fbd6c3</item>
+    </style>
     <style name="font_personal_black_one" parent="@style/double_wrap">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/black</item>

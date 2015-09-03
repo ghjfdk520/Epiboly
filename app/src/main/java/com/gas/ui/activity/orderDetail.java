@@ -117,6 +117,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
 
     public void init() {
 
+        findViewById(R.id.title_home).setVisibility(View.GONE);
         String bottles[] = SharedPreferenceUtil.getInstance(this).getString(SharedPreferenceUtil.ORDER_DELIVERY_BOTTLE + itemOrder.getId()).split(",");
         for (String temp : bottles) {
             if (!Utils.isEmptyOrNullStr(temp)) bottleList.add(temp);

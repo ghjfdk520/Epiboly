@@ -93,7 +93,7 @@ public class repairDetail extends SuperActivity implements View.OnClickListener 
     }
 
     public void init() {
-
+        findViewById(R.id.title_home).setVisibility(View.GONE);
         accpet_order = (Button) findViewById(R.id.accpet_order);
         refuse_order = (Button) findViewById(R.id.refuse_order);
         finish_order = (Button) findViewById(R.id.finish_order);

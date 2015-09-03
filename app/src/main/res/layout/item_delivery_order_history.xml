@@ -3,6 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
+    android:background="#fbd6c3"
+    android:id="@+id/ly_item"
     android:orientation="vertical">
 
 
@@ -76,6 +78,5 @@
                 android:textSize="11.5sp" />
         </LinearLayout>
     </LinearLayout>
-
-    <View style="@style/line_two_order" />
+    <View style="@style/line_three_order" />
 </LinearLayout>
