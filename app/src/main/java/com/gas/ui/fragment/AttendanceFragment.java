@@ -91,11 +91,11 @@ public class AttendanceFragment extends BaseFragment implements HttpCallBack,Vie
        switch (v.getId()){
            case R.id.imageview_off_bt:
                MainActivity.showLoading();
-               offFlag = BusinessHttpProtocol.ClockIn(this,u.getId()+"",temp[0],temp[1],temp[2],String.format("%d",System.currentTimeMillis() / 1000+3*24*60*60),2);
+               offFlag = BusinessHttpProtocol.ClockIn(this,u.getId()+"",temp[0],temp[1],temp[2],String.format("%d",System.currentTimeMillis() / 1000),2);
                break;
            case R.id.imageview_work_bt:
                MainActivity.showLoading();
-               workFlag =  BusinessHttpProtocol.ClockIn(this,u.getId()+"",temp[0],temp[1],temp[2],String.format("%d",System.currentTimeMillis() / 1000+3*24*60*60),1);
+               workFlag =  BusinessHttpProtocol.ClockIn(this,u.getId()+"",temp[0],temp[1],temp[2],String.format("%d",System.currentTimeMillis() / 1000),1);
                break;
            case R.id.bt_check_all:
                checkActivity.launchActivity(getActivity());

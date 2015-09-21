@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.gas.BaseApplication;
+import com.gas.CloseAllActivity;
 import com.gas.conf.Common;
 import com.gas.epiboly.MainActivity;
 import com.gas.epiboly.R;
@@ -47,6 +49,8 @@ public class JGReceiver extends BroadcastReceiver {
             addNotification(context, bundle);
 
         } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
+
+
             Utils.log(TAG, "[MyReceiver] 接收到推送下来的通知");
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
             Utils.log(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
@@ -109,6 +113,14 @@ public class JGReceiver extends BroadcastReceiver {
             JSONObject jsontemp = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
 
             JSONObject json = new JSONObject(jsontemp.getString("txt"));
+            int logout = json.optInt("logout");
+
+            if (logout ==1){
+                BaseApplication.showLogoutDialog(CloseAllActivity.getInstance().getTopActivity());
+                return;
+            }
+
+
             int order_type = json.optInt("order_type");
             int must_get=json.optInt("must_get");
 

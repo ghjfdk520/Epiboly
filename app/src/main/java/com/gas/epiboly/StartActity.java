@@ -17,7 +17,6 @@ import com.gas.database.UserWorker;
 import com.gas.entity.User;
 import com.gas.ui.common.SuperActivity;
 import com.gas.utils.Utils;
-import com.gas.utils.wrapCarUtil;
 import com.google.gson.Gson;
 
 /**
@@ -50,13 +49,15 @@ public class StartActity extends SuperActivity implements View.OnClickListener {
     }
 
     public void init() {
-        wrapCarUtil.startLocation(this);
+
+       // wrapCarUtil.getInstance().startLocation();
+
         bt_login = (Button) findViewById(R.id.bt_login);
         edit_name = (EditText) findViewById(R.id.edit_name);
         edit_pass = (EditText) findViewById(R.id.edit_pass);
         loading_progress_layout = findViewById(R.id.loading_progress_layout);
         setOnDismissListener(this);
-        LoginHttpProtocol.serviceTime();
+     //   LoginHttpProtocol.serviceTime();
         userWorker = new UserWorker(this);
         quit = (Button) findViewById(R.id.quit);
         user = userWorker.getUser();
@@ -132,10 +133,9 @@ public class StartActity extends SuperActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(StartActity.this);
-       builder.setMessage("确认退出吗？");
-       builder.setTitle("提示");
+        builder.setMessage("确认退出吗？");
+        builder.setTitle("提示");
         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
              @Override
             public void onClick(DialogInterface dialog, int which) {

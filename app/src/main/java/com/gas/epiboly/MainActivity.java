@@ -198,6 +198,7 @@ public class MainActivity extends SuperActivity implements HttpCallBack, View.On
     protected void onDestroy() {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
+        unregisterReceiver(mMessageReceiver);
         EventBus.getInstatnce().unregister(this);
     }
 

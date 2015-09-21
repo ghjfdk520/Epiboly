@@ -102,6 +102,7 @@
         <activity android:name="com.gas.ui.codeScan.CaptureActivity" />
         <activity android:name="com.gas.ui.codeScan.ResultActivity" />
         <activity android:name="com.gas.ui.activity.AddoilActivity" />
+        <activity android:name="com.gas.ui.activity.OrderStatistics" />
         <activity
             android:name="com.gas.ui.activity.orderDetail"
             android:label="@string/app_name"></activity>

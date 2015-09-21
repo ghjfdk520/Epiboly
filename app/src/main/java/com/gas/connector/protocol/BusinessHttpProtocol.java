@@ -243,4 +243,12 @@ public class BusinessHttpProtocol {
         entity.put("driver_id",driver_id+"");
         return Post(Config.oilLog, entity, callback);
     }
+
+    public static long orderStatistics(HttpCallBack callback,int driver_id,long start_time,long end_time){
+        LinkedHashMap< String , Object > entity  = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",driver_id+"");
+        entity.put("start_time",start_time+"");
+        entity.put("end_time",end_time+"");
+        return Post(Config.order_statistics, entity, callback);
+    }
 }

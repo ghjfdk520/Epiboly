@@ -57,6 +57,7 @@ public class BaiduLocationUtil {
     public void startBaiduListener(final BaiduCallBack baiduCallBack ){
      //   option.setAddrType("all");
         client.setLocOption(option);
+
         setCallBack(baiduCallBack);
         try {
             Utils.log( TAG + "startBaiduListener" , "isListener:" + isListener );
@@ -161,7 +162,8 @@ public class BaiduLocationUtil {
 
 
     public void setCallBack(BaiduCallBack baiduCallBack){
-        callBacks.add(baiduCallBack);
+        if(baiduCallBack != null)
+         callBacks.add(baiduCallBack);
     }
     public interface BaiduCallBack {
         public void updateBaidu(int type, int lat, int lng, String address,

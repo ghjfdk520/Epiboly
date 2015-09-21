@@ -21,6 +21,7 @@ import com.gas.database.SharedPreferenceUtil;
 import com.gas.entity.DeliveryOrder;
 import com.gas.epiboly.MainActivity;
 import com.gas.epiboly.R;
+import com.gas.ui.activity.OrderStatistics;
 import com.gas.ui.activity.orderDetail;
 import com.gas.ui.common.BaseFragment;
 import com.gas.utils.TimeFormat;
@@ -308,6 +309,7 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
 //                DOWN_FLAG = BusinessHttpProtocol.newDeliverOrder(DeliveryFragment.this, Common.getInstance().user, 0, DOWN_STATE);
 //            }
 //        });
+        rootView.findViewById(R.id.orders_received_statistics).setOnClickListener(this);
     }
 
     public void showListView(int position) {
@@ -418,6 +420,11 @@ public class DeliveryFragment extends BaseFragment implements HttpCallBack, View
     @Override
     public void onClick(View v) {
 
+        switch (v.getId()){
+            case R.id.orders_received_statistics:
+                OrderStatistics.launchActivity(getActivity());
+                break;
+        }
     }
 
     @Override

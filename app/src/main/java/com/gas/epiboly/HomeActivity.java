@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.gas.BaseApplication;
 import com.gas.conf.Common;
 import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.UserWorker;
@@ -24,10 +25,12 @@ import com.gas.ui.codeScan.CaptureActivity;
 import com.gas.ui.common.SuperActivity;
 import com.gas.utils.CommonUtil;
 import com.gas.utils.Utils;
+import com.gas.utils.wrapCarUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
@@ -69,6 +72,11 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener 
     }
 
     public void init() {
+        wrapCarUtil.startLocation(HomeActivity.this);
+        Utils.log("device", BaseApplication.getDeviceId());
+
+
+
         loading_progress_layout = findViewById(R.id.loading_progress_layout);
     }
 
@@ -117,7 +125,8 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener 
 
     public void logout() {
         showLoading();
-        JPushInterface.setAliasAndTags(getApplicationContext(), "", null, mAliasCallback);
+        Set<String> tagSet = new LinkedHashSet<String>();
+        JPushInterface.setAliasAndTags(getApplicationContext(), "", tagSet, mAliasCallback);
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -246,7 +255,9 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener 
             super.handleMessage(msg);
             switch (msg.what) {
                 case MSG_SET_ALIAS:
-                    JPushInterface.setAliasAndTags(getApplicationContext(), (String) msg.obj, null, mAliasCallback);
+                    Set<String> tagSet = new LinkedHashSet<String>();
+                    tagSet.add(BaseApplication.getDeviceId());
+                    JPushInterface.setAliasAndTags(getApplicationContext(), (String) msg.obj, tagSet, mAliasCallback);
                     break;
             }
         }

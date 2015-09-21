@@ -1,0 +1,224 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_color"
+        android:orientation="vertical">
+
+        <include layout="@layout/title_navigation_bar" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/start_date"
+                style="@style/common_black"
+                android:background="@drawable/statistics_text"
+                android:gravity="center"
+                android:text="2015-09-09" />
+
+            <TextView
+                style="@style/common_orange"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:text="到" />
+
+            <TextView
+                android:id="@+id/end_date"
+                style="@style/common_black"
+                android:background="@drawable/statistics_text"
+                android:gravity="center"
+                android:text="2015-09-09" />
+
+            <Button
+                android:id="@+id/button_statistics"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="13dp"
+                android:background="@drawable/button_statistics" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/date_statistics"
+            style="@style/common_orange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal"
+            android:text="2015年09月09号~2015年09月27号" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/statistics_body"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="35dp"
+                android:paddingRight="35dp">
+                <TextView
+                    style="@style/common_black"
+                    android:layout_weight="1"
+                    android:text="订单数"
+                    android:textSize="23sp" />
+                <TextView
+                    android:id="@+id/order_count"
+                    style="@style/common_orange"
+                    android:text="0"
+                    android:layout_marginRight="25dp"
+                    android:textSize="23sp" />
+                <TextView
+                    style="@style/common_black"
+                    android:text="条"
+                    android:textSize="23sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="#fbd6c3"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="35dp"
+                android:paddingRight="35dp">
+                <TextView
+                    style="@style/common_black"
+                    android:layout_weight="1"
+                    android:text="50KG"
+                    android:textSize="23sp" />
+                <TextView
+                    android:id="@+id/count3"
+                    style="@style/common_orange"
+                    android:text="0"
+                    android:layout_marginRight="25dp"
+                    android:textSize="23sp" />
+                <TextView
+                    style="@style/common_black"
+                    android:text="瓶"
+                    android:textSize="23sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="35dp"
+                android:paddingRight="35dp">
+                <TextView
+                    style="@style/common_black"
+                    android:layout_weight="1"
+                    android:text="15KG"
+                    android:textSize="23sp" />
+                <TextView
+                    android:id="@+id/count2"
+                    style="@style/common_orange"
+                    android:text="0"
+                    android:layout_marginRight="25dp"
+                    android:textSize="23sp" />
+                <TextView
+                    style="@style/common_black"
+                    android:text="瓶"
+                    android:textSize="23sp" />
+            </LinearLayout>
+            <LinearLayout android:background="#fbd6c3"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="35dp"
+                android:paddingRight="35dp">
+                <TextView
+                    style="@style/common_black"
+                    android:layout_weight="1"
+                    android:text="5KG"
+                    android:textSize="23sp" />
+                <TextView
+                    android:id="@+id/count1"
+                    style="@style/common_orange"
+                    android:text="0"
+                    android:layout_marginRight="25dp"
+                    android:textSize="23sp" />
+                <TextView
+                    style="@style/common_black"
+                    android:text="瓶"
+                    android:textSize="23sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="35dp"
+                android:paddingRight="35dp">
+                <TextView
+                    style="@style/common_black"
+                    android:layout_weight="1"
+                    android:text="微信支付"
+                    android:textSize="23sp" />
+                <TextView
+                    android:id="@+id/total_wx_cost"
+                    style="@style/common_orange"
+                    android:text="¥  0"
+                    android:textSize="23sp" />
+
+            </LinearLayout>
+
+            <LinearLayout android:background="#fbd6c3"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="35dp"
+                android:paddingRight="35dp">
+                <TextView
+                    style="@style/common_black"
+                    android:layout_weight="1"
+                    android:text="货到付款"
+                    android:textSize="23sp" />
+                <TextView
+                    android:id="@+id/total_h_cost"
+                    style="@style/common_orange"
+                    android:text="¥  0"
+                    android:textSize="23sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="35dp"
+                android:paddingRight="35dp">
+                <TextView
+                    style="@style/common_black"
+                    android:layout_weight="1"
+                    android:text="总金额"
+                    android:textSize="23sp" />
+                <TextView
+                    android:id="@+id/total_cost"
+                    style="@style/common_orange"
+                    android:text="¥  0"
+                    android:textSize="23sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <include layout="@layout/layout_loading" />
+</RelativeLayout>

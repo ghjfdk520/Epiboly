@@ -160,4 +160,8 @@ public abstract class LightTimer
      */
     public abstract void run( LightTimer timer );
 
+
+    public boolean isRunning(){
+        return mIsRun;
+    }
 }

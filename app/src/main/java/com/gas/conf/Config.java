@@ -8,7 +8,6 @@ public class Config {
     public static boolean DEBUG = false;
     public static int PLAT = 1;
     public static String APP_VERSION = "2.0";
-
     public static String BASE_URL ="http://www.weithink.com.cn/ranqi/index.php?g=Admin&m=Android";
     public static String localTime =" http://www.weithink.com.cn/ranqi/index.php/Admin/Android/localtime";
     public static String loginUrl = BASE_URL+"&a=login";
@@ -47,5 +46,30 @@ public class Config {
 
     public static String oilLog = BASE_URL +"&a=oil_log";
     public static String carOil = BASE_URL +"&a=car_oil";
-}
 
+    public static String order_statistics = BASE_URL +"&a=driver_order";
+}
+/**
+ *
+ * http://www.weithink.com.cn/ranqi/index.php?g=Admin&m=Android&a=driver_order
+
+ $data = array (
+ 'driver_id' => '33',                //员工id
+ 'start_time' => '1439136000',       //开始时间
+ 'end_time' => '1441814400',         //结束时间
+ );
+
+
+ 返回json数组
+ $apk_count = array(8) {   ["start_time"] => string(10) "1439136000"     //开始时间
+ ["end_time"] => string(10) "1441814400"	  //结束时间
+ ["driver_name"] => string(12) "测试人员"      //员工名字
+ ["countOrder"] => string(1) "2"		  //订单数
+ ["count3"] => int(0)				  //50KG
+ ["count2"] => int(0)				  //15KG
+ ["count1"] => int(1)				  //5KG
+ ["total_cost"] => string(6) "641.00"		  //总金额
+ ["total_h_cost"] => string(6) "641.00"	  //货到付款金额
+ ["total_wx_cost"] => int(0)     		  //微支付金额 }
+
+ */

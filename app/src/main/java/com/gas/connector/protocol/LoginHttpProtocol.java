@@ -25,6 +25,7 @@ public class LoginHttpProtocol {
         LinkedHashMap<String, Object> entity = new LinkedHashMap<String, Object>();
         entity.put("username", username);
         entity.put("password", password);
+        entity.put("deviceid",BaseApplication.getDeviceId());
         return Post(Config.loginUrl, entity, callback);
     }
 
