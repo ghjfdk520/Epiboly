@@ -58,7 +58,7 @@ public class Config {
  'start_time' => '1439136000',       //开始时间
  'end_time' => '1441814400',         //结束时间
  );
-
+ bg_marking.png
 
  返回json数组
  $apk_count = array(8) {   ["start_time"] => string(10) "1439136000"     //开始时间
