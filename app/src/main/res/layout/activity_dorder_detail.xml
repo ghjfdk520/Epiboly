@@ -41,19 +41,36 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/custom_name"
-                            android:layout_width="0dp"
+                        <LinearLayout
+
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:textColor="#f4753b"
-                            android:textSize="23sp" />
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/custom_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+
+                                android:textColor="#f4753b"
+                                android:textSize="23sp" />
+
+                            <TextView
+                                android:id="@+id/client_b_type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:textColor="#f4753b"
+                                android:textSize="18sp" />
+                        </LinearLayout>
+
                         <Button
                             android:id="@+id/bottle_list"
-                            android:layout_marginRight="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
                             android:background="@drawable/order_bottle_list" />
 
                     </LinearLayout>
@@ -367,17 +384,18 @@
         <View
             android:layout_width="0.5dp"
             android:layout_height="match_parent" />
+
         <Button
             android:id="@+id/bottle_type_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/order_type_in" />
 
-       <!-- <Button
-            android:id="@+id/bottle_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/order_bottle_list" />-->
+        <!-- <Button
+             android:id="@+id/bottle_list"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:background="@drawable/order_bottle_list" />-->
     </LinearLayout>
 
     <Button

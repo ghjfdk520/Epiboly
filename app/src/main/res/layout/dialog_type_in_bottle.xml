@@ -21,18 +21,32 @@
             android:text="输入瓶号"
             android:textSize="30sp" />
 
-        <EditText
-
-            android:id="@+id/bottle_code"
+        <LinearLayout
             android:layout_width="120dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="5dp"
-            android:gravity="center"
-            android:background="@null"
-            android:cursorVisible="false"
-            android:inputType="number"
-            android:textColor="#f4753b"
-            android:textSize="13sp" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="LT"
+                android:textColor="@color/orange"
+                android:textSize="13sp" />
+
+            <EditText
+
+                android:id="@+id/bottle_code"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:background="@null"
+                android:cursorVisible="false"
+                android:gravity="center"
+                android:inputType="number"
+                android:textColor="#f4753b"
+                android:textSize="13sp" />
+        </LinearLayout>
 
         <View
             android:layout_width="120dp"
@@ -70,16 +84,17 @@
         android:id="@+id/ly_progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:focusable="true"
+        android:background="#33000000"
         android:clickable="true"
-        android:visibility="gone"
-        android:background="#33000000">
+        android:focusable="true"
+        android:gravity="center"
+        android:visibility="gone">
+
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
     </LinearLayout>
+
     <include layout="@layout/layout_loading" />
 </RelativeLayout>

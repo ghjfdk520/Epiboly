@@ -8,8 +8,8 @@ public class Config {
     public static boolean DEBUG = false;
     public static int PLAT = 1;
     public static String APP_VERSION = "2.0";
-    public static String BASE_URL ="http://www.weithink.com.cn/ranqi/index.php?g=Admin&m=Android";
-    public static String localTime =" http://www.weithink.com.cn/ranqi/index.php/Admin/Android/localtime";
+    public static String BASE_URL ="http://www.lintianranqi.com/index.php?g=Admin&m=Android";
+    public static String localTime =" http://www.lintianranqi.com.cn/index.php/Admin/Android/localtime";
     public static String loginUrl = BASE_URL+"&a=login";
     public static String clockInUrl = BASE_URL+ "&a=checking";
     public static String checkInfo =  BASE_URL+ "&a=check_all";

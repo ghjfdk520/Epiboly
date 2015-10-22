@@ -80,6 +80,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
     private TextView order_status;
     private TextView custom_name;
     private TextView cash_pledge;
+    private TextView client_b_type;
     private TextView bottle_num;
     private ListView productListView;
     private LinearLayout ly_accept_order;
@@ -143,6 +144,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         custom_name = (TextView) findViewById(R.id.custom_name);
         cash_pledge = (TextView) findViewById(R.id.cash_pledge);
         bottle_num = (TextView) findViewById(R.id.bottle_num);
+        client_b_type = (TextView) findViewById(R.id.client_b_type);
         ly_accept_order = (LinearLayout) findViewById(R.id.ly_accept_order);
         ly_unaccept_order = (LinearLayout) findViewById(R.id.ly_unaccept_order);
         productListView = (ListView) findViewById(R.id.product_list);
@@ -222,6 +224,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
                 showPopLoading();
 
 
+                code ="LT"+code;
                 VERIFY_BOTTLE_FLAG = BusinessHttpProtocol.gasBottleOut(this, user.getId(), itemOrder.getId(), code);
                 bottleMap.put(VERIFY_BOTTLE_FLAG, code);
                 break;
@@ -312,11 +315,15 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
                 //itemOrder  = gson.fromJson(result,DeliveryOrder.class);
                 JSONArray jsonArray = new JSONArray(json.getString("order_list"));
 
-                Utils.log("jsonarray", jsonArray.toString());
-                for (int i = 0; i < jsonArray.length(); i++) {
+
+                String typeText = json.optString("client_b_type");
+                if(!Utils.isEmptyOrNullStr(typeText)){
+                    typeText="("+typeText+")";
+                    client_b_type.setText(typeText);
+                }
+                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsontemp = jsonArray.getJSONObject(i);
-                    Utils.log("jsontemp", jsontemp.toString());
-                    productList.add(jsontemp.getString("product_type") + "," + jsontemp.getString("count"));
+                     productList.add(jsontemp.getString("product_type") + "," + jsontemp.getString("count"));
                 }
                 productAdapter.notifyDataSetChanged();
                 Utils.setListViewHeightBasedOnChildren(productListView);
