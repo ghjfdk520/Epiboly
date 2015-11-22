@@ -168,6 +168,29 @@ public class JGReceiver extends BroadcastReceiver {
             notification.setLatestEventInfo(mContext, "林田燃气", strBuffer.toString(), pendingIntent);
             manager.cancel(notificationId);
             manager.notify(notificationId, notification);
+            /**
+             *   NotificationCompat.Builder mBuilder =new NotificationCompat.Builder(mContext)
+             .setSmallIcon(R.mipmap.icon_lt)   //若没有设置largeicon，此为左边的大icon，设置了largeicon，则为右下角的小icon，无论怎样，都影响Notifications area显示的图标
+
+             .setContentTitle("林田燃气") //标题
+
+             .setContentText(strBuffer.toString())         //正文
+
+             .setNumber(3)                       //设置信息条数
+
+             //              .setContentInfo("3")        //作用同上，设置信息的条数
+
+             //.setLargeIcon(R.mipmap.icon_lt)           //largeicon，
+
+             .setDefaults(R.raw.sound)//设置声音，此为默认声音
+
+
+             .setOngoing(true)      //true使notification变为ongoing，用户不能手动清除，类似QQ,false或者不设置则为普通的通知
+
+             .setAutoCancel(true);
+             mBuilder.setContentIntent(pendingIntent);
+             manager.notify(notificationId+1, mBuilder.build());
+             */
         } catch (JSONException e) {
             e.printStackTrace();
         }

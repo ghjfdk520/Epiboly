@@ -48,6 +48,7 @@ public class Config {
     public static String carOil = BASE_URL +"&a=car_oil";
 
     public static String order_statistics = BASE_URL +"&a=driver_order";
+    public static String del_site = BASE_URL +"&a=del_site";
 }
 /**
  *

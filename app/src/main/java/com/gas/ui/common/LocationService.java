@@ -76,11 +76,9 @@ public class LocationService extends Service implements HttpCallBack{
     }
 
     private void sendLocation(){
-        Log.i(TAG, "sendLocation--->start");
         BaiduLocationUtil.getInstance(this).startBaiduListener(new BaiduLocationUtil.BaiduCallBack() {
             @Override
             public void updateBaidu(int type, int lat, int lng, String address, String simpleAddress) {
-                Log.i(TAG, "sendLocation--->send");
                 BusinessHttpProtocol.siteCar(LocationService.this,carId,lat,lng);
             }
         });

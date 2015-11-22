@@ -17,6 +17,15 @@ public class BusinessHttpProtocol {
     }
 
 
+
+    //清除地理位置
+
+    //获取考勤信息
+    public static long delSite(HttpCallBack callback,String id){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("driver_id",id);
+        return Post(Config.del_site, entity, callback);
+    }
     //打卡
     public static long ClockIn(HttpCallBack callback,String driver_id,String latitude,String longitude,String address,String time,int status){
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );

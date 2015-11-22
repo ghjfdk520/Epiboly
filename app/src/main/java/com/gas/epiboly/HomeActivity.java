@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.gas.BaseApplication;
 import com.gas.conf.Common;
+import com.gas.connector.HttpCallBack;
 import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.UserWorker;
 import com.gas.entity.User;
@@ -125,18 +126,33 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener 
 
     public void logout() {
         showLoading();
-        Set<String> tagSet = new LinkedHashSet<String>();
-        JPushInterface.setAliasAndTags(getApplicationContext(), "", tagSet, mAliasCallback);
-        mHandler.postDelayed(new Runnable() {
+
+        wrapCarUtil.stopLocation(this);
+        BusinessHttpProtocol.delSite(new HttpCallBack() {
             @Override
-            public void run() {
-                hidenLoading();
-                new UserWorker(HomeActivity.this).removeAll(user.getId());
-                Common.getInstance().user = null;
-                StartActity.launchActivity(HomeActivity.this);
-                finish();
+            public void onGeneralSuccess(String result, long flag) {
+                Set<String> tagSet = new LinkedHashSet<String>();
+                JPushInterface.setAliasAndTags(getApplicationContext(), "", tagSet, mAliasCallback);
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        hidenLoading();
+                        new UserWorker(HomeActivity.this).removeAll(user.getId());
+                        Common.getInstance().user = null;
+                        StartActity.launchActivity(HomeActivity.this);
+                        finish();
+                    }
+                }, 1500);
             }
-        }, 1500);
+
+            @Override
+            public void onGeneralError(String e, long flag) {
+
+                Utils.toastMsg(HomeActivity.this,"退出失败，请重新操作");
+            }
+        }, user.getId() + "");
+
+
     }
 
     @Override
