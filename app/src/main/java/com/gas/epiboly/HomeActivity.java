@@ -22,6 +22,7 @@ import com.gas.connector.protocol.BusinessHttpProtocol;
 import com.gas.database.UserWorker;
 import com.gas.entity.User;
 import com.gas.ui.activity.carManagerActivity;
+import com.gas.ui.activity.clientBottleManager;
 import com.gas.ui.codeScan.CaptureActivity;
 import com.gas.ui.common.SuperActivity;
 import com.gas.utils.CommonUtil;
@@ -175,6 +176,7 @@ public class HomeActivity extends SuperActivity implements View.OnClickListener 
                 MainActivity.lauchActivity(this, 4);
                 break;
             case R.id.home_delivery:
+//                clientBottleManager.launchActivity(this,"10005270");
                 MainActivity.lauchActivity(this, 2);
                 break;
             case R.id.home_attendance:

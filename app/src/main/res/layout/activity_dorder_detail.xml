@@ -66,12 +66,30 @@
                                 android:textSize="18sp" />
                         </LinearLayout>
 
-                        <Button
-                            android:id="@+id/bottle_list"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:background="@drawable/order_bottle_list" />
+                            android:orientation="vertical">
+                            <Button
+                                android:id="@+id/bottle_list"
+                                android:text="气瓶列表"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:layout_marginRight="10dp"
+                                android:textColor="@drawable/textcolor_selector"
+                                android:background="@drawable/order_bottle_list" />
+
+                            <Button
+                                android:id="@+id/button_clientBottleManager"
+                                android:text="借还管理"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginRight="10dp"
+                                android:textColor="@drawable/textcolor_selector"
+                                android:background="@drawable/order_bottle_list" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -352,7 +370,7 @@
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="#f4753b"
             android:orientation="horizontal">

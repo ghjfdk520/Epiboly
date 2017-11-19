@@ -1,0 +1,117 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_color"
+        android:orientation="vertical">
+
+        <include layout="@layout/title_navigation_bar" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="150dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_borrow"
+                        style="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:background="#FEC27F"
+                        android:gravity="center"
+                        android:minHeight="150dp"
+                        android:text="借"
+                        android:textColor="#FFFFFF" />
+
+                    <ListView
+                        android:id="@+id/list_client_bottle_borrow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fadingEdge="none"
+                        android:fastScrollEnabled="false"
+                        android:footerDividersEnabled="false"
+                        android:headerDividersEnabled="false" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:minHeight="150dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_detain"
+
+                        style="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:background="#FEC27F"
+                        android:gravity="center"
+                        android:text="押"
+                        android:textColor="#FFFFFF" />
+
+                    <ListView
+                        android:id="@+id/list_client_bottle_detain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:minHeight="150dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_repay"
+                        style="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:background="#FEC27F"
+                        android:gravity="center"
+                        android:minHeight="150dp"
+                        android:text="还"
+                        android:textColor="#FFFFFF" />
+
+                    <ListView
+                        android:id="@+id/list_client_bottle_repay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="#F5743C"
+            android:text="保存"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <include layout="@layout/layout_loading" />
+</FrameLayout>

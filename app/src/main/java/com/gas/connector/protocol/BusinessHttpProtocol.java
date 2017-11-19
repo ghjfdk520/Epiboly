@@ -105,7 +105,17 @@ public class BusinessHttpProtocol {
         return Post(Config.deliverOrderlist, entity, callback);
     }
 
+    public static long getClientBottle(HttpCallBack callBack,String gas_card){
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("gas_card", gas_card);
+        return Post(Config.clientBottle, entity, callBack);
+    }
 
+    public static long saveClientBottle(HttpCallBack callBack,String clientBottle) {
+        LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );
+        entity.put("list", clientBottle);
+        return Post(Config.saveClientBottle, entity, callBack);
+    }
     //派送历史订单
     public static  long repairOrderHistory(HttpCallBack callback,User user,int Id,String status ){
         LinkedHashMap< String , Object > entity = new LinkedHashMap< String , Object >( );

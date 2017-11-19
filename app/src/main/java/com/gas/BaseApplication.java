@@ -24,9 +24,10 @@ import cn.jpush.android.api.JPushInterface;
 /**
  * Created by Heart on 2015/7/16.
  */
-public class BaseApplication extends Application{
+public class BaseApplication extends Application {
     public static User user;
     public static Context mContext;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -36,6 +37,7 @@ public class BaseApplication extends Application{
         this.mContext = getBaseContext();
         BaiduLocationUtil.getInstance(this);
         PgyCrashManager.register(this, "66a0cbb2f41686b59a52833aa45d0442");
+
     }
 
     @Override
@@ -47,14 +49,15 @@ public class BaseApplication extends Application{
 
     /**
      * 获得设备id
+     *
      * @return
      */
-    public static String getDeviceId(){
-        String deviceId=((TelephonyManager)mContext.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+    public static String getDeviceId() {
+        String deviceId = ((TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
         return StringEncrypt.encodeByAsymmetric(deviceId, StringEncrypt.EncodeType.MD5, StringEncrypt.Case.LOWER);
     }
 
-    public static void showLogoutDialog(final Context context){
+    public static void showLogoutDialog(final Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("您的账号在其他登陆，请重新登陆。");
         builder.setTitle("提示");

@@ -5,11 +5,14 @@ package com.gas.conf;
  * Created by Heart on 2015/7/16.
  */
 public class Config {
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
     public static int PLAT = 1;
     public static String APP_VERSION = "2.0";
-    public static String BASE_URL ="http://www.lintianranqi.com/index.php?g=Admin&m=Android";
-    public static String localTime =" http://www.lintianranqi.com.cn/index.php/Admin/Android/localtime";
+    public static String HOST ="http://www.lintianranqi.com/index.php";
+    public static String BASE_URL =HOST+"?g=Admin&m=Android";
+    public static String localTime =HOST+"/Admin/Android/localtime";
+    public static String clientBottle= HOST+"/admin/Android/client_bottle";
+    public static String saveClientBottle= HOST+"/admin/Android/client_bottle_action";
     public static String loginUrl = BASE_URL+"&a=login";
     public static String clockInUrl = BASE_URL+ "&a=checking";
     public static String checkInfo =  BASE_URL+ "&a=check_all";

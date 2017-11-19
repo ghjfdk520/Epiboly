@@ -87,6 +87,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
     private LinearLayout ly_unaccept_order;
     private Button bottle_type_in;
     private Button bottle_list;
+    private Button button_clientBottleManager;
     private EditText bottle_code;
     private View popupLoading;
 
@@ -150,6 +151,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
         productListView = (ListView) findViewById(R.id.product_list);
         bottle_type_in = (Button) findViewById(R.id.bottle_type_in);
         bottle_list= (Button) findViewById(R.id.bottle_list);
+        button_clientBottleManager= (Button) findViewById(R.id.button_clientBottleManager);
 
 
         custom_name.setText(itemOrder.getClient_name());
@@ -179,6 +181,7 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
 
     public void initListener() {
         bottle_list.setOnClickListener(this);
+        button_clientBottleManager.setOnClickListener(this);
         bottle_type_in.setOnClickListener(this);
         accpet_order.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,6 +233,9 @@ public class orderDetail extends SuperActivity implements HttpCallBack, View.OnC
                 break;
             case R.id.bottle_list:
                 showWindow(4);
+                break;
+            case R.id.button_clientBottleManager:
+                clientBottleManager.launchActivity(this,itemOrder.getGas_card());
                 break;
             case R.id.bottle_type_in:
                 showWindow(3);
